@@ -1,6 +1,8 @@
 {
-  "name": "AI Launch QA",
+  "name": "LaunchProof",
   "description": "Automated pre-launch QA platform with deterministic technical audits, mobile responsive checks, axe accessibility, Core Web Vitals, and Gemini multimodal visual/UX reasoning with Playwright regression test and AI fix prompt generation.",
   "requestFramePermissions": [],
-  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
 }
