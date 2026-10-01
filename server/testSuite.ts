@@ -8,6 +8,9 @@ import { validateTargetUrlSecurity, isPrivateOrReservedIp } from './security/url
 import { generateFindingFingerprint, deduplicateFindings } from '../src/lib/engine/dedup';
 import { calculateAuditScores } from '../src/lib/engine/scoring';
 import { CHECK_DEFINITIONS } from '../src/lib/engine/checks';
+import http from 'http';
+import express from 'express';
+import { setupFixtureRoutes } from './fixtures/fixturePages';
 import { runBrowserAuditWorker } from './engine/browserWorker';
 import { queueManager } from './storage/queueManager';
 import { Finding, TestSuiteResult } from '../src/types/audit';
@@ -163,7 +166,19 @@ export async function runAllAutomatedTests(): Promise<TestSuiteResult[]> {
   const fixtureStart = Date.now();
   const fixtureTests: { name: string; passed: boolean; error?: string; details?: string }[] = [];
 
+  let testServer: http.Server | null = null;
   try {
+    const testApp = express();
+    setupFixtureRoutes(testApp);
+    testServer = await new Promise<http.Server | null>((resolve) => {
+      const s = testApp.listen(3000, '127.0.0.1', () => {
+        resolve(s);
+      });
+      s.on('error', () => {
+        resolve(null); // Port 3000 already in use (dev server running)
+      });
+    });
+
     const controller = new AbortController();
     
     // Test 1: Defective Fixture
@@ -228,6 +243,10 @@ export async function runAllAutomatedTests(): Promise<TestSuiteResult[]> {
       passed: false,
       error: err.message,
     });
+  } finally {
+    if (testServer) {
+      await new Promise<void>((resolve) => testServer!.close(() => resolve()));
+    }
   }
 
   suites.push({
