@@ -1,5 +1,5 @@
 /**
- * AI Launch QA — Main Application
+ * LaunchProof — Main Application
  * Pre-launch QA platform with deterministic technical audits, mobile responsive checks,
  * axe accessibility, Core Web Vitals, and Gemini multimodal visual/UX reasoning.
  */
@@ -17,6 +17,7 @@ import { CategoryDeepDive } from './components/CategoryDeepDive';
 import { RetestComparisonView } from './components/RetestComparisonView';
 import { AuditHistoryDrawer } from './components/AuditHistoryDrawer';
 import { SecurityPolicyModal } from './components/SecurityPolicyModal';
+import { TestRunnerModal } from './components/TestRunnerModal';
 import { AuditConfig, AuditLog, AuditReport, AuditStatus, Finding, QACategory } from './types/audit';
 import { runFullAudit } from './lib/engine/orchestrator';
 
@@ -32,7 +33,7 @@ export default function App() {
   // History State
   const [history, setHistory] = useState<AuditReport[]>(() => {
     try {
-      const saved = localStorage.getItem('ai_launch_qa_history');
+      const saved = localStorage.getItem('launchproof_history');
       return saved ? JSON.parse(saved) : [];
     } catch {
       return [];
@@ -47,11 +48,12 @@ export default function App() {
   const [showRetestModal, setShowRetestModal] = useState<boolean>(false);
   const [showHistoryDrawer, setShowHistoryDrawer] = useState<boolean>(false);
   const [showSecurityModal, setShowSecurityModal] = useState<boolean>(false);
+  const [showTestRunner, setShowTestRunner] = useState<boolean>(false);
 
   // Auto-save history
   useEffect(() => {
     try {
-      localStorage.setItem('ai_launch_qa_history', JSON.stringify(history.slice(0, 15)));
+      localStorage.setItem('launchproof_history', JSON.stringify(history.slice(0, 15)));
     } catch (e) {
       console.warn('Could not save history to localStorage', e);
     }
@@ -107,7 +109,6 @@ export default function App() {
         : f
     );
 
-    // Recalculate summary blockers
     const openCritical = updatedFindings.filter((f) => f.severity === 'critical' && f.status !== 'fixed').length;
     const openHigh = updatedFindings.filter((f) => f.severity === 'high' && f.status !== 'fixed').length;
 
@@ -141,7 +142,7 @@ export default function App() {
   const handleClearHistory = () => {
     setHistory([]);
     try {
-      localStorage.removeItem('ai_launch_qa_history');
+      localStorage.removeItem('launchproof_history');
     } catch {}
   };
 
@@ -151,6 +152,7 @@ export default function App() {
       <Navbar
         onOpenHistory={() => setShowHistoryDrawer(true)}
         onOpenSecurity={() => setShowSecurityModal(true)}
+        onOpenTestRunner={() => setShowTestRunner(true)}
         auditCount={history.length}
       />
 
@@ -253,6 +255,11 @@ export default function App() {
         onClose={() => setShowSecurityModal(false)}
       />
 
+      <TestRunnerModal
+        isOpen={showTestRunner}
+        onClose={() => setShowTestRunner(false)}
+      />
+
       {/* Footer */}
       <footer className="mt-16 border-t border-slate-900 bg-slate-950 py-6 text-center text-xs text-slate-400">
         <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
@@ -262,6 +269,13 @@ export default function App() {
             <span>Automated Pre-Launch Evidence & Remediation Platform</span>
           </div>
           <div className="flex items-center gap-4 text-slate-400">
+            <button
+              onClick={() => setShowTestRunner(true)}
+              className="hover:text-cyan-400 font-semibold transition-colors"
+            >
+              Run Automated Tests
+            </button>
+            <span>•</span>
             <button
               onClick={() => setShowSecurityModal(true)}
               className="hover:text-cyan-400 transition-colors"

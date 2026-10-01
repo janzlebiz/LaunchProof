@@ -1,15 +1,17 @@
 import React from 'react';
-import { ShieldCheck, History, ShieldAlert, Sparkles, Terminal } from 'lucide-react';
+import { ShieldCheck, History, ShieldAlert, Sparkles, Terminal, CheckSquare } from 'lucide-react';
 
 interface NavbarProps {
   onOpenHistory: () => void;
   onOpenSecurity: () => void;
+  onOpenTestRunner: () => void;
   auditCount: number;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
   onOpenHistory,
   onOpenSecurity,
+  onOpenTestRunner,
   auditCount,
 }) => {
   return (
@@ -29,7 +31,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 Launch<span className="bg-gradient-to-r from-cyan-400 to-indigo-400 bg-clip-text text-transparent">Proof</span>
               </span>
               <span className="rounded-full bg-cyan-950/80 border border-cyan-500/30 px-2 py-0.5 text-[10px] font-semibold text-cyan-300">
-                v1.0
+                v1.0 Production
               </span>
             </div>
             <p className="text-xs text-slate-400">Automated Pre-Launch Evidence & AI Reasoning</p>
@@ -38,6 +40,16 @@ export const Navbar: React.FC<NavbarProps> = ({
 
         {/* Right Action Badges */}
         <div className="flex items-center gap-2 sm:gap-3">
+          {/* Automated Test Suite Button */}
+          <button
+            onClick={onOpenTestRunner}
+            className="hidden sm:flex items-center gap-1.5 rounded-lg border border-slate-800 bg-slate-900/90 px-3 py-1.5 text-xs font-semibold text-cyan-300 hover:border-cyan-500/40 hover:bg-cyan-950/30 transition-all shadow-sm"
+            title="Run Unit & Security Test Suites"
+          >
+            <CheckSquare className="h-3.5 w-3.5 text-cyan-400" />
+            <span>Test Suites</span>
+          </button>
+
           {/* SSRF Protection Badge */}
           <button
             onClick={onOpenSecurity}

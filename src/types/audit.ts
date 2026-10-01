@@ -1,6 +1,6 @@
 /**
- * AI Launch QA — Types and Interfaces
- * Technical Specifications & Product Requirements compliant
+ * LaunchProof — Core Domain Types and Interfaces
+ * Automated Pre-Launch Website QA Platform
  */
 
 export type Severity = 'critical' | 'high' | 'medium' | 'low' | 'info';
@@ -35,6 +35,7 @@ export type AuditStatus =
   | 'REPORTING'
   | 'COMPLETED'
   | 'FAILED'
+  | 'CANCELLED'
   | 'SECURITY_BLOCKED';
 
 export type LaunchVerdict = 'LAUNCH_READY' | 'LAUNCH_BLOCKED' | 'NEEDS_REVIEW';
@@ -146,16 +147,20 @@ export interface NetworkError {
 }
 
 export interface PerformanceMetrics {
+  ttfb: number; // Time to First Byte (ms)
+  loadTimeMs: number; // Page load time (ms)
   lcp: number; // Largest Contentful Paint (ms)
   fcp: number; // First Contentful Paint (ms)
   cls: number; // Cumulative Layout Shift
   tbt: number; // Total Blocking Time (ms)
   totalBytes: number;
+  htmlBytes: number;
   scriptBytes: number;
   imageBytes: number;
   cssBytes: number;
   requestCount: number;
   domElementsCount: number;
+  renderBlockingCount: number;
 }
 
 export interface PageResult {
@@ -167,14 +172,16 @@ export interface PageResult {
   consoleErrors: BrowserError[];
   networkErrors: NetworkError[];
   metrics: PerformanceMetrics;
-  discoveredLinks: { text: string; href: string; isExternal: boolean; isBroken?: boolean }[];
+  discoveredLinks: { text: string; href: string; isExternal: boolean; status?: number; isBroken?: boolean }[];
   elementsCount: {
     buttons: number;
     links: number;
     forms: number;
     images: number;
     headings: number;
+    scripts: number;
   };
+  htmlSnippet?: string;
 }
 
 export interface AuditSummary {
@@ -213,6 +220,7 @@ export interface AuditReport {
   findings: Finding[];
   pages: PageResult[];
   logs: AuditLog[];
+  isRealScrape?: boolean;
   errorMessage?: string;
 }
 
@@ -238,4 +246,16 @@ export interface TargetPreset {
   description: string;
   type: 'flawed' | 'healthy' | 'ecommerce';
   expectedIssues: string[];
+}
+
+export interface TestSuiteResult {
+  name: string;
+  passed: boolean;
+  durationMs: number;
+  tests: {
+    name: string;
+    passed: boolean;
+    error?: string;
+    details?: string;
+  }[];
 }
