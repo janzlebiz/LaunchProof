@@ -1,0 +1,5005 @@
+[
+  {
+    "id": "audit_1790881677107_xgyi7",
+    "targetUrl": "https://ais-dev-bzwoignz3ygqmsvmvdgiav-212282537635.asia-east1.run.app/",
+    "status": "COMPLETED",
+    "startedAt": "2026-10-01T19:07:57.609Z",
+    "completedAt": "2026-10-01T19:07:57.693Z",
+    "config": {
+      "targetUrl": "https://ais-dev-bzwoignz3ygqmsvmvdgiav-212282537635.asia-east1.run.app/",
+      "maxPages": 20,
+      "maxDepth": 5,
+      "timeoutMs": 25000,
+      "viewports": [
+        {
+          "name": "Desktop (1440x900)",
+          "width": 1440,
+          "height": 900,
+          "isMobile": false
+        },
+        {
+          "name": "Tablet (768x1024)",
+          "width": 768,
+          "height": 1024,
+          "isMobile": true
+        },
+        {
+          "name": "Mobile (390x844)",
+          "width": 390,
+          "height": 844,
+          "isMobile": true
+        }
+      ],
+      "enableA11y": true,
+      "enablePerformance": true,
+      "enableAI": true,
+      "enableExternalLinks": true
+    },
+    "summary": {
+      "overallScore": 99,
+      "verdict": "LAUNCH_READY",
+      "verdictReason": "All deterministic and AI checks passed with high confidence. Safe for production deployment.",
+      "criticalCount": 0,
+      "highCount": 0,
+      "mediumCount": 1,
+      "lowCount": 0,
+      "infoCount": 0,
+      "totalFindings": 1,
+      "pagesAudited": 1,
+      "viewportsTested": 3,
+      "checksExecuted": 28,
+      "durationMs": 83,
+      "executionEngine": "HTTP_INSPECTOR",
+      "aiReasoningStatus": "FAILED"
+    },
+    "categoryScores": [
+      {
+        "category": "functionality",
+        "name": "Functionality & Availability",
+        "score": 100,
+        "weight": 0.25,
+        "passedCount": 6,
+        "failedCount": 0,
+        "warningCount": 0,
+        "status": "pass",
+        "checks": [
+          {
+            "id": "availability.http-status",
+            "name": "HTTP 200 Availability & Status",
+            "category": "functionality",
+            "passed": true,
+            "severityIfFailed": "critical",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "availability.console-errors",
+            "name": "Uncaught JavaScript Runtime Errors",
+            "category": "functionality",
+            "passed": true,
+            "severityIfFailed": "high",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "functionality.broken-links",
+            "name": "Broken Internal & External Hyperlinks",
+            "category": "functionality",
+            "passed": true,
+            "severityIfFailed": "high",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "functionality.dead-buttons",
+            "name": "Dead Interactive Elements / Empty Callbacks",
+            "category": "functionality",
+            "passed": true,
+            "severityIfFailed": "high",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "functionality.empty-hrefs",
+            "name": "Empty or Placeholder href Attributes (href=\"#\" / href=\"\")",
+            "category": "functionality",
+            "passed": true,
+            "severityIfFailed": "medium",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "functionality.unlabeled-interactive",
+            "name": "Unlabeled Interactive Controls",
+            "category": "functionality",
+            "passed": true,
+            "severityIfFailed": "medium",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          }
+        ]
+      },
+      {
+        "category": "mobile",
+        "name": "Mobile & Responsive UX",
+        "score": 100,
+        "weight": 0.2,
+        "passedCount": 5,
+        "failedCount": 0,
+        "warningCount": 0,
+        "status": "pass",
+        "checks": [
+          {
+            "id": "mobile.horizontal-overflow",
+            "name": "Mobile Horizontal Viewport Overflow",
+            "category": "mobile",
+            "passed": true,
+            "severityIfFailed": "critical",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "mobile.viewport-clipping",
+            "name": "Viewport Element Clipping & Cropped CTAs",
+            "category": "mobile",
+            "passed": true,
+            "severityIfFailed": "high",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "mobile.touch-targets",
+            "name": "Touch Target Sizing (Min 44x44px)",
+            "category": "mobile",
+            "passed": true,
+            "severityIfFailed": "medium",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "mobile.text-size",
+            "name": "Legible Mobile Typography (Min 12px)",
+            "category": "mobile",
+            "passed": true,
+            "severityIfFailed": "low",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "mobile.element-overlap",
+            "name": "Responsive Element Collision & Overlap",
+            "category": "mobile",
+            "passed": true,
+            "severityIfFailed": "high",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          }
+        ]
+      },
+      {
+        "category": "accessibility",
+        "name": "Accessibility (a11y)",
+        "score": 100,
+        "weight": 0.15,
+        "passedCount": 5,
+        "failedCount": 0,
+        "warningCount": 0,
+        "status": "pass",
+        "checks": [
+          {
+            "id": "accessibility.color-contrast",
+            "name": "WCAG AA Color Contrast Ratios",
+            "category": "accessibility",
+            "passed": true,
+            "severityIfFailed": "high",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "accessibility.image-alt",
+            "name": "Image Descriptive alt Attributes",
+            "category": "accessibility",
+            "passed": true,
+            "severityIfFailed": "medium",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "accessibility.form-labels",
+            "name": "Explicit Form Input Labels (<label> / aria-label)",
+            "category": "accessibility",
+            "passed": true,
+            "severityIfFailed": "high",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "accessibility.heading-hierarchy",
+            "name": "Logical Heading Structure (H1-H6)",
+            "category": "accessibility",
+            "passed": true,
+            "severityIfFailed": "medium",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "accessibility.landmark-regions",
+            "name": "Semantic Landmark Regions (<main>, <header>, <nav>)",
+            "category": "accessibility",
+            "passed": true,
+            "severityIfFailed": "low",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          }
+        ]
+      },
+      {
+        "category": "performance",
+        "name": "Performance & Web Vitals",
+        "score": 93,
+        "weight": 0.15,
+        "passedCount": 3,
+        "failedCount": 1,
+        "warningCount": 0,
+        "status": "pass",
+        "checks": [
+          {
+            "id": "performance.lcp",
+            "name": "Largest Contentful Paint (LCP < 2.5s)",
+            "category": "performance",
+            "passed": true,
+            "severityIfFailed": "high",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "performance.cls",
+            "name": "Cumulative Layout Shift (CLS < 0.1)",
+            "category": "performance",
+            "passed": true,
+            "severityIfFailed": "medium",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "performance.render-blocking",
+            "name": "Render-Blocking Scripts & Stylesheets",
+            "category": "performance",
+            "passed": false,
+            "severityIfFailed": "medium",
+            "details": "Failed — 1 issue(s) detected: 1 render-blocking script(s) in <head>",
+            "findingsCount": 1,
+            "executed": true
+          },
+          {
+            "id": "performance.resource-weight",
+            "name": "Total JavaScript & Asset Weight",
+            "category": "performance",
+            "passed": true,
+            "severityIfFailed": "low",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          }
+        ]
+      },
+      {
+        "category": "visual_ux",
+        "name": "Visual & UX Reasoning",
+        "score": 100,
+        "weight": 0.15,
+        "passedCount": 3,
+        "failedCount": 0,
+        "warningCount": 0,
+        "status": "pass",
+        "checks": [
+          {
+            "id": "visual.cta-prominence",
+            "name": "Primary CTA Visual Prominence & Contrast",
+            "category": "visual_ux",
+            "passed": true,
+            "severityIfFailed": "high",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "visual.spacing-consistency",
+            "name": "Visual Layout Consistency & Spacing Rhythm",
+            "category": "visual_ux",
+            "passed": true,
+            "severityIfFailed": "medium",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "visual.responsive-composition",
+            "name": "Multi-Viewport Visual Composition & Balance",
+            "category": "visual_ux",
+            "passed": true,
+            "severityIfFailed": "medium",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          }
+        ]
+      },
+      {
+        "category": "seo",
+        "name": "SEO & Social Signals",
+        "score": 100,
+        "weight": 0.1,
+        "passedCount": 5,
+        "failedCount": 0,
+        "warningCount": 0,
+        "status": "pass",
+        "checks": [
+          {
+            "id": "seo.title",
+            "name": "Page <title> Tag Presence & Length",
+            "category": "seo",
+            "passed": true,
+            "severityIfFailed": "high",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "seo.meta-description",
+            "name": "Meta Description Tag",
+            "category": "seo",
+            "passed": true,
+            "severityIfFailed": "medium",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "seo.h1",
+            "name": "Single Primary <h1> Heading",
+            "category": "seo",
+            "passed": true,
+            "severityIfFailed": "medium",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "seo.open-graph",
+            "name": "OpenGraph & Social Sharing Cards (og:title, og:image)",
+            "category": "seo",
+            "passed": true,
+            "severityIfFailed": "low",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "seo.canonical",
+            "name": "Canonical URL Tag (<link rel=\"canonical\">)",
+            "category": "seo",
+            "passed": true,
+            "severityIfFailed": "low",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          }
+        ]
+      }
+    ],
+    "findings": [
+      {
+        "id": "f_perf_block_1790881677689",
+        "auditId": "audit_1790881677107_xgyi7",
+        "pageId": "page_root",
+        "category": "performance",
+        "checkId": "performance.render-blocking",
+        "severity": "medium",
+        "confidence": 0.94,
+        "title": "1 render-blocking script(s) in <head>",
+        "description": "Synchronous scripts in <head> block HTML parsing and delay first paint.",
+        "impact": "Increases initial page load time.",
+        "recommendation": "Add `defer` or `async` attributes to scripts.",
+        "source": "performance",
+        "url": "https://ais-dev-bzwoignz3ygqmsvmvdgiav-212282537635.asia-east1.run.app/",
+        "evidence": [
+          {
+            "id": "ev_block",
+            "type": "performance",
+            "snippet": "<script src=\"/_aistudio-iframe.js?v=2c34bde1\"></script>"
+          }
+        ],
+        "fingerprint": "performance::performance.render-blocking::https://ais-dev-bzwoignz3ygqmsvmvdgiav-212282537635.asia-east1.run.app/::::1 render blocking script s  in  head",
+        "status": "open"
+      }
+    ],
+    "pages": [
+      {
+        "id": "page_root",
+        "url": "https://ais-dev-bzwoignz3ygqmsvmvdgiav-212282537635.asia-east1.run.app/",
+        "status": 302,
+        "title": "302 Found",
+        "loadTimeMs": 29,
+        "consoleErrors": [],
+        "networkErrors": [],
+        "metrics": {
+          "ttfb": 0,
+          "loadTimeMs": 0,
+          "lcp": 0,
+          "fcp": 0,
+          "cls": 0,
+          "tbt": 0,
+          "totalBytes": 40200,
+          "htmlBytes": 200,
+          "scriptBytes": 40000,
+          "imageBytes": 0,
+          "cssBytes": 0,
+          "requestCount": 2,
+          "domElementsCount": 9,
+          "renderBlockingCount": 1
+        },
+        "discoveredLinks": [],
+        "elementsCount": {
+          "buttons": 0,
+          "links": 0,
+          "forms": 0,
+          "images": 0,
+          "headings": 1,
+          "scripts": 1
+        },
+        "screenshots": {},
+        "htmlSnippet": "<html>\r\n<head><title>302 Found</title><script src=\"/_aistudio-iframe.js?v=2c34bde1\"></script></head>\r\n<body>\r\n<center><h1>302 Found</h1></center>\r\n<hr><center>nginx/1.22.1</center>\r\n</body>\r\n</html>\r\n"
+      }
+    ],
+    "logs": [
+      {
+        "id": "log_1790881677622_xla6",
+        "timestamp": "7:07:57 PM",
+        "level": "success",
+        "message": "Security validated. Destination: https://ais-dev-bzwoignz3ygqmsvmvdgiav-212282537635.asia-east1.run.app/ (Pinned IP: 2600:1901:81d5:200::)",
+        "step": "INITIALIZING"
+      },
+      {
+        "id": "log_1790881677648_a4z1",
+        "timestamp": "7:07:57 PM",
+        "level": "warn",
+        "message": "Chromium sandbox launch unavailable (browserType.launch: Executable doesn't exist at /root/.cache/ms-playwright/chromium_headless_shell-1243/chrome-headless-shell-linux64/chrome-headless-shell\n╔════════════════════════════════════════════════════════════╗\n║ Looks like Playwright was just installed or updated.       ║\n║ Please run the following command to download new browsers: ║\n║                                                            ║\n║     npx playwright install                                 ║\n║                                                            ║\n║ <3 Playwright Team                                         ║\n╚════════════════════════════════════════════════════════════╝). Switching to HTTP Inspector engine.",
+        "step": "INITIALIZING"
+      }
+    ]
+  },
+  {
+    "id": "audit_1790881725391_t31cb",
+    "targetUrl": "https://ais-pre-twqasbvtmkrtsllriliohj-212282537635.asia-east1.run.app/",
+    "status": "COMPLETED",
+    "startedAt": "2026-10-01T19:08:45.627Z",
+    "completedAt": "2026-10-01T19:08:45.664Z",
+    "config": {
+      "targetUrl": "https://ais-pre-twqasbvtmkrtsllriliohj-212282537635.asia-east1.run.app/",
+      "maxPages": 20,
+      "maxDepth": 5,
+      "timeoutMs": 25000,
+      "viewports": [
+        {
+          "name": "Desktop (1440x900)",
+          "width": 1440,
+          "height": 900,
+          "isMobile": false
+        },
+        {
+          "name": "Tablet (768x1024)",
+          "width": 768,
+          "height": 1024,
+          "isMobile": true
+        },
+        {
+          "name": "Mobile (390x844)",
+          "width": 390,
+          "height": 844,
+          "isMobile": true
+        }
+      ],
+      "enableA11y": true,
+      "enablePerformance": true,
+      "enableAI": true,
+      "enableExternalLinks": true
+    },
+    "summary": {
+      "overallScore": 99,
+      "verdict": "LAUNCH_READY",
+      "verdictReason": "All deterministic and AI checks passed with high confidence. Safe for production deployment.",
+      "criticalCount": 0,
+      "highCount": 0,
+      "mediumCount": 1,
+      "lowCount": 0,
+      "infoCount": 0,
+      "totalFindings": 1,
+      "pagesAudited": 1,
+      "viewportsTested": 3,
+      "checksExecuted": 28,
+      "durationMs": 37,
+      "executionEngine": "HTTP_INSPECTOR",
+      "aiReasoningStatus": "FAILED"
+    },
+    "categoryScores": [
+      {
+        "category": "functionality",
+        "name": "Functionality & Availability",
+        "score": 100,
+        "weight": 0.25,
+        "passedCount": 6,
+        "failedCount": 0,
+        "warningCount": 0,
+        "status": "pass",
+        "checks": [
+          {
+            "id": "availability.http-status",
+            "name": "HTTP 200 Availability & Status",
+            "category": "functionality",
+            "passed": true,
+            "severityIfFailed": "critical",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "availability.console-errors",
+            "name": "Uncaught JavaScript Runtime Errors",
+            "category": "functionality",
+            "passed": true,
+            "severityIfFailed": "high",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "functionality.broken-links",
+            "name": "Broken Internal & External Hyperlinks",
+            "category": "functionality",
+            "passed": true,
+            "severityIfFailed": "high",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "functionality.dead-buttons",
+            "name": "Dead Interactive Elements / Empty Callbacks",
+            "category": "functionality",
+            "passed": true,
+            "severityIfFailed": "high",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "functionality.empty-hrefs",
+            "name": "Empty or Placeholder href Attributes (href=\"#\" / href=\"\")",
+            "category": "functionality",
+            "passed": true,
+            "severityIfFailed": "medium",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "functionality.unlabeled-interactive",
+            "name": "Unlabeled Interactive Controls",
+            "category": "functionality",
+            "passed": true,
+            "severityIfFailed": "medium",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          }
+        ]
+      },
+      {
+        "category": "mobile",
+        "name": "Mobile & Responsive UX",
+        "score": 100,
+        "weight": 0.2,
+        "passedCount": 5,
+        "failedCount": 0,
+        "warningCount": 0,
+        "status": "pass",
+        "checks": [
+          {
+            "id": "mobile.horizontal-overflow",
+            "name": "Mobile Horizontal Viewport Overflow",
+            "category": "mobile",
+            "passed": true,
+            "severityIfFailed": "critical",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "mobile.viewport-clipping",
+            "name": "Viewport Element Clipping & Cropped CTAs",
+            "category": "mobile",
+            "passed": true,
+            "severityIfFailed": "high",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "mobile.touch-targets",
+            "name": "Touch Target Sizing (Min 44x44px)",
+            "category": "mobile",
+            "passed": true,
+            "severityIfFailed": "medium",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "mobile.text-size",
+            "name": "Legible Mobile Typography (Min 12px)",
+            "category": "mobile",
+            "passed": true,
+            "severityIfFailed": "low",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "mobile.element-overlap",
+            "name": "Responsive Element Collision & Overlap",
+            "category": "mobile",
+            "passed": true,
+            "severityIfFailed": "high",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          }
+        ]
+      },
+      {
+        "category": "accessibility",
+        "name": "Accessibility (a11y)",
+        "score": 100,
+        "weight": 0.15,
+        "passedCount": 5,
+        "failedCount": 0,
+        "warningCount": 0,
+        "status": "pass",
+        "checks": [
+          {
+            "id": "accessibility.color-contrast",
+            "name": "WCAG AA Color Contrast Ratios",
+            "category": "accessibility",
+            "passed": true,
+            "severityIfFailed": "high",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "accessibility.image-alt",
+            "name": "Image Descriptive alt Attributes",
+            "category": "accessibility",
+            "passed": true,
+            "severityIfFailed": "medium",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "accessibility.form-labels",
+            "name": "Explicit Form Input Labels (<label> / aria-label)",
+            "category": "accessibility",
+            "passed": true,
+            "severityIfFailed": "high",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "accessibility.heading-hierarchy",
+            "name": "Logical Heading Structure (H1-H6)",
+            "category": "accessibility",
+            "passed": true,
+            "severityIfFailed": "medium",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "accessibility.landmark-regions",
+            "name": "Semantic Landmark Regions (<main>, <header>, <nav>)",
+            "category": "accessibility",
+            "passed": true,
+            "severityIfFailed": "low",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          }
+        ]
+      },
+      {
+        "category": "performance",
+        "name": "Performance & Web Vitals",
+        "score": 93,
+        "weight": 0.15,
+        "passedCount": 3,
+        "failedCount": 1,
+        "warningCount": 0,
+        "status": "pass",
+        "checks": [
+          {
+            "id": "performance.lcp",
+            "name": "Largest Contentful Paint (LCP < 2.5s)",
+            "category": "performance",
+            "passed": true,
+            "severityIfFailed": "high",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "performance.cls",
+            "name": "Cumulative Layout Shift (CLS < 0.1)",
+            "category": "performance",
+            "passed": true,
+            "severityIfFailed": "medium",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "performance.render-blocking",
+            "name": "Render-Blocking Scripts & Stylesheets",
+            "category": "performance",
+            "passed": false,
+            "severityIfFailed": "medium",
+            "details": "Failed — 1 issue(s) detected: 1 render-blocking script(s) in <head>",
+            "findingsCount": 1,
+            "executed": true
+          },
+          {
+            "id": "performance.resource-weight",
+            "name": "Total JavaScript & Asset Weight",
+            "category": "performance",
+            "passed": true,
+            "severityIfFailed": "low",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          }
+        ]
+      },
+      {
+        "category": "visual_ux",
+        "name": "Visual & UX Reasoning",
+        "score": 100,
+        "weight": 0.15,
+        "passedCount": 3,
+        "failedCount": 0,
+        "warningCount": 0,
+        "status": "pass",
+        "checks": [
+          {
+            "id": "visual.cta-prominence",
+            "name": "Primary CTA Visual Prominence & Contrast",
+            "category": "visual_ux",
+            "passed": true,
+            "severityIfFailed": "high",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "visual.spacing-consistency",
+            "name": "Visual Layout Consistency & Spacing Rhythm",
+            "category": "visual_ux",
+            "passed": true,
+            "severityIfFailed": "medium",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "visual.responsive-composition",
+            "name": "Multi-Viewport Visual Composition & Balance",
+            "category": "visual_ux",
+            "passed": true,
+            "severityIfFailed": "medium",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          }
+        ]
+      },
+      {
+        "category": "seo",
+        "name": "SEO & Social Signals",
+        "score": 100,
+        "weight": 0.1,
+        "passedCount": 5,
+        "failedCount": 0,
+        "warningCount": 0,
+        "status": "pass",
+        "checks": [
+          {
+            "id": "seo.title",
+            "name": "Page <title> Tag Presence & Length",
+            "category": "seo",
+            "passed": true,
+            "severityIfFailed": "high",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "seo.meta-description",
+            "name": "Meta Description Tag",
+            "category": "seo",
+            "passed": true,
+            "severityIfFailed": "medium",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "seo.h1",
+            "name": "Single Primary <h1> Heading",
+            "category": "seo",
+            "passed": true,
+            "severityIfFailed": "medium",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "seo.open-graph",
+            "name": "OpenGraph & Social Sharing Cards (og:title, og:image)",
+            "category": "seo",
+            "passed": true,
+            "severityIfFailed": "low",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "seo.canonical",
+            "name": "Canonical URL Tag (<link rel=\"canonical\">)",
+            "category": "seo",
+            "passed": true,
+            "severityIfFailed": "low",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          }
+        ]
+      }
+    ],
+    "findings": [
+      {
+        "id": "f_perf_block_1790881725662",
+        "auditId": "audit_1790881725391_t31cb",
+        "pageId": "page_root",
+        "category": "performance",
+        "checkId": "performance.render-blocking",
+        "severity": "medium",
+        "confidence": 0.94,
+        "title": "1 render-blocking script(s) in <head>",
+        "description": "Synchronous scripts in <head> block HTML parsing and delay first paint.",
+        "impact": "Increases initial page load time.",
+        "recommendation": "Add `defer` or `async` attributes to scripts.",
+        "source": "performance",
+        "url": "https://ais-pre-twqasbvtmkrtsllriliohj-212282537635.asia-east1.run.app/",
+        "evidence": [
+          {
+            "id": "ev_block",
+            "type": "performance",
+            "snippet": "<script src=\"/_aistudio-iframe.js?v=2c34bde1\"></script>"
+          }
+        ],
+        "fingerprint": "performance::performance.render-blocking::https://ais-pre-twqasbvtmkrtsllriliohj-212282537635.asia-east1.run.app/::::1 render blocking script s  in  head",
+        "status": "open"
+      }
+    ],
+    "pages": [
+      {
+        "id": "page_root",
+        "url": "https://ais-pre-twqasbvtmkrtsllriliohj-212282537635.asia-east1.run.app/",
+        "status": 302,
+        "title": "302 Found",
+        "loadTimeMs": 22,
+        "consoleErrors": [],
+        "networkErrors": [],
+        "metrics": {
+          "ttfb": 0,
+          "loadTimeMs": 0,
+          "lcp": 0,
+          "fcp": 0,
+          "cls": 0,
+          "tbt": 0,
+          "totalBytes": 40200,
+          "htmlBytes": 200,
+          "scriptBytes": 40000,
+          "imageBytes": 0,
+          "cssBytes": 0,
+          "requestCount": 2,
+          "domElementsCount": 9,
+          "renderBlockingCount": 1
+        },
+        "discoveredLinks": [],
+        "elementsCount": {
+          "buttons": 0,
+          "links": 0,
+          "forms": 0,
+          "images": 0,
+          "headings": 1,
+          "scripts": 1
+        },
+        "screenshots": {},
+        "htmlSnippet": "<html>\r\n<head><title>302 Found</title><script src=\"/_aistudio-iframe.js?v=2c34bde1\"></script></head>\r\n<body>\r\n<center><h1>302 Found</h1></center>\r\n<hr><center>nginx/1.22.1</center>\r\n</body>\r\n</html>\r\n"
+      }
+    ],
+    "logs": [
+      {
+        "id": "log_1790881725632_nbxz",
+        "timestamp": "7:08:45 PM",
+        "level": "success",
+        "message": "Security validated. Destination: https://ais-pre-twqasbvtmkrtsllriliohj-212282537635.asia-east1.run.app/ (Pinned IP: 2600:1900:4245:200::)",
+        "step": "INITIALIZING"
+      },
+      {
+        "id": "log_1790881725636_iuz8",
+        "timestamp": "7:08:45 PM",
+        "level": "warn",
+        "message": "Chromium sandbox launch unavailable (browserType.launch: Executable doesn't exist at /root/.cache/ms-playwright/chromium_headless_shell-1243/chrome-headless-shell-linux64/chrome-headless-shell\n╔════════════════════════════════════════════════════════════╗\n║ Looks like Playwright was just installed or updated.       ║\n║ Please run the following command to download new browsers: ║\n║                                                            ║\n║     npx playwright install                                 ║\n║                                                            ║\n║ <3 Playwright Team                                         ║\n╚════════════════════════════════════════════════════════════╝). Switching to HTTP Inspector engine.",
+        "step": "INITIALIZING"
+      }
+    ]
+  },
+  {
+    "id": "audit_1790881809627_b28mm",
+    "targetUrl": "https://ais-pre-twqasbvtmkrtsllriliohj-212282537635.asia-east1.run.app/",
+    "status": "COMPLETED",
+    "startedAt": "2026-10-01T19:10:09.662Z",
+    "completedAt": "2026-10-01T19:10:09.690Z",
+    "config": {
+      "targetUrl": "https://ais-pre-twqasbvtmkrtsllriliohj-212282537635.asia-east1.run.app/",
+      "maxPages": 20,
+      "maxDepth": 5,
+      "timeoutMs": 25000,
+      "viewports": [
+        {
+          "name": "Desktop (1440x900)",
+          "width": 1440,
+          "height": 900,
+          "isMobile": false
+        },
+        {
+          "name": "Tablet (768x1024)",
+          "width": 768,
+          "height": 1024,
+          "isMobile": true
+        },
+        {
+          "name": "Mobile (390x844)",
+          "width": 390,
+          "height": 844,
+          "isMobile": true
+        }
+      ],
+      "enableA11y": true,
+      "enablePerformance": true,
+      "enableAI": true,
+      "enableExternalLinks": true
+    },
+    "summary": {
+      "overallScore": 99,
+      "verdict": "LAUNCH_READY",
+      "verdictReason": "All deterministic and AI checks passed with high confidence. Safe for production deployment.",
+      "criticalCount": 0,
+      "highCount": 0,
+      "mediumCount": 1,
+      "lowCount": 0,
+      "infoCount": 0,
+      "totalFindings": 1,
+      "pagesAudited": 1,
+      "viewportsTested": 3,
+      "checksExecuted": 28,
+      "durationMs": 28,
+      "executionEngine": "HTTP_INSPECTOR",
+      "aiReasoningStatus": "FAILED"
+    },
+    "categoryScores": [
+      {
+        "category": "functionality",
+        "name": "Functionality & Availability",
+        "score": 100,
+        "weight": 0.25,
+        "passedCount": 6,
+        "failedCount": 0,
+        "warningCount": 0,
+        "status": "pass",
+        "checks": [
+          {
+            "id": "availability.http-status",
+            "name": "HTTP 200 Availability & Status",
+            "category": "functionality",
+            "passed": true,
+            "severityIfFailed": "critical",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "availability.console-errors",
+            "name": "Uncaught JavaScript Runtime Errors",
+            "category": "functionality",
+            "passed": true,
+            "severityIfFailed": "high",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "functionality.broken-links",
+            "name": "Broken Internal & External Hyperlinks",
+            "category": "functionality",
+            "passed": true,
+            "severityIfFailed": "high",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "functionality.dead-buttons",
+            "name": "Dead Interactive Elements / Empty Callbacks",
+            "category": "functionality",
+            "passed": true,
+            "severityIfFailed": "high",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "functionality.empty-hrefs",
+            "name": "Empty or Placeholder href Attributes (href=\"#\" / href=\"\")",
+            "category": "functionality",
+            "passed": true,
+            "severityIfFailed": "medium",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "functionality.unlabeled-interactive",
+            "name": "Unlabeled Interactive Controls",
+            "category": "functionality",
+            "passed": true,
+            "severityIfFailed": "medium",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          }
+        ]
+      },
+      {
+        "category": "mobile",
+        "name": "Mobile & Responsive UX",
+        "score": 100,
+        "weight": 0.2,
+        "passedCount": 5,
+        "failedCount": 0,
+        "warningCount": 0,
+        "status": "pass",
+        "checks": [
+          {
+            "id": "mobile.horizontal-overflow",
+            "name": "Mobile Horizontal Viewport Overflow",
+            "category": "mobile",
+            "passed": true,
+            "severityIfFailed": "critical",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "mobile.viewport-clipping",
+            "name": "Viewport Element Clipping & Cropped CTAs",
+            "category": "mobile",
+            "passed": true,
+            "severityIfFailed": "high",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "mobile.touch-targets",
+            "name": "Touch Target Sizing (Min 44x44px)",
+            "category": "mobile",
+            "passed": true,
+            "severityIfFailed": "medium",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "mobile.text-size",
+            "name": "Legible Mobile Typography (Min 12px)",
+            "category": "mobile",
+            "passed": true,
+            "severityIfFailed": "low",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "mobile.element-overlap",
+            "name": "Responsive Element Collision & Overlap",
+            "category": "mobile",
+            "passed": true,
+            "severityIfFailed": "high",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          }
+        ]
+      },
+      {
+        "category": "accessibility",
+        "name": "Accessibility (a11y)",
+        "score": 100,
+        "weight": 0.15,
+        "passedCount": 5,
+        "failedCount": 0,
+        "warningCount": 0,
+        "status": "pass",
+        "checks": [
+          {
+            "id": "accessibility.color-contrast",
+            "name": "WCAG AA Color Contrast Ratios",
+            "category": "accessibility",
+            "passed": true,
+            "severityIfFailed": "high",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "accessibility.image-alt",
+            "name": "Image Descriptive alt Attributes",
+            "category": "accessibility",
+            "passed": true,
+            "severityIfFailed": "medium",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "accessibility.form-labels",
+            "name": "Explicit Form Input Labels (<label> / aria-label)",
+            "category": "accessibility",
+            "passed": true,
+            "severityIfFailed": "high",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "accessibility.heading-hierarchy",
+            "name": "Logical Heading Structure (H1-H6)",
+            "category": "accessibility",
+            "passed": true,
+            "severityIfFailed": "medium",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "accessibility.landmark-regions",
+            "name": "Semantic Landmark Regions (<main>, <header>, <nav>)",
+            "category": "accessibility",
+            "passed": true,
+            "severityIfFailed": "low",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          }
+        ]
+      },
+      {
+        "category": "performance",
+        "name": "Performance & Web Vitals",
+        "score": 93,
+        "weight": 0.15,
+        "passedCount": 3,
+        "failedCount": 1,
+        "warningCount": 0,
+        "status": "pass",
+        "checks": [
+          {
+            "id": "performance.lcp",
+            "name": "Largest Contentful Paint (LCP < 2.5s)",
+            "category": "performance",
+            "passed": true,
+            "severityIfFailed": "high",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "performance.cls",
+            "name": "Cumulative Layout Shift (CLS < 0.1)",
+            "category": "performance",
+            "passed": true,
+            "severityIfFailed": "medium",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "performance.render-blocking",
+            "name": "Render-Blocking Scripts & Stylesheets",
+            "category": "performance",
+            "passed": false,
+            "severityIfFailed": "medium",
+            "details": "Failed — 1 issue(s) detected: 1 render-blocking script(s) in <head>",
+            "findingsCount": 1,
+            "executed": true
+          },
+          {
+            "id": "performance.resource-weight",
+            "name": "Total JavaScript & Asset Weight",
+            "category": "performance",
+            "passed": true,
+            "severityIfFailed": "low",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          }
+        ]
+      },
+      {
+        "category": "visual_ux",
+        "name": "Visual & UX Reasoning",
+        "score": 100,
+        "weight": 0.15,
+        "passedCount": 3,
+        "failedCount": 0,
+        "warningCount": 0,
+        "status": "pass",
+        "checks": [
+          {
+            "id": "visual.cta-prominence",
+            "name": "Primary CTA Visual Prominence & Contrast",
+            "category": "visual_ux",
+            "passed": true,
+            "severityIfFailed": "high",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "visual.spacing-consistency",
+            "name": "Visual Layout Consistency & Spacing Rhythm",
+            "category": "visual_ux",
+            "passed": true,
+            "severityIfFailed": "medium",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "visual.responsive-composition",
+            "name": "Multi-Viewport Visual Composition & Balance",
+            "category": "visual_ux",
+            "passed": true,
+            "severityIfFailed": "medium",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          }
+        ]
+      },
+      {
+        "category": "seo",
+        "name": "SEO & Social Signals",
+        "score": 100,
+        "weight": 0.1,
+        "passedCount": 5,
+        "failedCount": 0,
+        "warningCount": 0,
+        "status": "pass",
+        "checks": [
+          {
+            "id": "seo.title",
+            "name": "Page <title> Tag Presence & Length",
+            "category": "seo",
+            "passed": true,
+            "severityIfFailed": "high",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "seo.meta-description",
+            "name": "Meta Description Tag",
+            "category": "seo",
+            "passed": true,
+            "severityIfFailed": "medium",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "seo.h1",
+            "name": "Single Primary <h1> Heading",
+            "category": "seo",
+            "passed": true,
+            "severityIfFailed": "medium",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "seo.open-graph",
+            "name": "OpenGraph & Social Sharing Cards (og:title, og:image)",
+            "category": "seo",
+            "passed": true,
+            "severityIfFailed": "low",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "seo.canonical",
+            "name": "Canonical URL Tag (<link rel=\"canonical\">)",
+            "category": "seo",
+            "passed": true,
+            "severityIfFailed": "low",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          }
+        ]
+      }
+    ],
+    "findings": [
+      {
+        "id": "f_perf_block_1790881809689",
+        "auditId": "audit_1790881809627_b28mm",
+        "pageId": "page_root",
+        "category": "performance",
+        "checkId": "performance.render-blocking",
+        "severity": "medium",
+        "confidence": 0.94,
+        "title": "1 render-blocking script(s) in <head>",
+        "description": "Synchronous scripts in <head> block HTML parsing and delay first paint.",
+        "impact": "Increases initial page load time.",
+        "recommendation": "Add `defer` or `async` attributes to scripts.",
+        "source": "performance",
+        "url": "https://ais-pre-twqasbvtmkrtsllriliohj-212282537635.asia-east1.run.app/",
+        "evidence": [
+          {
+            "id": "ev_block",
+            "type": "performance",
+            "snippet": "<script src=\"/_aistudio-iframe.js?v=2c34bde1\"></script>"
+          }
+        ],
+        "fingerprint": "performance::performance.render-blocking::https://ais-pre-twqasbvtmkrtsllriliohj-212282537635.asia-east1.run.app/::::1 render blocking script s  in  head",
+        "status": "open"
+      }
+    ],
+    "pages": [
+      {
+        "id": "page_root",
+        "url": "https://ais-pre-twqasbvtmkrtsllriliohj-212282537635.asia-east1.run.app/",
+        "status": 302,
+        "title": "302 Found",
+        "loadTimeMs": 18,
+        "consoleErrors": [],
+        "networkErrors": [],
+        "metrics": {
+          "ttfb": 0,
+          "loadTimeMs": 0,
+          "lcp": 0,
+          "fcp": 0,
+          "cls": 0,
+          "tbt": 0,
+          "totalBytes": 40200,
+          "htmlBytes": 200,
+          "scriptBytes": 40000,
+          "imageBytes": 0,
+          "cssBytes": 0,
+          "requestCount": 2,
+          "domElementsCount": 9,
+          "renderBlockingCount": 1
+        },
+        "discoveredLinks": [],
+        "elementsCount": {
+          "buttons": 0,
+          "links": 0,
+          "forms": 0,
+          "images": 0,
+          "headings": 1,
+          "scripts": 1
+        },
+        "screenshots": {},
+        "htmlSnippet": "<html>\r\n<head><title>302 Found</title><script src=\"/_aistudio-iframe.js?v=2c34bde1\"></script></head>\r\n<body>\r\n<center><h1>302 Found</h1></center>\r\n<hr><center>nginx/1.22.1</center>\r\n</body>\r\n</html>\r\n"
+      }
+    ],
+    "logs": [
+      {
+        "id": "log_1790881809664_l10w",
+        "timestamp": "7:10:09 PM",
+        "level": "success",
+        "message": "Security validated. Destination: https://ais-pre-twqasbvtmkrtsllriliohj-212282537635.asia-east1.run.app/ (Pinned IP: 2600:1901:81d5:200::)",
+        "step": "INITIALIZING"
+      },
+      {
+        "id": "log_1790881809668_iipk",
+        "timestamp": "7:10:09 PM",
+        "level": "warn",
+        "message": "Chromium sandbox launch unavailable (browserType.launch: Executable doesn't exist at /root/.cache/ms-playwright/chromium_headless_shell-1243/chrome-headless-shell-linux64/chrome-headless-shell\n╔════════════════════════════════════════════════════════════╗\n║ Looks like Playwright was just installed or updated.       ║\n║ Please run the following command to download new browsers: ║\n║                                                            ║\n║     npx playwright install                                 ║\n║                                                            ║\n║ <3 Playwright Team                                         ║\n╚════════════════════════════════════════════════════════════╝). Switching to HTTP Inspector engine.",
+        "step": "INITIALIZING"
+      }
+    ]
+  },
+  {
+    "id": "audit_1790881847817_c6mm4",
+    "targetUrl": "https://ais-pre-twqasbvtmkrtsllriliohj-212282537635.asia-east1.run.app/",
+    "status": "COMPLETED",
+    "startedAt": "2026-10-01T19:10:49.675Z",
+    "completedAt": "2026-10-01T19:10:49.703Z",
+    "config": {
+      "targetUrl": "https://ais-pre-twqasbvtmkrtsllriliohj-212282537635.asia-east1.run.app/",
+      "maxPages": 20,
+      "maxDepth": 5,
+      "timeoutMs": 25000,
+      "viewports": [
+        {
+          "name": "Desktop (1440x900)",
+          "width": 1440,
+          "height": 900,
+          "isMobile": false
+        },
+        {
+          "name": "Tablet (768x1024)",
+          "width": 768,
+          "height": 1024,
+          "isMobile": true
+        },
+        {
+          "name": "Mobile (390x844)",
+          "width": 390,
+          "height": 844,
+          "isMobile": true
+        }
+      ],
+      "enableA11y": true,
+      "enablePerformance": true,
+      "enableAI": true,
+      "enableExternalLinks": true
+    },
+    "summary": {
+      "overallScore": 99,
+      "verdict": "LAUNCH_READY",
+      "verdictReason": "All deterministic and AI checks passed with high confidence. Safe for production deployment.",
+      "criticalCount": 0,
+      "highCount": 0,
+      "mediumCount": 1,
+      "lowCount": 0,
+      "infoCount": 0,
+      "totalFindings": 1,
+      "pagesAudited": 1,
+      "viewportsTested": 3,
+      "checksExecuted": 28,
+      "durationMs": 28,
+      "executionEngine": "HTTP_INSPECTOR",
+      "aiReasoningStatus": "FAILED"
+    },
+    "categoryScores": [
+      {
+        "category": "functionality",
+        "name": "Functionality & Availability",
+        "score": 100,
+        "weight": 0.25,
+        "passedCount": 6,
+        "failedCount": 0,
+        "warningCount": 0,
+        "status": "pass",
+        "checks": [
+          {
+            "id": "availability.http-status",
+            "name": "HTTP 200 Availability & Status",
+            "category": "functionality",
+            "passed": true,
+            "severityIfFailed": "critical",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "availability.console-errors",
+            "name": "Uncaught JavaScript Runtime Errors",
+            "category": "functionality",
+            "passed": true,
+            "severityIfFailed": "high",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "functionality.broken-links",
+            "name": "Broken Internal & External Hyperlinks",
+            "category": "functionality",
+            "passed": true,
+            "severityIfFailed": "high",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "functionality.dead-buttons",
+            "name": "Dead Interactive Elements / Empty Callbacks",
+            "category": "functionality",
+            "passed": true,
+            "severityIfFailed": "high",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "functionality.empty-hrefs",
+            "name": "Empty or Placeholder href Attributes (href=\"#\" / href=\"\")",
+            "category": "functionality",
+            "passed": true,
+            "severityIfFailed": "medium",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "functionality.unlabeled-interactive",
+            "name": "Unlabeled Interactive Controls",
+            "category": "functionality",
+            "passed": true,
+            "severityIfFailed": "medium",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          }
+        ]
+      },
+      {
+        "category": "mobile",
+        "name": "Mobile & Responsive UX",
+        "score": 100,
+        "weight": 0.2,
+        "passedCount": 5,
+        "failedCount": 0,
+        "warningCount": 0,
+        "status": "pass",
+        "checks": [
+          {
+            "id": "mobile.horizontal-overflow",
+            "name": "Mobile Horizontal Viewport Overflow",
+            "category": "mobile",
+            "passed": true,
+            "severityIfFailed": "critical",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "mobile.viewport-clipping",
+            "name": "Viewport Element Clipping & Cropped CTAs",
+            "category": "mobile",
+            "passed": true,
+            "severityIfFailed": "high",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "mobile.touch-targets",
+            "name": "Touch Target Sizing (Min 44x44px)",
+            "category": "mobile",
+            "passed": true,
+            "severityIfFailed": "medium",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "mobile.text-size",
+            "name": "Legible Mobile Typography (Min 12px)",
+            "category": "mobile",
+            "passed": true,
+            "severityIfFailed": "low",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "mobile.element-overlap",
+            "name": "Responsive Element Collision & Overlap",
+            "category": "mobile",
+            "passed": true,
+            "severityIfFailed": "high",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          }
+        ]
+      },
+      {
+        "category": "accessibility",
+        "name": "Accessibility (a11y)",
+        "score": 100,
+        "weight": 0.15,
+        "passedCount": 5,
+        "failedCount": 0,
+        "warningCount": 0,
+        "status": "pass",
+        "checks": [
+          {
+            "id": "accessibility.color-contrast",
+            "name": "WCAG AA Color Contrast Ratios",
+            "category": "accessibility",
+            "passed": true,
+            "severityIfFailed": "high",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "accessibility.image-alt",
+            "name": "Image Descriptive alt Attributes",
+            "category": "accessibility",
+            "passed": true,
+            "severityIfFailed": "medium",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "accessibility.form-labels",
+            "name": "Explicit Form Input Labels (<label> / aria-label)",
+            "category": "accessibility",
+            "passed": true,
+            "severityIfFailed": "high",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "accessibility.heading-hierarchy",
+            "name": "Logical Heading Structure (H1-H6)",
+            "category": "accessibility",
+            "passed": true,
+            "severityIfFailed": "medium",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "accessibility.landmark-regions",
+            "name": "Semantic Landmark Regions (<main>, <header>, <nav>)",
+            "category": "accessibility",
+            "passed": true,
+            "severityIfFailed": "low",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          }
+        ]
+      },
+      {
+        "category": "performance",
+        "name": "Performance & Web Vitals",
+        "score": 93,
+        "weight": 0.15,
+        "passedCount": 3,
+        "failedCount": 1,
+        "warningCount": 0,
+        "status": "pass",
+        "checks": [
+          {
+            "id": "performance.lcp",
+            "name": "Largest Contentful Paint (LCP < 2.5s)",
+            "category": "performance",
+            "passed": true,
+            "severityIfFailed": "high",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "performance.cls",
+            "name": "Cumulative Layout Shift (CLS < 0.1)",
+            "category": "performance",
+            "passed": true,
+            "severityIfFailed": "medium",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "performance.render-blocking",
+            "name": "Render-Blocking Scripts & Stylesheets",
+            "category": "performance",
+            "passed": false,
+            "severityIfFailed": "medium",
+            "details": "Failed — 1 issue(s) detected: 1 render-blocking script(s) in <head>",
+            "findingsCount": 1,
+            "executed": true
+          },
+          {
+            "id": "performance.resource-weight",
+            "name": "Total JavaScript & Asset Weight",
+            "category": "performance",
+            "passed": true,
+            "severityIfFailed": "low",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          }
+        ]
+      },
+      {
+        "category": "visual_ux",
+        "name": "Visual & UX Reasoning",
+        "score": 100,
+        "weight": 0.15,
+        "passedCount": 3,
+        "failedCount": 0,
+        "warningCount": 0,
+        "status": "pass",
+        "checks": [
+          {
+            "id": "visual.cta-prominence",
+            "name": "Primary CTA Visual Prominence & Contrast",
+            "category": "visual_ux",
+            "passed": true,
+            "severityIfFailed": "high",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "visual.spacing-consistency",
+            "name": "Visual Layout Consistency & Spacing Rhythm",
+            "category": "visual_ux",
+            "passed": true,
+            "severityIfFailed": "medium",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "visual.responsive-composition",
+            "name": "Multi-Viewport Visual Composition & Balance",
+            "category": "visual_ux",
+            "passed": true,
+            "severityIfFailed": "medium",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          }
+        ]
+      },
+      {
+        "category": "seo",
+        "name": "SEO & Social Signals",
+        "score": 100,
+        "weight": 0.1,
+        "passedCount": 5,
+        "failedCount": 0,
+        "warningCount": 0,
+        "status": "pass",
+        "checks": [
+          {
+            "id": "seo.title",
+            "name": "Page <title> Tag Presence & Length",
+            "category": "seo",
+            "passed": true,
+            "severityIfFailed": "high",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "seo.meta-description",
+            "name": "Meta Description Tag",
+            "category": "seo",
+            "passed": true,
+            "severityIfFailed": "medium",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "seo.h1",
+            "name": "Single Primary <h1> Heading",
+            "category": "seo",
+            "passed": true,
+            "severityIfFailed": "medium",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "seo.open-graph",
+            "name": "OpenGraph & Social Sharing Cards (og:title, og:image)",
+            "category": "seo",
+            "passed": true,
+            "severityIfFailed": "low",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "seo.canonical",
+            "name": "Canonical URL Tag (<link rel=\"canonical\">)",
+            "category": "seo",
+            "passed": true,
+            "severityIfFailed": "low",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          }
+        ]
+      }
+    ],
+    "findings": [
+      {
+        "id": "f_perf_block_1790881849702",
+        "auditId": "audit_1790881847817_c6mm4",
+        "pageId": "page_root",
+        "category": "performance",
+        "checkId": "performance.render-blocking",
+        "severity": "medium",
+        "confidence": 0.94,
+        "title": "1 render-blocking script(s) in <head>",
+        "description": "Synchronous scripts in <head> block HTML parsing and delay first paint.",
+        "impact": "Increases initial page load time.",
+        "recommendation": "Add `defer` or `async` attributes to scripts.",
+        "source": "performance",
+        "url": "https://ais-pre-twqasbvtmkrtsllriliohj-212282537635.asia-east1.run.app/",
+        "evidence": [
+          {
+            "id": "ev_block",
+            "type": "performance",
+            "snippet": "<script src=\"/_aistudio-iframe.js?v=2c34bde1\"></script>"
+          }
+        ],
+        "fingerprint": "performance::performance.render-blocking::https://ais-pre-twqasbvtmkrtsllriliohj-212282537635.asia-east1.run.app/::::1 render blocking script s  in  head",
+        "status": "open"
+      }
+    ],
+    "pages": [
+      {
+        "id": "page_root",
+        "url": "https://ais-pre-twqasbvtmkrtsllriliohj-212282537635.asia-east1.run.app/",
+        "status": 302,
+        "title": "302 Found",
+        "loadTimeMs": 18,
+        "consoleErrors": [],
+        "networkErrors": [],
+        "metrics": {
+          "ttfb": 0,
+          "loadTimeMs": 0,
+          "lcp": 0,
+          "fcp": 0,
+          "cls": 0,
+          "tbt": 0,
+          "totalBytes": 40200,
+          "htmlBytes": 200,
+          "scriptBytes": 40000,
+          "imageBytes": 0,
+          "cssBytes": 0,
+          "requestCount": 2,
+          "domElementsCount": 9,
+          "renderBlockingCount": 1
+        },
+        "discoveredLinks": [],
+        "elementsCount": {
+          "buttons": 0,
+          "links": 0,
+          "forms": 0,
+          "images": 0,
+          "headings": 1,
+          "scripts": 1
+        },
+        "screenshots": {},
+        "htmlSnippet": "<html>\r\n<head><title>302 Found</title><script src=\"/_aistudio-iframe.js?v=2c34bde1\"></script></head>\r\n<body>\r\n<center><h1>302 Found</h1></center>\r\n<hr><center>nginx/1.22.1</center>\r\n</body>\r\n</html>\r\n"
+      }
+    ],
+    "logs": [
+      {
+        "id": "log_1790881849678_8xuu",
+        "timestamp": "7:10:49 PM",
+        "level": "success",
+        "message": "Security validated. Destination: https://ais-pre-twqasbvtmkrtsllriliohj-212282537635.asia-east1.run.app/ (Pinned IP: 2600:1900:4242:200::)",
+        "step": "INITIALIZING"
+      },
+      {
+        "id": "log_1790881849682_jw9m",
+        "timestamp": "7:10:49 PM",
+        "level": "warn",
+        "message": "Chromium sandbox launch unavailable (browserType.launch: Executable doesn't exist at /root/.cache/ms-playwright/chromium_headless_shell-1243/chrome-headless-shell-linux64/chrome-headless-shell\n╔════════════════════════════════════════════════════════════╗\n║ Looks like Playwright was just installed or updated.       ║\n║ Please run the following command to download new browsers: ║\n║                                                            ║\n║     npx playwright install                                 ║\n║                                                            ║\n║ <3 Playwright Team                                         ║\n╚════════════════════════════════════════════════════════════╝). Switching to HTTP Inspector engine.",
+        "step": "INITIALIZING"
+      }
+    ]
+  },
+  {
+    "id": "audit_1790881853316_t4dx1",
+    "targetUrl": "https://ais-pre-twqasbvtmkrtsllriliohj-212282537635.asia-east1.run.app/",
+    "status": "COMPLETED",
+    "startedAt": "2026-10-01T19:10:53.676Z",
+    "completedAt": "2026-10-01T19:10:53.715Z",
+    "config": {
+      "targetUrl": "https://ais-pre-twqasbvtmkrtsllriliohj-212282537635.asia-east1.run.app/",
+      "maxPages": 20,
+      "maxDepth": 5,
+      "timeoutMs": 25000,
+      "viewports": [
+        {
+          "name": "Desktop (1440x900)",
+          "width": 1440,
+          "height": 900,
+          "isMobile": false
+        },
+        {
+          "name": "Tablet (768x1024)",
+          "width": 768,
+          "height": 1024,
+          "isMobile": true
+        },
+        {
+          "name": "Mobile (390x844)",
+          "width": 390,
+          "height": 844,
+          "isMobile": true
+        }
+      ],
+      "enableA11y": true,
+      "enablePerformance": true,
+      "enableAI": true,
+      "enableExternalLinks": true
+    },
+    "summary": {
+      "overallScore": 99,
+      "verdict": "LAUNCH_READY",
+      "verdictReason": "All deterministic and AI checks passed with high confidence. Safe for production deployment.",
+      "criticalCount": 0,
+      "highCount": 0,
+      "mediumCount": 1,
+      "lowCount": 0,
+      "infoCount": 0,
+      "totalFindings": 1,
+      "pagesAudited": 1,
+      "viewportsTested": 3,
+      "checksExecuted": 28,
+      "durationMs": 39,
+      "executionEngine": "HTTP_INSPECTOR",
+      "aiReasoningStatus": "FAILED"
+    },
+    "categoryScores": [
+      {
+        "category": "functionality",
+        "name": "Functionality & Availability",
+        "score": 100,
+        "weight": 0.25,
+        "passedCount": 6,
+        "failedCount": 0,
+        "warningCount": 0,
+        "status": "pass",
+        "checks": [
+          {
+            "id": "availability.http-status",
+            "name": "HTTP 200 Availability & Status",
+            "category": "functionality",
+            "passed": true,
+            "severityIfFailed": "critical",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "availability.console-errors",
+            "name": "Uncaught JavaScript Runtime Errors",
+            "category": "functionality",
+            "passed": true,
+            "severityIfFailed": "high",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "functionality.broken-links",
+            "name": "Broken Internal & External Hyperlinks",
+            "category": "functionality",
+            "passed": true,
+            "severityIfFailed": "high",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "functionality.dead-buttons",
+            "name": "Dead Interactive Elements / Empty Callbacks",
+            "category": "functionality",
+            "passed": true,
+            "severityIfFailed": "high",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "functionality.empty-hrefs",
+            "name": "Empty or Placeholder href Attributes (href=\"#\" / href=\"\")",
+            "category": "functionality",
+            "passed": true,
+            "severityIfFailed": "medium",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "functionality.unlabeled-interactive",
+            "name": "Unlabeled Interactive Controls",
+            "category": "functionality",
+            "passed": true,
+            "severityIfFailed": "medium",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          }
+        ]
+      },
+      {
+        "category": "mobile",
+        "name": "Mobile & Responsive UX",
+        "score": 100,
+        "weight": 0.2,
+        "passedCount": 5,
+        "failedCount": 0,
+        "warningCount": 0,
+        "status": "pass",
+        "checks": [
+          {
+            "id": "mobile.horizontal-overflow",
+            "name": "Mobile Horizontal Viewport Overflow",
+            "category": "mobile",
+            "passed": true,
+            "severityIfFailed": "critical",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "mobile.viewport-clipping",
+            "name": "Viewport Element Clipping & Cropped CTAs",
+            "category": "mobile",
+            "passed": true,
+            "severityIfFailed": "high",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "mobile.touch-targets",
+            "name": "Touch Target Sizing (Min 44x44px)",
+            "category": "mobile",
+            "passed": true,
+            "severityIfFailed": "medium",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "mobile.text-size",
+            "name": "Legible Mobile Typography (Min 12px)",
+            "category": "mobile",
+            "passed": true,
+            "severityIfFailed": "low",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "mobile.element-overlap",
+            "name": "Responsive Element Collision & Overlap",
+            "category": "mobile",
+            "passed": true,
+            "severityIfFailed": "high",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          }
+        ]
+      },
+      {
+        "category": "accessibility",
+        "name": "Accessibility (a11y)",
+        "score": 100,
+        "weight": 0.15,
+        "passedCount": 5,
+        "failedCount": 0,
+        "warningCount": 0,
+        "status": "pass",
+        "checks": [
+          {
+            "id": "accessibility.color-contrast",
+            "name": "WCAG AA Color Contrast Ratios",
+            "category": "accessibility",
+            "passed": true,
+            "severityIfFailed": "high",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "accessibility.image-alt",
+            "name": "Image Descriptive alt Attributes",
+            "category": "accessibility",
+            "passed": true,
+            "severityIfFailed": "medium",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "accessibility.form-labels",
+            "name": "Explicit Form Input Labels (<label> / aria-label)",
+            "category": "accessibility",
+            "passed": true,
+            "severityIfFailed": "high",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "accessibility.heading-hierarchy",
+            "name": "Logical Heading Structure (H1-H6)",
+            "category": "accessibility",
+            "passed": true,
+            "severityIfFailed": "medium",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "accessibility.landmark-regions",
+            "name": "Semantic Landmark Regions (<main>, <header>, <nav>)",
+            "category": "accessibility",
+            "passed": true,
+            "severityIfFailed": "low",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          }
+        ]
+      },
+      {
+        "category": "performance",
+        "name": "Performance & Web Vitals",
+        "score": 93,
+        "weight": 0.15,
+        "passedCount": 3,
+        "failedCount": 1,
+        "warningCount": 0,
+        "status": "pass",
+        "checks": [
+          {
+            "id": "performance.lcp",
+            "name": "Largest Contentful Paint (LCP < 2.5s)",
+            "category": "performance",
+            "passed": true,
+            "severityIfFailed": "high",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "performance.cls",
+            "name": "Cumulative Layout Shift (CLS < 0.1)",
+            "category": "performance",
+            "passed": true,
+            "severityIfFailed": "medium",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "performance.render-blocking",
+            "name": "Render-Blocking Scripts & Stylesheets",
+            "category": "performance",
+            "passed": false,
+            "severityIfFailed": "medium",
+            "details": "Failed — 1 issue(s) detected: 1 render-blocking script(s) in <head>",
+            "findingsCount": 1,
+            "executed": true
+          },
+          {
+            "id": "performance.resource-weight",
+            "name": "Total JavaScript & Asset Weight",
+            "category": "performance",
+            "passed": true,
+            "severityIfFailed": "low",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          }
+        ]
+      },
+      {
+        "category": "visual_ux",
+        "name": "Visual & UX Reasoning",
+        "score": 100,
+        "weight": 0.15,
+        "passedCount": 3,
+        "failedCount": 0,
+        "warningCount": 0,
+        "status": "pass",
+        "checks": [
+          {
+            "id": "visual.cta-prominence",
+            "name": "Primary CTA Visual Prominence & Contrast",
+            "category": "visual_ux",
+            "passed": true,
+            "severityIfFailed": "high",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "visual.spacing-consistency",
+            "name": "Visual Layout Consistency & Spacing Rhythm",
+            "category": "visual_ux",
+            "passed": true,
+            "severityIfFailed": "medium",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "visual.responsive-composition",
+            "name": "Multi-Viewport Visual Composition & Balance",
+            "category": "visual_ux",
+            "passed": true,
+            "severityIfFailed": "medium",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          }
+        ]
+      },
+      {
+        "category": "seo",
+        "name": "SEO & Social Signals",
+        "score": 100,
+        "weight": 0.1,
+        "passedCount": 5,
+        "failedCount": 0,
+        "warningCount": 0,
+        "status": "pass",
+        "checks": [
+          {
+            "id": "seo.title",
+            "name": "Page <title> Tag Presence & Length",
+            "category": "seo",
+            "passed": true,
+            "severityIfFailed": "high",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "seo.meta-description",
+            "name": "Meta Description Tag",
+            "category": "seo",
+            "passed": true,
+            "severityIfFailed": "medium",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "seo.h1",
+            "name": "Single Primary <h1> Heading",
+            "category": "seo",
+            "passed": true,
+            "severityIfFailed": "medium",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "seo.open-graph",
+            "name": "OpenGraph & Social Sharing Cards (og:title, og:image)",
+            "category": "seo",
+            "passed": true,
+            "severityIfFailed": "low",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "seo.canonical",
+            "name": "Canonical URL Tag (<link rel=\"canonical\">)",
+            "category": "seo",
+            "passed": true,
+            "severityIfFailed": "low",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          }
+        ]
+      }
+    ],
+    "findings": [
+      {
+        "id": "f_perf_block_1790881853713",
+        "auditId": "audit_1790881853316_t4dx1",
+        "pageId": "page_root",
+        "category": "performance",
+        "checkId": "performance.render-blocking",
+        "severity": "medium",
+        "confidence": 0.94,
+        "title": "1 render-blocking script(s) in <head>",
+        "description": "Synchronous scripts in <head> block HTML parsing and delay first paint.",
+        "impact": "Increases initial page load time.",
+        "recommendation": "Add `defer` or `async` attributes to scripts.",
+        "source": "performance",
+        "url": "https://ais-pre-twqasbvtmkrtsllriliohj-212282537635.asia-east1.run.app/",
+        "evidence": [
+          {
+            "id": "ev_block",
+            "type": "performance",
+            "snippet": "<script src=\"/_aistudio-iframe.js?v=2c34bde1\"></script>"
+          }
+        ],
+        "fingerprint": "performance::performance.render-blocking::https://ais-pre-twqasbvtmkrtsllriliohj-212282537635.asia-east1.run.app/::::1 render blocking script s  in  head",
+        "status": "open"
+      }
+    ],
+    "pages": [
+      {
+        "id": "page_root",
+        "url": "https://ais-pre-twqasbvtmkrtsllriliohj-212282537635.asia-east1.run.app/",
+        "status": 302,
+        "title": "302 Found",
+        "loadTimeMs": 23,
+        "consoleErrors": [],
+        "networkErrors": [],
+        "metrics": {
+          "ttfb": 0,
+          "loadTimeMs": 0,
+          "lcp": 0,
+          "fcp": 0,
+          "cls": 0,
+          "tbt": 0,
+          "totalBytes": 40200,
+          "htmlBytes": 200,
+          "scriptBytes": 40000,
+          "imageBytes": 0,
+          "cssBytes": 0,
+          "requestCount": 2,
+          "domElementsCount": 9,
+          "renderBlockingCount": 1
+        },
+        "discoveredLinks": [],
+        "elementsCount": {
+          "buttons": 0,
+          "links": 0,
+          "forms": 0,
+          "images": 0,
+          "headings": 1,
+          "scripts": 1
+        },
+        "screenshots": {},
+        "htmlSnippet": "<html>\r\n<head><title>302 Found</title><script src=\"/_aistudio-iframe.js?v=2c34bde1\"></script></head>\r\n<body>\r\n<center><h1>302 Found</h1></center>\r\n<hr><center>nginx/1.22.1</center>\r\n</body>\r\n</html>\r\n"
+      }
+    ],
+    "logs": [
+      {
+        "id": "log_1790881853679_ilp0",
+        "timestamp": "7:10:53 PM",
+        "level": "success",
+        "message": "Security validated. Destination: https://ais-pre-twqasbvtmkrtsllriliohj-212282537635.asia-east1.run.app/ (Pinned IP: 2600:1900:4243:200::)",
+        "step": "INITIALIZING"
+      },
+      {
+        "id": "log_1790881853686_idys",
+        "timestamp": "7:10:53 PM",
+        "level": "warn",
+        "message": "Chromium sandbox launch unavailable (browserType.launch: Executable doesn't exist at /root/.cache/ms-playwright/chromium_headless_shell-1243/chrome-headless-shell-linux64/chrome-headless-shell\n╔════════════════════════════════════════════════════════════╗\n║ Looks like Playwright was just installed or updated.       ║\n║ Please run the following command to download new browsers: ║\n║                                                            ║\n║     npx playwright install                                 ║\n║                                                            ║\n║ <3 Playwright Team                                         ║\n╚════════════════════════════════════════════════════════════╝). Switching to HTTP Inspector engine.",
+        "step": "INITIALIZING"
+      }
+    ]
+  },
+  {
+    "id": "audit_1790881894774_jzzdc",
+    "targetUrl": "https://ais-pre-twqasbvtmkrtsllriliohj-212282537635.asia-east1.run.app/home",
+    "status": "COMPLETED",
+    "startedAt": "2026-10-01T19:11:35.691Z",
+    "completedAt": "2026-10-01T19:11:35.720Z",
+    "config": {
+      "targetUrl": "https://ais-pre-twqasbvtmkrtsllriliohj-212282537635.asia-east1.run.app/home",
+      "maxPages": 20,
+      "maxDepth": 5,
+      "timeoutMs": 25000,
+      "viewports": [
+        {
+          "name": "Desktop (1440x900)",
+          "width": 1440,
+          "height": 900,
+          "isMobile": false
+        },
+        {
+          "name": "Tablet (768x1024)",
+          "width": 768,
+          "height": 1024,
+          "isMobile": true
+        },
+        {
+          "name": "Mobile (390x844)",
+          "width": 390,
+          "height": 844,
+          "isMobile": true
+        }
+      ],
+      "enableA11y": true,
+      "enablePerformance": true,
+      "enableAI": true,
+      "enableExternalLinks": true
+    },
+    "summary": {
+      "overallScore": 99,
+      "verdict": "LAUNCH_READY",
+      "verdictReason": "All deterministic and AI checks passed with high confidence. Safe for production deployment.",
+      "criticalCount": 0,
+      "highCount": 0,
+      "mediumCount": 1,
+      "lowCount": 0,
+      "infoCount": 0,
+      "totalFindings": 1,
+      "pagesAudited": 1,
+      "viewportsTested": 3,
+      "checksExecuted": 28,
+      "durationMs": 29,
+      "executionEngine": "HTTP_INSPECTOR",
+      "aiReasoningStatus": "FAILED"
+    },
+    "categoryScores": [
+      {
+        "category": "functionality",
+        "name": "Functionality & Availability",
+        "score": 100,
+        "weight": 0.25,
+        "passedCount": 6,
+        "failedCount": 0,
+        "warningCount": 0,
+        "status": "pass",
+        "checks": [
+          {
+            "id": "availability.http-status",
+            "name": "HTTP 200 Availability & Status",
+            "category": "functionality",
+            "passed": true,
+            "severityIfFailed": "critical",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "availability.console-errors",
+            "name": "Uncaught JavaScript Runtime Errors",
+            "category": "functionality",
+            "passed": true,
+            "severityIfFailed": "high",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "functionality.broken-links",
+            "name": "Broken Internal & External Hyperlinks",
+            "category": "functionality",
+            "passed": true,
+            "severityIfFailed": "high",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "functionality.dead-buttons",
+            "name": "Dead Interactive Elements / Empty Callbacks",
+            "category": "functionality",
+            "passed": true,
+            "severityIfFailed": "high",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "functionality.empty-hrefs",
+            "name": "Empty or Placeholder href Attributes (href=\"#\" / href=\"\")",
+            "category": "functionality",
+            "passed": true,
+            "severityIfFailed": "medium",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "functionality.unlabeled-interactive",
+            "name": "Unlabeled Interactive Controls",
+            "category": "functionality",
+            "passed": true,
+            "severityIfFailed": "medium",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          }
+        ]
+      },
+      {
+        "category": "mobile",
+        "name": "Mobile & Responsive UX",
+        "score": 100,
+        "weight": 0.2,
+        "passedCount": 5,
+        "failedCount": 0,
+        "warningCount": 0,
+        "status": "pass",
+        "checks": [
+          {
+            "id": "mobile.horizontal-overflow",
+            "name": "Mobile Horizontal Viewport Overflow",
+            "category": "mobile",
+            "passed": true,
+            "severityIfFailed": "critical",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "mobile.viewport-clipping",
+            "name": "Viewport Element Clipping & Cropped CTAs",
+            "category": "mobile",
+            "passed": true,
+            "severityIfFailed": "high",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "mobile.touch-targets",
+            "name": "Touch Target Sizing (Min 44x44px)",
+            "category": "mobile",
+            "passed": true,
+            "severityIfFailed": "medium",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "mobile.text-size",
+            "name": "Legible Mobile Typography (Min 12px)",
+            "category": "mobile",
+            "passed": true,
+            "severityIfFailed": "low",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "mobile.element-overlap",
+            "name": "Responsive Element Collision & Overlap",
+            "category": "mobile",
+            "passed": true,
+            "severityIfFailed": "high",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          }
+        ]
+      },
+      {
+        "category": "accessibility",
+        "name": "Accessibility (a11y)",
+        "score": 100,
+        "weight": 0.15,
+        "passedCount": 5,
+        "failedCount": 0,
+        "warningCount": 0,
+        "status": "pass",
+        "checks": [
+          {
+            "id": "accessibility.color-contrast",
+            "name": "WCAG AA Color Contrast Ratios",
+            "category": "accessibility",
+            "passed": true,
+            "severityIfFailed": "high",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "accessibility.image-alt",
+            "name": "Image Descriptive alt Attributes",
+            "category": "accessibility",
+            "passed": true,
+            "severityIfFailed": "medium",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "accessibility.form-labels",
+            "name": "Explicit Form Input Labels (<label> / aria-label)",
+            "category": "accessibility",
+            "passed": true,
+            "severityIfFailed": "high",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "accessibility.heading-hierarchy",
+            "name": "Logical Heading Structure (H1-H6)",
+            "category": "accessibility",
+            "passed": true,
+            "severityIfFailed": "medium",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "accessibility.landmark-regions",
+            "name": "Semantic Landmark Regions (<main>, <header>, <nav>)",
+            "category": "accessibility",
+            "passed": true,
+            "severityIfFailed": "low",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          }
+        ]
+      },
+      {
+        "category": "performance",
+        "name": "Performance & Web Vitals",
+        "score": 93,
+        "weight": 0.15,
+        "passedCount": 3,
+        "failedCount": 1,
+        "warningCount": 0,
+        "status": "pass",
+        "checks": [
+          {
+            "id": "performance.lcp",
+            "name": "Largest Contentful Paint (LCP < 2.5s)",
+            "category": "performance",
+            "passed": true,
+            "severityIfFailed": "high",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "performance.cls",
+            "name": "Cumulative Layout Shift (CLS < 0.1)",
+            "category": "performance",
+            "passed": true,
+            "severityIfFailed": "medium",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "performance.render-blocking",
+            "name": "Render-Blocking Scripts & Stylesheets",
+            "category": "performance",
+            "passed": false,
+            "severityIfFailed": "medium",
+            "details": "Failed — 1 issue(s) detected: 1 render-blocking script(s) in <head>",
+            "findingsCount": 1,
+            "executed": true
+          },
+          {
+            "id": "performance.resource-weight",
+            "name": "Total JavaScript & Asset Weight",
+            "category": "performance",
+            "passed": true,
+            "severityIfFailed": "low",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          }
+        ]
+      },
+      {
+        "category": "visual_ux",
+        "name": "Visual & UX Reasoning",
+        "score": 100,
+        "weight": 0.15,
+        "passedCount": 3,
+        "failedCount": 0,
+        "warningCount": 0,
+        "status": "pass",
+        "checks": [
+          {
+            "id": "visual.cta-prominence",
+            "name": "Primary CTA Visual Prominence & Contrast",
+            "category": "visual_ux",
+            "passed": true,
+            "severityIfFailed": "high",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "visual.spacing-consistency",
+            "name": "Visual Layout Consistency & Spacing Rhythm",
+            "category": "visual_ux",
+            "passed": true,
+            "severityIfFailed": "medium",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "visual.responsive-composition",
+            "name": "Multi-Viewport Visual Composition & Balance",
+            "category": "visual_ux",
+            "passed": true,
+            "severityIfFailed": "medium",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          }
+        ]
+      },
+      {
+        "category": "seo",
+        "name": "SEO & Social Signals",
+        "score": 100,
+        "weight": 0.1,
+        "passedCount": 5,
+        "failedCount": 0,
+        "warningCount": 0,
+        "status": "pass",
+        "checks": [
+          {
+            "id": "seo.title",
+            "name": "Page <title> Tag Presence & Length",
+            "category": "seo",
+            "passed": true,
+            "severityIfFailed": "high",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "seo.meta-description",
+            "name": "Meta Description Tag",
+            "category": "seo",
+            "passed": true,
+            "severityIfFailed": "medium",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "seo.h1",
+            "name": "Single Primary <h1> Heading",
+            "category": "seo",
+            "passed": true,
+            "severityIfFailed": "medium",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "seo.open-graph",
+            "name": "OpenGraph & Social Sharing Cards (og:title, og:image)",
+            "category": "seo",
+            "passed": true,
+            "severityIfFailed": "low",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "seo.canonical",
+            "name": "Canonical URL Tag (<link rel=\"canonical\">)",
+            "category": "seo",
+            "passed": true,
+            "severityIfFailed": "low",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          }
+        ]
+      }
+    ],
+    "findings": [
+      {
+        "id": "f_perf_block_1790881895719",
+        "auditId": "audit_1790881894774_jzzdc",
+        "pageId": "page_root",
+        "category": "performance",
+        "checkId": "performance.render-blocking",
+        "severity": "medium",
+        "confidence": 0.94,
+        "title": "1 render-blocking script(s) in <head>",
+        "description": "Synchronous scripts in <head> block HTML parsing and delay first paint.",
+        "impact": "Increases initial page load time.",
+        "recommendation": "Add `defer` or `async` attributes to scripts.",
+        "source": "performance",
+        "url": "https://ais-pre-twqasbvtmkrtsllriliohj-212282537635.asia-east1.run.app/home",
+        "evidence": [
+          {
+            "id": "ev_block",
+            "type": "performance",
+            "snippet": "<script src=\"/_aistudio-iframe.js?v=2c34bde1\"></script>"
+          }
+        ],
+        "fingerprint": "performance::performance.render-blocking::https://ais-pre-twqasbvtmkrtsllriliohj-212282537635.asia-east1.run.app/home::::1 render blocking script s  in  head",
+        "status": "open"
+      }
+    ],
+    "pages": [
+      {
+        "id": "page_root",
+        "url": "https://ais-pre-twqasbvtmkrtsllriliohj-212282537635.asia-east1.run.app/home",
+        "status": 302,
+        "title": "302 Found",
+        "loadTimeMs": 19,
+        "consoleErrors": [],
+        "networkErrors": [],
+        "metrics": {
+          "ttfb": 0,
+          "loadTimeMs": 0,
+          "lcp": 0,
+          "fcp": 0,
+          "cls": 0,
+          "tbt": 0,
+          "totalBytes": 40200,
+          "htmlBytes": 200,
+          "scriptBytes": 40000,
+          "imageBytes": 0,
+          "cssBytes": 0,
+          "requestCount": 2,
+          "domElementsCount": 9,
+          "renderBlockingCount": 1
+        },
+        "discoveredLinks": [],
+        "elementsCount": {
+          "buttons": 0,
+          "links": 0,
+          "forms": 0,
+          "images": 0,
+          "headings": 1,
+          "scripts": 1
+        },
+        "screenshots": {},
+        "htmlSnippet": "<html>\r\n<head><title>302 Found</title><script src=\"/_aistudio-iframe.js?v=2c34bde1\"></script></head>\r\n<body>\r\n<center><h1>302 Found</h1></center>\r\n<hr><center>nginx/1.22.1</center>\r\n</body>\r\n</html>\r\n"
+      }
+    ],
+    "logs": [
+      {
+        "id": "log_1790881895694_quks",
+        "timestamp": "7:11:35 PM",
+        "level": "success",
+        "message": "Security validated. Destination: https://ais-pre-twqasbvtmkrtsllriliohj-212282537635.asia-east1.run.app/home (Pinned IP: 2600:1900:4244:200::)",
+        "step": "INITIALIZING"
+      },
+      {
+        "id": "log_1790881895697_6r8d",
+        "timestamp": "7:11:35 PM",
+        "level": "warn",
+        "message": "Chromium sandbox launch unavailable (browserType.launch: Executable doesn't exist at /root/.cache/ms-playwright/chromium_headless_shell-1243/chrome-headless-shell-linux64/chrome-headless-shell\n╔════════════════════════════════════════════════════════════╗\n║ Looks like Playwright was just installed or updated.       ║\n║ Please run the following command to download new browsers: ║\n║                                                            ║\n║     npx playwright install                                 ║\n║                                                            ║\n║ <3 Playwright Team                                         ║\n╚════════════════════════════════════════════════════════════╝). Switching to HTTP Inspector engine.",
+        "step": "INITIALIZING"
+      }
+    ]
+  },
+  {
+    "id": "audit_1790882131705_5umol",
+    "targetUrl": "https://ais-pre-twqasbvtmkrtsllriliohj-212282537635.asia-east1.run.app/",
+    "status": "COMPLETED",
+    "startedAt": "2026-10-01T19:15:31.720Z",
+    "completedAt": "2026-10-01T19:15:31.803Z",
+    "config": {
+      "targetUrl": "https://ais-pre-twqasbvtmkrtsllriliohj-212282537635.asia-east1.run.app/",
+      "maxPages": 20,
+      "maxDepth": 5,
+      "timeoutMs": 25000,
+      "viewports": [
+        {
+          "name": "Desktop (1440x900)",
+          "width": 1440,
+          "height": 900,
+          "isMobile": false
+        },
+        {
+          "name": "Tablet (768x1024)",
+          "width": 768,
+          "height": 1024,
+          "isMobile": true
+        },
+        {
+          "name": "Mobile (390x844)",
+          "width": 390,
+          "height": 844,
+          "isMobile": true
+        }
+      ],
+      "enableA11y": true,
+      "enablePerformance": true,
+      "enableAI": true,
+      "enableExternalLinks": true
+    },
+    "summary": {
+      "overallScore": 99,
+      "verdict": "LAUNCH_READY",
+      "verdictReason": "All deterministic and AI checks passed with high confidence. Safe for production deployment.",
+      "criticalCount": 0,
+      "highCount": 0,
+      "mediumCount": 1,
+      "lowCount": 0,
+      "infoCount": 0,
+      "totalFindings": 1,
+      "pagesAudited": 1,
+      "viewportsTested": 3,
+      "checksExecuted": 28,
+      "durationMs": 83,
+      "executionEngine": "HTTP_INSPECTOR",
+      "aiReasoningStatus": "FAILED"
+    },
+    "categoryScores": [
+      {
+        "category": "functionality",
+        "name": "Functionality & Availability",
+        "score": 100,
+        "weight": 0.25,
+        "passedCount": 6,
+        "failedCount": 0,
+        "warningCount": 0,
+        "status": "pass",
+        "checks": [
+          {
+            "id": "availability.http-status",
+            "name": "HTTP 200 Availability & Status",
+            "category": "functionality",
+            "passed": true,
+            "severityIfFailed": "critical",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "availability.console-errors",
+            "name": "Uncaught JavaScript Runtime Errors",
+            "category": "functionality",
+            "passed": true,
+            "severityIfFailed": "high",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "functionality.broken-links",
+            "name": "Broken Internal & External Hyperlinks",
+            "category": "functionality",
+            "passed": true,
+            "severityIfFailed": "high",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "functionality.dead-buttons",
+            "name": "Dead Interactive Elements / Empty Callbacks",
+            "category": "functionality",
+            "passed": true,
+            "severityIfFailed": "high",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "functionality.empty-hrefs",
+            "name": "Empty or Placeholder href Attributes (href=\"#\" / href=\"\")",
+            "category": "functionality",
+            "passed": true,
+            "severityIfFailed": "medium",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "functionality.unlabeled-interactive",
+            "name": "Unlabeled Interactive Controls",
+            "category": "functionality",
+            "passed": true,
+            "severityIfFailed": "medium",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          }
+        ]
+      },
+      {
+        "category": "mobile",
+        "name": "Mobile & Responsive UX",
+        "score": 100,
+        "weight": 0.2,
+        "passedCount": 5,
+        "failedCount": 0,
+        "warningCount": 0,
+        "status": "pass",
+        "checks": [
+          {
+            "id": "mobile.horizontal-overflow",
+            "name": "Mobile Horizontal Viewport Overflow",
+            "category": "mobile",
+            "passed": true,
+            "severityIfFailed": "critical",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "mobile.viewport-clipping",
+            "name": "Viewport Element Clipping & Cropped CTAs",
+            "category": "mobile",
+            "passed": true,
+            "severityIfFailed": "high",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "mobile.touch-targets",
+            "name": "Touch Target Sizing (Min 44x44px)",
+            "category": "mobile",
+            "passed": true,
+            "severityIfFailed": "medium",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "mobile.text-size",
+            "name": "Legible Mobile Typography (Min 12px)",
+            "category": "mobile",
+            "passed": true,
+            "severityIfFailed": "low",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "mobile.element-overlap",
+            "name": "Responsive Element Collision & Overlap",
+            "category": "mobile",
+            "passed": true,
+            "severityIfFailed": "high",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          }
+        ]
+      },
+      {
+        "category": "accessibility",
+        "name": "Accessibility (a11y)",
+        "score": 100,
+        "weight": 0.15,
+        "passedCount": 5,
+        "failedCount": 0,
+        "warningCount": 0,
+        "status": "pass",
+        "checks": [
+          {
+            "id": "accessibility.color-contrast",
+            "name": "WCAG AA Color Contrast Ratios",
+            "category": "accessibility",
+            "passed": true,
+            "severityIfFailed": "high",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "accessibility.image-alt",
+            "name": "Image Descriptive alt Attributes",
+            "category": "accessibility",
+            "passed": true,
+            "severityIfFailed": "medium",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "accessibility.form-labels",
+            "name": "Explicit Form Input Labels (<label> / aria-label)",
+            "category": "accessibility",
+            "passed": true,
+            "severityIfFailed": "high",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "accessibility.heading-hierarchy",
+            "name": "Logical Heading Structure (H1-H6)",
+            "category": "accessibility",
+            "passed": true,
+            "severityIfFailed": "medium",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "accessibility.landmark-regions",
+            "name": "Semantic Landmark Regions (<main>, <header>, <nav>)",
+            "category": "accessibility",
+            "passed": true,
+            "severityIfFailed": "low",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          }
+        ]
+      },
+      {
+        "category": "performance",
+        "name": "Performance & Web Vitals",
+        "score": 93,
+        "weight": 0.15,
+        "passedCount": 3,
+        "failedCount": 1,
+        "warningCount": 0,
+        "status": "pass",
+        "checks": [
+          {
+            "id": "performance.lcp",
+            "name": "Largest Contentful Paint (LCP < 2.5s)",
+            "category": "performance",
+            "passed": true,
+            "severityIfFailed": "high",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "performance.cls",
+            "name": "Cumulative Layout Shift (CLS < 0.1)",
+            "category": "performance",
+            "passed": true,
+            "severityIfFailed": "medium",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "performance.render-blocking",
+            "name": "Render-Blocking Scripts & Stylesheets",
+            "category": "performance",
+            "passed": false,
+            "severityIfFailed": "medium",
+            "details": "Failed — 1 issue(s) detected: 1 render-blocking script(s) in <head>",
+            "findingsCount": 1,
+            "executed": true
+          },
+          {
+            "id": "performance.resource-weight",
+            "name": "Total JavaScript & Asset Weight",
+            "category": "performance",
+            "passed": true,
+            "severityIfFailed": "low",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          }
+        ]
+      },
+      {
+        "category": "visual_ux",
+        "name": "Visual & UX Reasoning",
+        "score": 100,
+        "weight": 0.15,
+        "passedCount": 3,
+        "failedCount": 0,
+        "warningCount": 0,
+        "status": "pass",
+        "checks": [
+          {
+            "id": "visual.cta-prominence",
+            "name": "Primary CTA Visual Prominence & Contrast",
+            "category": "visual_ux",
+            "passed": true,
+            "severityIfFailed": "high",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "visual.spacing-consistency",
+            "name": "Visual Layout Consistency & Spacing Rhythm",
+            "category": "visual_ux",
+            "passed": true,
+            "severityIfFailed": "medium",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "visual.responsive-composition",
+            "name": "Multi-Viewport Visual Composition & Balance",
+            "category": "visual_ux",
+            "passed": true,
+            "severityIfFailed": "medium",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          }
+        ]
+      },
+      {
+        "category": "seo",
+        "name": "SEO & Social Signals",
+        "score": 100,
+        "weight": 0.1,
+        "passedCount": 5,
+        "failedCount": 0,
+        "warningCount": 0,
+        "status": "pass",
+        "checks": [
+          {
+            "id": "seo.title",
+            "name": "Page <title> Tag Presence & Length",
+            "category": "seo",
+            "passed": true,
+            "severityIfFailed": "high",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "seo.meta-description",
+            "name": "Meta Description Tag",
+            "category": "seo",
+            "passed": true,
+            "severityIfFailed": "medium",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "seo.h1",
+            "name": "Single Primary <h1> Heading",
+            "category": "seo",
+            "passed": true,
+            "severityIfFailed": "medium",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "seo.open-graph",
+            "name": "OpenGraph & Social Sharing Cards (og:title, og:image)",
+            "category": "seo",
+            "passed": true,
+            "severityIfFailed": "low",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "seo.canonical",
+            "name": "Canonical URL Tag (<link rel=\"canonical\">)",
+            "category": "seo",
+            "passed": true,
+            "severityIfFailed": "low",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          }
+        ]
+      }
+    ],
+    "findings": [
+      {
+        "id": "f_perf_block_1790882131800",
+        "auditId": "audit_1790882131705_5umol",
+        "pageId": "page_root",
+        "category": "performance",
+        "checkId": "performance.render-blocking",
+        "severity": "medium",
+        "confidence": 0.94,
+        "title": "1 render-blocking script(s) in <head>",
+        "description": "Synchronous scripts in <head> block HTML parsing and delay first paint.",
+        "impact": "Increases initial page load time.",
+        "recommendation": "Add `defer` or `async` attributes to scripts.",
+        "source": "performance",
+        "url": "https://ais-pre-twqasbvtmkrtsllriliohj-212282537635.asia-east1.run.app/",
+        "evidence": [
+          {
+            "id": "ev_block",
+            "type": "performance",
+            "snippet": "<script src=\"/_aistudio-iframe.js?v=2c34bde1\"></script>"
+          }
+        ],
+        "fingerprint": "performance::performance.render-blocking::https://ais-pre-twqasbvtmkrtsllriliohj-212282537635.asia-east1.run.app/::::1 render blocking script s  in  head",
+        "status": "open"
+      }
+    ],
+    "pages": [
+      {
+        "id": "page_root",
+        "url": "https://ais-pre-twqasbvtmkrtsllriliohj-212282537635.asia-east1.run.app/",
+        "status": 302,
+        "title": "302 Found",
+        "loadTimeMs": 27,
+        "consoleErrors": [],
+        "networkErrors": [],
+        "metrics": {
+          "ttfb": 0,
+          "loadTimeMs": 0,
+          "lcp": 0,
+          "fcp": 0,
+          "cls": 0,
+          "tbt": 0,
+          "totalBytes": 40200,
+          "htmlBytes": 200,
+          "scriptBytes": 40000,
+          "imageBytes": 0,
+          "cssBytes": 0,
+          "requestCount": 2,
+          "domElementsCount": 9,
+          "renderBlockingCount": 1
+        },
+        "discoveredLinks": [],
+        "elementsCount": {
+          "buttons": 0,
+          "links": 0,
+          "forms": 0,
+          "images": 0,
+          "headings": 1,
+          "scripts": 1
+        },
+        "screenshots": {},
+        "htmlSnippet": "<html>\r\n<head><title>302 Found</title><script src=\"/_aistudio-iframe.js?v=2c34bde1\"></script></head>\r\n<body>\r\n<center><h1>302 Found</h1></center>\r\n<hr><center>nginx/1.22.1</center>\r\n</body>\r\n</html>\r\n"
+      }
+    ],
+    "logs": [
+      {
+        "id": "log_1790882131734_ppj7",
+        "timestamp": "7:15:31 PM",
+        "level": "success",
+        "message": "Security validated. Destination: https://ais-pre-twqasbvtmkrtsllriliohj-212282537635.asia-east1.run.app/ (Pinned IP: 2600:1900:4245:200::)",
+        "step": "INITIALIZING"
+      },
+      {
+        "id": "log_1790882131760_cykw",
+        "timestamp": "7:15:31 PM",
+        "level": "warn",
+        "message": "Chromium sandbox launch unavailable (browserType.launch: Executable doesn't exist at /root/.cache/ms-playwright/chromium_headless_shell-1243/chrome-headless-shell-linux64/chrome-headless-shell\n╔════════════════════════════════════════════════════════════╗\n║ Looks like Playwright was just installed or updated.       ║\n║ Please run the following command to download new browsers: ║\n║                                                            ║\n║     npx playwright install                                 ║\n║                                                            ║\n║ <3 Playwright Team                                         ║\n╚════════════════════════════════════════════════════════════╝). Switching to HTTP Inspector engine.",
+        "step": "INITIALIZING"
+      }
+    ]
+  },
+  {
+    "id": "audit_1790882183947_l8qe8",
+    "targetUrl": "https://ais-pre-twqasbvtmkrtsllriliohj-212282537635.asia-east1.run.app/",
+    "status": "COMPLETED",
+    "startedAt": "2026-10-01T19:16:25.745Z",
+    "completedAt": "2026-10-01T19:16:25.784Z",
+    "config": {
+      "targetUrl": "https://ais-pre-twqasbvtmkrtsllriliohj-212282537635.asia-east1.run.app/",
+      "maxPages": 5,
+      "maxDepth": 2,
+      "timeoutMs": 25000,
+      "viewports": [
+        {
+          "name": "Desktop (1440x900)",
+          "width": 1440,
+          "height": 900,
+          "isMobile": false
+        },
+        {
+          "name": "Tablet (768x1024)",
+          "width": 768,
+          "height": 1024,
+          "isMobile": true
+        },
+        {
+          "name": "Mobile (390x844)",
+          "width": 390,
+          "height": 844,
+          "isMobile": true
+        }
+      ],
+      "enableA11y": true,
+      "enablePerformance": true,
+      "enableAI": true,
+      "enableExternalLinks": true
+    },
+    "summary": {
+      "overallScore": 99,
+      "verdict": "LAUNCH_READY",
+      "verdictReason": "All deterministic and AI checks passed with high confidence. Safe for production deployment.",
+      "criticalCount": 0,
+      "highCount": 0,
+      "mediumCount": 1,
+      "lowCount": 0,
+      "infoCount": 0,
+      "totalFindings": 1,
+      "pagesAudited": 1,
+      "viewportsTested": 3,
+      "checksExecuted": 28,
+      "durationMs": 39,
+      "executionEngine": "HTTP_INSPECTOR",
+      "aiReasoningStatus": "FAILED"
+    },
+    "categoryScores": [
+      {
+        "category": "functionality",
+        "name": "Functionality & Availability",
+        "score": 100,
+        "weight": 0.25,
+        "passedCount": 6,
+        "failedCount": 0,
+        "warningCount": 0,
+        "status": "pass",
+        "checks": [
+          {
+            "id": "availability.http-status",
+            "name": "HTTP 200 Availability & Status",
+            "category": "functionality",
+            "passed": true,
+            "severityIfFailed": "critical",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "availability.console-errors",
+            "name": "Uncaught JavaScript Runtime Errors",
+            "category": "functionality",
+            "passed": true,
+            "severityIfFailed": "high",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "functionality.broken-links",
+            "name": "Broken Internal & External Hyperlinks",
+            "category": "functionality",
+            "passed": true,
+            "severityIfFailed": "high",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "functionality.dead-buttons",
+            "name": "Dead Interactive Elements / Empty Callbacks",
+            "category": "functionality",
+            "passed": true,
+            "severityIfFailed": "high",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "functionality.empty-hrefs",
+            "name": "Empty or Placeholder href Attributes (href=\"#\" / href=\"\")",
+            "category": "functionality",
+            "passed": true,
+            "severityIfFailed": "medium",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "functionality.unlabeled-interactive",
+            "name": "Unlabeled Interactive Controls",
+            "category": "functionality",
+            "passed": true,
+            "severityIfFailed": "medium",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          }
+        ]
+      },
+      {
+        "category": "mobile",
+        "name": "Mobile & Responsive UX",
+        "score": 100,
+        "weight": 0.2,
+        "passedCount": 5,
+        "failedCount": 0,
+        "warningCount": 0,
+        "status": "pass",
+        "checks": [
+          {
+            "id": "mobile.horizontal-overflow",
+            "name": "Mobile Horizontal Viewport Overflow",
+            "category": "mobile",
+            "passed": true,
+            "severityIfFailed": "critical",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "mobile.viewport-clipping",
+            "name": "Viewport Element Clipping & Cropped CTAs",
+            "category": "mobile",
+            "passed": true,
+            "severityIfFailed": "high",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "mobile.touch-targets",
+            "name": "Touch Target Sizing (Min 44x44px)",
+            "category": "mobile",
+            "passed": true,
+            "severityIfFailed": "medium",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "mobile.text-size",
+            "name": "Legible Mobile Typography (Min 12px)",
+            "category": "mobile",
+            "passed": true,
+            "severityIfFailed": "low",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "mobile.element-overlap",
+            "name": "Responsive Element Collision & Overlap",
+            "category": "mobile",
+            "passed": true,
+            "severityIfFailed": "high",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          }
+        ]
+      },
+      {
+        "category": "accessibility",
+        "name": "Accessibility (a11y)",
+        "score": 100,
+        "weight": 0.15,
+        "passedCount": 5,
+        "failedCount": 0,
+        "warningCount": 0,
+        "status": "pass",
+        "checks": [
+          {
+            "id": "accessibility.color-contrast",
+            "name": "WCAG AA Color Contrast Ratios",
+            "category": "accessibility",
+            "passed": true,
+            "severityIfFailed": "high",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "accessibility.image-alt",
+            "name": "Image Descriptive alt Attributes",
+            "category": "accessibility",
+            "passed": true,
+            "severityIfFailed": "medium",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "accessibility.form-labels",
+            "name": "Explicit Form Input Labels (<label> / aria-label)",
+            "category": "accessibility",
+            "passed": true,
+            "severityIfFailed": "high",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "accessibility.heading-hierarchy",
+            "name": "Logical Heading Structure (H1-H6)",
+            "category": "accessibility",
+            "passed": true,
+            "severityIfFailed": "medium",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "accessibility.landmark-regions",
+            "name": "Semantic Landmark Regions (<main>, <header>, <nav>)",
+            "category": "accessibility",
+            "passed": true,
+            "severityIfFailed": "low",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          }
+        ]
+      },
+      {
+        "category": "performance",
+        "name": "Performance & Web Vitals",
+        "score": 93,
+        "weight": 0.15,
+        "passedCount": 3,
+        "failedCount": 1,
+        "warningCount": 0,
+        "status": "pass",
+        "checks": [
+          {
+            "id": "performance.lcp",
+            "name": "Largest Contentful Paint (LCP < 2.5s)",
+            "category": "performance",
+            "passed": true,
+            "severityIfFailed": "high",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "performance.cls",
+            "name": "Cumulative Layout Shift (CLS < 0.1)",
+            "category": "performance",
+            "passed": true,
+            "severityIfFailed": "medium",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "performance.render-blocking",
+            "name": "Render-Blocking Scripts & Stylesheets",
+            "category": "performance",
+            "passed": false,
+            "severityIfFailed": "medium",
+            "details": "Failed — 1 issue(s) detected: 1 render-blocking script(s) in <head>",
+            "findingsCount": 1,
+            "executed": true
+          },
+          {
+            "id": "performance.resource-weight",
+            "name": "Total JavaScript & Asset Weight",
+            "category": "performance",
+            "passed": true,
+            "severityIfFailed": "low",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          }
+        ]
+      },
+      {
+        "category": "visual_ux",
+        "name": "Visual & UX Reasoning",
+        "score": 100,
+        "weight": 0.15,
+        "passedCount": 3,
+        "failedCount": 0,
+        "warningCount": 0,
+        "status": "pass",
+        "checks": [
+          {
+            "id": "visual.cta-prominence",
+            "name": "Primary CTA Visual Prominence & Contrast",
+            "category": "visual_ux",
+            "passed": true,
+            "severityIfFailed": "high",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "visual.spacing-consistency",
+            "name": "Visual Layout Consistency & Spacing Rhythm",
+            "category": "visual_ux",
+            "passed": true,
+            "severityIfFailed": "medium",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "visual.responsive-composition",
+            "name": "Multi-Viewport Visual Composition & Balance",
+            "category": "visual_ux",
+            "passed": true,
+            "severityIfFailed": "medium",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          }
+        ]
+      },
+      {
+        "category": "seo",
+        "name": "SEO & Social Signals",
+        "score": 100,
+        "weight": 0.1,
+        "passedCount": 5,
+        "failedCount": 0,
+        "warningCount": 0,
+        "status": "pass",
+        "checks": [
+          {
+            "id": "seo.title",
+            "name": "Page <title> Tag Presence & Length",
+            "category": "seo",
+            "passed": true,
+            "severityIfFailed": "high",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "seo.meta-description",
+            "name": "Meta Description Tag",
+            "category": "seo",
+            "passed": true,
+            "severityIfFailed": "medium",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "seo.h1",
+            "name": "Single Primary <h1> Heading",
+            "category": "seo",
+            "passed": true,
+            "severityIfFailed": "medium",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "seo.open-graph",
+            "name": "OpenGraph & Social Sharing Cards (og:title, og:image)",
+            "category": "seo",
+            "passed": true,
+            "severityIfFailed": "low",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "seo.canonical",
+            "name": "Canonical URL Tag (<link rel=\"canonical\">)",
+            "category": "seo",
+            "passed": true,
+            "severityIfFailed": "low",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          }
+        ]
+      }
+    ],
+    "findings": [
+      {
+        "id": "f_perf_block_1790882185782",
+        "auditId": "audit_1790882183947_l8qe8",
+        "pageId": "page_root",
+        "category": "performance",
+        "checkId": "performance.render-blocking",
+        "severity": "medium",
+        "confidence": 0.94,
+        "title": "1 render-blocking script(s) in <head>",
+        "description": "Synchronous scripts in <head> block HTML parsing and delay first paint.",
+        "impact": "Increases initial page load time.",
+        "recommendation": "Add `defer` or `async` attributes to scripts.",
+        "source": "performance",
+        "url": "https://ais-pre-twqasbvtmkrtsllriliohj-212282537635.asia-east1.run.app/",
+        "evidence": [
+          {
+            "id": "ev_block",
+            "type": "performance",
+            "snippet": "<script src=\"/_aistudio-iframe.js?v=2c34bde1\"></script>"
+          }
+        ],
+        "fingerprint": "performance::performance.render-blocking::https://ais-pre-twqasbvtmkrtsllriliohj-212282537635.asia-east1.run.app/::::1 render blocking script s  in  head",
+        "status": "open"
+      }
+    ],
+    "pages": [
+      {
+        "id": "page_root",
+        "url": "https://ais-pre-twqasbvtmkrtsllriliohj-212282537635.asia-east1.run.app/",
+        "status": 302,
+        "title": "302 Found",
+        "loadTimeMs": 23,
+        "consoleErrors": [],
+        "networkErrors": [],
+        "metrics": {
+          "ttfb": 0,
+          "loadTimeMs": 0,
+          "lcp": 0,
+          "fcp": 0,
+          "cls": 0,
+          "tbt": 0,
+          "totalBytes": 40200,
+          "htmlBytes": 200,
+          "scriptBytes": 40000,
+          "imageBytes": 0,
+          "cssBytes": 0,
+          "requestCount": 2,
+          "domElementsCount": 9,
+          "renderBlockingCount": 1
+        },
+        "discoveredLinks": [],
+        "elementsCount": {
+          "buttons": 0,
+          "links": 0,
+          "forms": 0,
+          "images": 0,
+          "headings": 1,
+          "scripts": 1
+        },
+        "screenshots": {},
+        "htmlSnippet": "<html>\r\n<head><title>302 Found</title><script src=\"/_aistudio-iframe.js?v=2c34bde1\"></script></head>\r\n<body>\r\n<center><h1>302 Found</h1></center>\r\n<hr><center>nginx/1.22.1</center>\r\n</body>\r\n</html>\r\n"
+      }
+    ],
+    "logs": [
+      {
+        "id": "log_1790882185748_449i",
+        "timestamp": "7:16:25 PM",
+        "level": "success",
+        "message": "Security validated. Destination: https://ais-pre-twqasbvtmkrtsllriliohj-212282537635.asia-east1.run.app/ (Pinned IP: 2600:1901:81d5:200::)",
+        "step": "INITIALIZING"
+      },
+      {
+        "id": "log_1790882185755_2o1y",
+        "timestamp": "7:16:25 PM",
+        "level": "warn",
+        "message": "Chromium sandbox launch unavailable (browserType.launch: Executable doesn't exist at /root/.cache/ms-playwright/chromium_headless_shell-1243/chrome-headless-shell-linux64/chrome-headless-shell\n╔════════════════════════════════════════════════════════════╗\n║ Looks like Playwright was just installed or updated.       ║\n║ Please run the following command to download new browsers: ║\n║                                                            ║\n║     npx playwright install                                 ║\n║                                                            ║\n║ <3 Playwright Team                                         ║\n╚════════════════════════════════════════════════════════════╝). Switching to HTTP Inspector engine.",
+        "step": "INITIALIZING"
+      }
+    ]
+  },
+  {
+    "id": "audit_1790882825813_zd57q",
+    "targetUrl": "https://ais-pre-twqasbvtmkrtsllriliohj-212282537635.asia-east1.run.app/",
+    "status": "COMPLETED",
+    "startedAt": "2026-10-01T19:27:07.439Z",
+    "completedAt": "2026-10-01T19:27:07.543Z",
+    "config": {
+      "targetUrl": "https://ais-pre-twqasbvtmkrtsllriliohj-212282537635.asia-east1.run.app/",
+      "maxPages": 20,
+      "maxDepth": 5,
+      "timeoutMs": 25000,
+      "viewports": [
+        {
+          "name": "Desktop (1440x900)",
+          "width": 1440,
+          "height": 900,
+          "isMobile": false
+        },
+        {
+          "name": "Tablet (768x1024)",
+          "width": 768,
+          "height": 1024,
+          "isMobile": true
+        },
+        {
+          "name": "Mobile (390x844)",
+          "width": 390,
+          "height": 844,
+          "isMobile": true
+        }
+      ],
+      "enableA11y": true,
+      "enablePerformance": true,
+      "enableAI": true,
+      "enableExternalLinks": true
+    },
+    "summary": {
+      "overallScore": 99,
+      "verdict": "LAUNCH_READY",
+      "verdictReason": "All deterministic and AI checks passed with high confidence. Safe for production deployment.",
+      "criticalCount": 0,
+      "highCount": 0,
+      "mediumCount": 1,
+      "lowCount": 0,
+      "infoCount": 0,
+      "totalFindings": 1,
+      "pagesAudited": 1,
+      "viewportsTested": 3,
+      "checksExecuted": 28,
+      "durationMs": 104,
+      "executionEngine": "HTTP_INSPECTOR",
+      "aiReasoningStatus": "FAILED"
+    },
+    "categoryScores": [
+      {
+        "category": "functionality",
+        "name": "Functionality & Availability",
+        "score": 100,
+        "weight": 0.25,
+        "passedCount": 6,
+        "failedCount": 0,
+        "warningCount": 0,
+        "status": "pass",
+        "checks": [
+          {
+            "id": "availability.http-status",
+            "name": "HTTP 200 Availability & Status",
+            "category": "functionality",
+            "passed": true,
+            "severityIfFailed": "critical",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "availability.console-errors",
+            "name": "Uncaught JavaScript Runtime Errors",
+            "category": "functionality",
+            "passed": true,
+            "severityIfFailed": "high",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "functionality.broken-links",
+            "name": "Broken Internal & External Hyperlinks",
+            "category": "functionality",
+            "passed": true,
+            "severityIfFailed": "high",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "functionality.dead-buttons",
+            "name": "Dead Interactive Elements / Empty Callbacks",
+            "category": "functionality",
+            "passed": true,
+            "severityIfFailed": "high",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "functionality.empty-hrefs",
+            "name": "Empty or Placeholder href Attributes (href=\"#\" / href=\"\")",
+            "category": "functionality",
+            "passed": true,
+            "severityIfFailed": "medium",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "functionality.unlabeled-interactive",
+            "name": "Unlabeled Interactive Controls",
+            "category": "functionality",
+            "passed": true,
+            "severityIfFailed": "medium",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          }
+        ]
+      },
+      {
+        "category": "mobile",
+        "name": "Mobile & Responsive UX",
+        "score": 100,
+        "weight": 0.2,
+        "passedCount": 5,
+        "failedCount": 0,
+        "warningCount": 0,
+        "status": "pass",
+        "checks": [
+          {
+            "id": "mobile.horizontal-overflow",
+            "name": "Mobile Horizontal Viewport Overflow",
+            "category": "mobile",
+            "passed": true,
+            "severityIfFailed": "critical",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "mobile.viewport-clipping",
+            "name": "Viewport Element Clipping & Cropped CTAs",
+            "category": "mobile",
+            "passed": true,
+            "severityIfFailed": "high",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "mobile.touch-targets",
+            "name": "Touch Target Sizing (Min 44x44px)",
+            "category": "mobile",
+            "passed": true,
+            "severityIfFailed": "medium",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "mobile.text-size",
+            "name": "Legible Mobile Typography (Min 12px)",
+            "category": "mobile",
+            "passed": true,
+            "severityIfFailed": "low",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "mobile.element-overlap",
+            "name": "Responsive Element Collision & Overlap",
+            "category": "mobile",
+            "passed": true,
+            "severityIfFailed": "high",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          }
+        ]
+      },
+      {
+        "category": "accessibility",
+        "name": "Accessibility (a11y)",
+        "score": 100,
+        "weight": 0.15,
+        "passedCount": 5,
+        "failedCount": 0,
+        "warningCount": 0,
+        "status": "pass",
+        "checks": [
+          {
+            "id": "accessibility.color-contrast",
+            "name": "WCAG AA Color Contrast Ratios",
+            "category": "accessibility",
+            "passed": true,
+            "severityIfFailed": "high",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "accessibility.image-alt",
+            "name": "Image Descriptive alt Attributes",
+            "category": "accessibility",
+            "passed": true,
+            "severityIfFailed": "medium",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "accessibility.form-labels",
+            "name": "Explicit Form Input Labels (<label> / aria-label)",
+            "category": "accessibility",
+            "passed": true,
+            "severityIfFailed": "high",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "accessibility.heading-hierarchy",
+            "name": "Logical Heading Structure (H1-H6)",
+            "category": "accessibility",
+            "passed": true,
+            "severityIfFailed": "medium",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "accessibility.landmark-regions",
+            "name": "Semantic Landmark Regions (<main>, <header>, <nav>)",
+            "category": "accessibility",
+            "passed": true,
+            "severityIfFailed": "low",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          }
+        ]
+      },
+      {
+        "category": "performance",
+        "name": "Performance & Web Vitals",
+        "score": 93,
+        "weight": 0.15,
+        "passedCount": 3,
+        "failedCount": 1,
+        "warningCount": 0,
+        "status": "pass",
+        "checks": [
+          {
+            "id": "performance.lcp",
+            "name": "Largest Contentful Paint (LCP < 2.5s)",
+            "category": "performance",
+            "passed": true,
+            "severityIfFailed": "high",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "performance.cls",
+            "name": "Cumulative Layout Shift (CLS < 0.1)",
+            "category": "performance",
+            "passed": true,
+            "severityIfFailed": "medium",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "performance.render-blocking",
+            "name": "Render-Blocking Scripts & Stylesheets",
+            "category": "performance",
+            "passed": false,
+            "severityIfFailed": "medium",
+            "details": "Failed — 1 issue(s) detected: 1 render-blocking script(s) in <head>",
+            "findingsCount": 1,
+            "executed": true
+          },
+          {
+            "id": "performance.resource-weight",
+            "name": "Total JavaScript & Asset Weight",
+            "category": "performance",
+            "passed": true,
+            "severityIfFailed": "low",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          }
+        ]
+      },
+      {
+        "category": "visual_ux",
+        "name": "Visual & UX Reasoning",
+        "score": 100,
+        "weight": 0.15,
+        "passedCount": 3,
+        "failedCount": 0,
+        "warningCount": 0,
+        "status": "pass",
+        "checks": [
+          {
+            "id": "visual.cta-prominence",
+            "name": "Primary CTA Visual Prominence & Contrast",
+            "category": "visual_ux",
+            "passed": true,
+            "severityIfFailed": "high",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "visual.spacing-consistency",
+            "name": "Visual Layout Consistency & Spacing Rhythm",
+            "category": "visual_ux",
+            "passed": true,
+            "severityIfFailed": "medium",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "visual.responsive-composition",
+            "name": "Multi-Viewport Visual Composition & Balance",
+            "category": "visual_ux",
+            "passed": true,
+            "severityIfFailed": "medium",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          }
+        ]
+      },
+      {
+        "category": "seo",
+        "name": "SEO & Social Signals",
+        "score": 100,
+        "weight": 0.1,
+        "passedCount": 5,
+        "failedCount": 0,
+        "warningCount": 0,
+        "status": "pass",
+        "checks": [
+          {
+            "id": "seo.title",
+            "name": "Page <title> Tag Presence & Length",
+            "category": "seo",
+            "passed": true,
+            "severityIfFailed": "high",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "seo.meta-description",
+            "name": "Meta Description Tag",
+            "category": "seo",
+            "passed": true,
+            "severityIfFailed": "medium",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "seo.h1",
+            "name": "Single Primary <h1> Heading",
+            "category": "seo",
+            "passed": true,
+            "severityIfFailed": "medium",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "seo.open-graph",
+            "name": "OpenGraph & Social Sharing Cards (og:title, og:image)",
+            "category": "seo",
+            "passed": true,
+            "severityIfFailed": "low",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "seo.canonical",
+            "name": "Canonical URL Tag (<link rel=\"canonical\">)",
+            "category": "seo",
+            "passed": true,
+            "severityIfFailed": "low",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          }
+        ]
+      }
+    ],
+    "findings": [
+      {
+        "id": "f_perf_block_1790882827539",
+        "auditId": "audit_1790882825813_zd57q",
+        "pageId": "page_root",
+        "category": "performance",
+        "checkId": "performance.render-blocking",
+        "severity": "medium",
+        "confidence": 0.94,
+        "title": "1 render-blocking script(s) in <head>",
+        "description": "Synchronous scripts in <head> block HTML parsing and delay first paint.",
+        "impact": "Increases initial page load time.",
+        "recommendation": "Add `defer` or `async` attributes to scripts.",
+        "source": "performance",
+        "url": "https://ais-pre-twqasbvtmkrtsllriliohj-212282537635.asia-east1.run.app/",
+        "evidence": [
+          {
+            "id": "ev_block",
+            "type": "performance",
+            "snippet": "<script src=\"/_aistudio-iframe.js?v=2c34bde1\"></script>"
+          }
+        ],
+        "fingerprint": "performance::performance.render-blocking::https://ais-pre-twqasbvtmkrtsllriliohj-212282537635.asia-east1.run.app/::::1 render blocking script s  in  head",
+        "status": "open"
+      }
+    ],
+    "pages": [
+      {
+        "id": "page_root",
+        "url": "https://ais-pre-twqasbvtmkrtsllriliohj-212282537635.asia-east1.run.app/",
+        "status": 302,
+        "title": "302 Found",
+        "loadTimeMs": 30,
+        "consoleErrors": [],
+        "networkErrors": [],
+        "metrics": {
+          "ttfb": 0,
+          "loadTimeMs": 0,
+          "lcp": 0,
+          "fcp": 0,
+          "cls": 0,
+          "tbt": 0,
+          "totalBytes": 40200,
+          "htmlBytes": 200,
+          "scriptBytes": 40000,
+          "imageBytes": 0,
+          "cssBytes": 0,
+          "requestCount": 2,
+          "domElementsCount": 9,
+          "renderBlockingCount": 1
+        },
+        "discoveredLinks": [],
+        "elementsCount": {
+          "buttons": 0,
+          "links": 0,
+          "forms": 0,
+          "images": 0,
+          "headings": 1,
+          "scripts": 1
+        },
+        "screenshots": {},
+        "htmlSnippet": "<html>\r\n<head><title>302 Found</title><script src=\"/_aistudio-iframe.js?v=2c34bde1\"></script></head>\r\n<body>\r\n<center><h1>302 Found</h1></center>\r\n<hr><center>nginx/1.22.1</center>\r\n</body>\r\n</html>\r\n"
+      }
+    ],
+    "logs": [
+      {
+        "id": "log_1790882827465_awdi",
+        "timestamp": "7:27:07 PM",
+        "level": "success",
+        "message": "Security validated. Destination: https://ais-pre-twqasbvtmkrtsllriliohj-212282537635.asia-east1.run.app/ (Pinned IP: 2600:1900:4242:200::)",
+        "step": "INITIALIZING"
+      },
+      {
+        "id": "log_1790882827494_9dny",
+        "timestamp": "7:27:07 PM",
+        "level": "warn",
+        "message": "Chromium sandbox launch unavailable (browserType.launch: Executable doesn't exist at /root/.cache/ms-playwright/chromium_headless_shell-1243/chrome-headless-shell-linux64/chrome-headless-shell\n╔════════════════════════════════════════════════════════════╗\n║ Looks like Playwright was just installed or updated.       ║\n║ Please run the following command to download new browsers: ║\n║                                                            ║\n║     npx playwright install                                 ║\n║                                                            ║\n║ <3 Playwright Team                                         ║\n╚════════════════════════════════════════════════════════════╝). Switching to HTTP Inspector engine.",
+        "step": "INITIALIZING"
+      }
+    ]
+  },
+  {
+    "id": "audit_1790882919709_5hmj3",
+    "targetUrl": "https://ais-pre-twqasbvtmkrtsllriliohj-212282537635.asia-east1.run.app/",
+    "status": "COMPLETED",
+    "startedAt": "2026-10-01T19:28:40.418Z",
+    "completedAt": "2026-10-01T19:28:40.509Z",
+    "config": {
+      "targetUrl": "https://ais-pre-twqasbvtmkrtsllriliohj-212282537635.asia-east1.run.app/",
+      "maxPages": 20,
+      "maxDepth": 5,
+      "timeoutMs": 25000,
+      "viewports": [
+        {
+          "name": "Desktop (1440x900)",
+          "width": 1440,
+          "height": 900,
+          "isMobile": false
+        },
+        {
+          "name": "Tablet (768x1024)",
+          "width": 768,
+          "height": 1024,
+          "isMobile": true
+        },
+        {
+          "name": "Mobile (390x844)",
+          "width": 390,
+          "height": 844,
+          "isMobile": true
+        }
+      ],
+      "enableA11y": true,
+      "enablePerformance": true,
+      "enableAI": true,
+      "enableExternalLinks": true
+    },
+    "summary": {
+      "overallScore": 95,
+      "verdict": "NEEDS_REVIEW",
+      "verdictReason": "Review recommended: 1 high and 1 medium issues detected.",
+      "criticalCount": 0,
+      "highCount": 1,
+      "mediumCount": 1,
+      "lowCount": 0,
+      "infoCount": 0,
+      "totalFindings": 2,
+      "pagesAudited": 1,
+      "viewportsTested": 3,
+      "checksExecuted": 28,
+      "durationMs": 3948,
+      "executionEngine": "HTTP_INSPECTOR",
+      "aiReasoningStatus": "SUCCESS"
+    },
+    "categoryScores": [
+      {
+        "category": "functionality",
+        "name": "Functionality & Availability",
+        "score": 86,
+        "weight": 0.25,
+        "passedCount": 6,
+        "failedCount": 0,
+        "warningCount": 0,
+        "status": "warn",
+        "checks": [
+          {
+            "id": "availability.http-status",
+            "name": "HTTP 200 Availability & Status",
+            "category": "functionality",
+            "passed": true,
+            "severityIfFailed": "critical",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "availability.console-errors",
+            "name": "Uncaught JavaScript Runtime Errors",
+            "category": "functionality",
+            "passed": true,
+            "severityIfFailed": "high",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "functionality.broken-links",
+            "name": "Broken Internal & External Hyperlinks",
+            "category": "functionality",
+            "passed": true,
+            "severityIfFailed": "high",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "functionality.dead-buttons",
+            "name": "Dead Interactive Elements / Empty Callbacks",
+            "category": "functionality",
+            "passed": true,
+            "severityIfFailed": "high",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "functionality.empty-hrefs",
+            "name": "Empty or Placeholder href Attributes (href=\"#\" / href=\"\")",
+            "category": "functionality",
+            "passed": true,
+            "severityIfFailed": "medium",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "functionality.unlabeled-interactive",
+            "name": "Unlabeled Interactive Controls",
+            "category": "functionality",
+            "passed": true,
+            "severityIfFailed": "medium",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          }
+        ]
+      },
+      {
+        "category": "mobile",
+        "name": "Mobile & Responsive UX",
+        "score": 100,
+        "weight": 0.2,
+        "passedCount": 5,
+        "failedCount": 0,
+        "warningCount": 0,
+        "status": "pass",
+        "checks": [
+          {
+            "id": "mobile.horizontal-overflow",
+            "name": "Mobile Horizontal Viewport Overflow",
+            "category": "mobile",
+            "passed": true,
+            "severityIfFailed": "critical",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "mobile.viewport-clipping",
+            "name": "Viewport Element Clipping & Cropped CTAs",
+            "category": "mobile",
+            "passed": true,
+            "severityIfFailed": "high",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "mobile.touch-targets",
+            "name": "Touch Target Sizing (Min 44x44px)",
+            "category": "mobile",
+            "passed": true,
+            "severityIfFailed": "medium",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "mobile.text-size",
+            "name": "Legible Mobile Typography (Min 12px)",
+            "category": "mobile",
+            "passed": true,
+            "severityIfFailed": "low",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "mobile.element-overlap",
+            "name": "Responsive Element Collision & Overlap",
+            "category": "mobile",
+            "passed": true,
+            "severityIfFailed": "high",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          }
+        ]
+      },
+      {
+        "category": "accessibility",
+        "name": "Accessibility (a11y)",
+        "score": 100,
+        "weight": 0.15,
+        "passedCount": 5,
+        "failedCount": 0,
+        "warningCount": 0,
+        "status": "pass",
+        "checks": [
+          {
+            "id": "accessibility.color-contrast",
+            "name": "WCAG AA Color Contrast Ratios",
+            "category": "accessibility",
+            "passed": true,
+            "severityIfFailed": "high",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "accessibility.image-alt",
+            "name": "Image Descriptive alt Attributes",
+            "category": "accessibility",
+            "passed": true,
+            "severityIfFailed": "medium",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "accessibility.form-labels",
+            "name": "Explicit Form Input Labels (<label> / aria-label)",
+            "category": "accessibility",
+            "passed": true,
+            "severityIfFailed": "high",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "accessibility.heading-hierarchy",
+            "name": "Logical Heading Structure (H1-H6)",
+            "category": "accessibility",
+            "passed": true,
+            "severityIfFailed": "medium",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "accessibility.landmark-regions",
+            "name": "Semantic Landmark Regions (<main>, <header>, <nav>)",
+            "category": "accessibility",
+            "passed": true,
+            "severityIfFailed": "low",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          }
+        ]
+      },
+      {
+        "category": "performance",
+        "name": "Performance & Web Vitals",
+        "score": 93,
+        "weight": 0.15,
+        "passedCount": 3,
+        "failedCount": 1,
+        "warningCount": 0,
+        "status": "pass",
+        "checks": [
+          {
+            "id": "performance.lcp",
+            "name": "Largest Contentful Paint (LCP < 2.5s)",
+            "category": "performance",
+            "passed": true,
+            "severityIfFailed": "high",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "performance.cls",
+            "name": "Cumulative Layout Shift (CLS < 0.1)",
+            "category": "performance",
+            "passed": true,
+            "severityIfFailed": "medium",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "performance.render-blocking",
+            "name": "Render-Blocking Scripts & Stylesheets",
+            "category": "performance",
+            "passed": false,
+            "severityIfFailed": "medium",
+            "details": "Failed — 1 issue(s) detected: 1 render-blocking script(s) in <head>",
+            "findingsCount": 1,
+            "executed": true
+          },
+          {
+            "id": "performance.resource-weight",
+            "name": "Total JavaScript & Asset Weight",
+            "category": "performance",
+            "passed": true,
+            "severityIfFailed": "low",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          }
+        ]
+      },
+      {
+        "category": "visual_ux",
+        "name": "Visual & UX Reasoning",
+        "score": 100,
+        "weight": 0.15,
+        "passedCount": 3,
+        "failedCount": 0,
+        "warningCount": 0,
+        "status": "pass",
+        "checks": [
+          {
+            "id": "visual.cta-prominence",
+            "name": "Primary CTA Visual Prominence & Contrast",
+            "category": "visual_ux",
+            "passed": true,
+            "severityIfFailed": "high",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "visual.spacing-consistency",
+            "name": "Visual Layout Consistency & Spacing Rhythm",
+            "category": "visual_ux",
+            "passed": true,
+            "severityIfFailed": "medium",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "visual.responsive-composition",
+            "name": "Multi-Viewport Visual Composition & Balance",
+            "category": "visual_ux",
+            "passed": true,
+            "severityIfFailed": "medium",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          }
+        ]
+      },
+      {
+        "category": "seo",
+        "name": "SEO & Social Signals",
+        "score": 100,
+        "weight": 0.1,
+        "passedCount": 5,
+        "failedCount": 0,
+        "warningCount": 0,
+        "status": "pass",
+        "checks": [
+          {
+            "id": "seo.title",
+            "name": "Page <title> Tag Presence & Length",
+            "category": "seo",
+            "passed": true,
+            "severityIfFailed": "high",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "seo.meta-description",
+            "name": "Meta Description Tag",
+            "category": "seo",
+            "passed": true,
+            "severityIfFailed": "medium",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "seo.h1",
+            "name": "Single Primary <h1> Heading",
+            "category": "seo",
+            "passed": true,
+            "severityIfFailed": "medium",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "seo.open-graph",
+            "name": "OpenGraph & Social Sharing Cards (og:title, og:image)",
+            "category": "seo",
+            "passed": true,
+            "severityIfFailed": "low",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          },
+          {
+            "id": "seo.canonical",
+            "name": "Canonical URL Tag (<link rel=\"canonical\">)",
+            "category": "seo",
+            "passed": true,
+            "severityIfFailed": "low",
+            "details": "Passed — No defects observed during testing.",
+            "findingsCount": 0,
+            "executed": true
+          }
+        ]
+      }
+    ],
+    "findings": [
+      {
+        "id": "f_perf_block_1790882920499",
+        "auditId": "audit_1790882919709_5hmj3",
+        "pageId": "page_root",
+        "category": "performance",
+        "checkId": "performance.render-blocking",
+        "severity": "medium",
+        "confidence": 0.94,
+        "title": "1 render-blocking script(s) in <head>",
+        "description": "Synchronous scripts in <head> block HTML parsing and delay first paint.",
+        "impact": "Increases initial page load time.",
+        "recommendation": "Add `defer` or `async` attributes to scripts.",
+        "source": "performance",
+        "url": "https://ais-pre-twqasbvtmkrtsllriliohj-212282537635.asia-east1.run.app/",
+        "evidence": [
+          {
+            "id": "ev_block",
+            "type": "performance",
+            "snippet": "<script src=\"/_aistudio-iframe.js?v=2c34bde1\"></script>"
+          }
+        ],
+        "fingerprint": "performance::performance.render-blocking::https://ais-pre-twqasbvtmkrtsllriliohj-212282537635.asia-east1.run.app/::::1 render blocking script s  in  head",
+        "status": "open"
+      },
+      {
+        "id": "f_ai_1790882924366_glvw",
+        "auditId": "",
+        "pageId": "page_root",
+        "category": "functionality",
+        "checkId": "functionality",
+        "severity": "high",
+        "confidence": 0.99,
+        "title": "HTTP 302 Redirect Failure",
+        "description": "The target URL returned an HTTP 302 Found status code, indicating the page is not accessible as intended and is redirecting to an external or internal resource without resolving to the actual application content.",
+        "impact": "Users are unable to access the application interface, resulting in a total loss of functionality and conversion opportunity.",
+        "recommendation": "Verify the server-side routing configuration and ensure the application container is correctly resolving to the intended entry point rather than an nginx redirect.",
+        "source": "ai_visual",
+        "url": "https://ais-pre-twqasbvtmkrtsllriliohj-212282537635.asia-east1.run.app/",
+        "evidence": [
+          {
+            "id": "ev_ai_shot_1790882924366",
+            "type": "screenshot",
+            "title": "Gemini Multimodal Visual Evidence",
+            "selector": "html",
+            "viewportName": "Desktop (1440x900)",
+            "screenshotId": "shot_root_desktop"
+          }
+        ],
+        "fingerprint": "functionality::functionality::https://ais-pre-twqasbvtmkrtsllriliohj-212282537635.asia-east1.run.app/::html::http 302 redirect failure",
+        "status": "open"
+      }
+    ],
+    "pages": [
+      {
+        "id": "page_root",
+        "url": "https://ais-pre-twqasbvtmkrtsllriliohj-212282537635.asia-east1.run.app/",
+        "status": 302,
+        "title": "302 Found",
+        "loadTimeMs": 30,
+        "consoleErrors": [],
+        "networkErrors": [],
+        "metrics": {
+          "ttfb": 0,
+          "loadTimeMs": 0,
+          "lcp": 0,
+          "fcp": 0,
+          "cls": 0,
+          "tbt": 0,
+          "totalBytes": 40200,
+          "htmlBytes": 200,
+          "scriptBytes": 40000,
+          "imageBytes": 0,
+          "cssBytes": 0,
+          "requestCount": 2,
+          "domElementsCount": 9,
+          "renderBlockingCount": 1
+        },
+        "discoveredLinks": [],
+        "elementsCount": {
+          "buttons": 0,
+          "links": 0,
+          "forms": 0,
+          "images": 0,
+          "headings": 1,
+          "scripts": 1
+        },
+        "screenshots": {},
+        "htmlSnippet": "<html>\r\n<head><title>302 Found</title><script src=\"/_aistudio-iframe.js?v=2c34bde1\"></script></head>\r\n<body>\r\n<center><h1>302 Found</h1></center>\r\n<hr><center>nginx/1.22.1</center>\r\n</body>\r\n</html>\r\n"
+      }
+    ],
+    "logs": [
+      {
+        "id": "log_1790882920428_3fhp",
+        "timestamp": "7:28:40 PM",
+        "level": "success",
+        "message": "Security validated. Destination: https://ais-pre-twqasbvtmkrtsllriliohj-212282537635.asia-east1.run.app/ (Pinned IP: 2600:1900:4244:200::)",
+        "step": "INITIALIZING"
+      },
+      {
+        "id": "log_1790882920454_ffqu",
+        "timestamp": "7:28:40 PM",
+        "level": "warn",
+        "message": "Chromium sandbox launch unavailable (browserType.launch: Executable doesn't exist at /root/.cache/ms-playwright/chromium_headless_shell-1243/chrome-headless-shell-linux64/chrome-headless-shell\n╔════════════════════════════════════════════════════════════╗\n║ Looks like Playwright was just installed or updated.       ║\n║ Please run the following command to download new browsers: ║\n║                                                            ║\n║     npx playwright install                                 ║\n║                                                            ║\n║ <3 Playwright Team                                         ║\n╚════════════════════════════════════════════════════════════╝). Switching to HTTP Inspector engine.",
+        "step": "INITIALIZING"
+      }
+    ]
+  },
+  {
+    "id": "prod_verify_store_1790883531417",
+    "targetUrl": "https://example.com",
+    "status": "COMPLETED",
+    "startedAt": "2026-10-01T19:38:51.417Z",
+    "completedAt": "2026-10-01T19:38:51.417Z",
+    "config": {
+      "targetUrl": "https://example.com",
+      "maxPages": 1,
+      "maxDepth": 1,
+      "timeoutMs": 5000,
+      "viewports": []
+    },
+    "summary": {
+      "overallScore": 100,
+      "verdict": "LAUNCH_READY",
+      "verdictReason": "Clean",
+      "criticalCount": 0,
+      "highCount": 0,
+      "totalFindings": 0,
+      "pagesAudited": 1,
+      "viewportsTested": 1,
+      "checksExecuted": 10,
+      "durationMs": 1200,
+      "executionEngine": "PLAYWRIGHT_CHROMIUM",
+      "aiReasoningStatus": "SUCCESS"
+    },
+    "categoryScores": [],
+    "findings": [],
+    "pages": [],
+    "logs": []
+  },
+  {
+    "id": "prod_verify_store_1790883545840",
+    "targetUrl": "https://example.com",
+    "status": "COMPLETED",
+    "startedAt": "2026-10-01T19:39:05.840Z",
+    "completedAt": "2026-10-01T19:39:05.840Z",
+    "config": {
+      "targetUrl": "https://example.com",
+      "maxPages": 1,
+      "maxDepth": 1,
+      "timeoutMs": 5000,
+      "viewports": []
+    },
+    "summary": {
+      "overallScore": 100,
+      "verdict": "LAUNCH_READY",
+      "verdictReason": "Clean",
+      "criticalCount": 0,
+      "highCount": 0,
+      "totalFindings": 0,
+      "pagesAudited": 1,
+      "viewportsTested": 1,
+      "checksExecuted": 10,
+      "durationMs": 1200,
+      "executionEngine": "PLAYWRIGHT_CHROMIUM",
+      "aiReasoningStatus": "SUCCESS"
+    },
+    "categoryScores": [],
+    "findings": [],
+    "pages": [],
+    "logs": []
+  },
+  {
+    "id": "prod_verify_store_1790883579997",
+    "targetUrl": "https://example.com",
+    "status": "COMPLETED",
+    "startedAt": "2026-10-01T19:39:39.997Z",
+    "completedAt": "2026-10-01T19:39:39.998Z",
+    "config": {
+      "targetUrl": "https://example.com",
+      "maxPages": 1,
+      "maxDepth": 1,
+      "timeoutMs": 5000,
+      "viewports": []
+    },
+    "summary": {
+      "overallScore": 100,
+      "verdict": "LAUNCH_READY",
+      "verdictReason": "Clean",
+      "criticalCount": 0,
+      "highCount": 0,
+      "totalFindings": 0,
+      "pagesAudited": 1,
+      "viewportsTested": 1,
+      "checksExecuted": 10,
+      "durationMs": 1200,
+      "executionEngine": "PLAYWRIGHT_CHROMIUM",
+      "aiReasoningStatus": "SUCCESS"
+    },
+    "categoryScores": [],
+    "findings": [],
+    "pages": [],
+    "logs": []
+  }
+]

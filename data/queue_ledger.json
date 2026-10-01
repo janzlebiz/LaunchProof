@@ -1100,5 +1100,163 @@
     "workerId": "test_worker_1",
     "startedAt": "2026-10-01T19:30:38.584Z",
     "completedAt": "2026-10-01T19:30:38.584Z"
+  },
+  {
+    "id": "ops_job_1_1790883532603",
+    "targetUrl": "https://example.com",
+    "config": {
+      "targetUrl": "https://example.com",
+      "maxPages": 1,
+      "maxDepth": 1,
+      "timeoutMs": 5000,
+      "viewports": []
+    },
+    "status": "COMPLETED",
+    "progressPercent": 5,
+    "currentMessage": "Audit queued in durable ledger",
+    "retryCount": 0,
+    "maxRetries": 2,
+    "createdAt": "2026-10-01T19:38:52.603Z",
+    "workerId": "worker_ops_1",
+    "startedAt": "2026-10-01T19:38:52.604Z",
+    "completedAt": "2026-10-01T19:38:52.604Z"
+  },
+  {
+    "id": "ops_job_2_1790883532603",
+    "targetUrl": "https://example.com",
+    "config": {
+      "targetUrl": "https://example.com",
+      "maxPages": 1,
+      "maxDepth": 1,
+      "timeoutMs": 5000,
+      "viewports": []
+    },
+    "status": "COMPLETED",
+    "progressPercent": 5,
+    "currentMessage": "Audit queued in durable ledger",
+    "retryCount": 0,
+    "maxRetries": 2,
+    "createdAt": "2026-10-01T19:38:52.604Z",
+    "workerId": "worker_ops_1",
+    "startedAt": "2026-10-01T19:38:52.605Z",
+    "completedAt": "2026-10-01T19:38:52.605Z"
+  },
+  {
+    "id": "ops_job_1_1790883547368",
+    "targetUrl": "https://example.com",
+    "config": {
+      "targetUrl": "https://example.com",
+      "maxPages": 1,
+      "maxDepth": 1,
+      "timeoutMs": 5000,
+      "viewports": []
+    },
+    "status": "COMPLETED",
+    "progressPercent": 5,
+    "currentMessage": "Audit queued in durable ledger",
+    "retryCount": 0,
+    "maxRetries": 2,
+    "createdAt": "2026-10-01T19:39:07.368Z",
+    "workerId": "worker_ops_1",
+    "startedAt": "2026-10-01T19:39:07.370Z",
+    "completedAt": "2026-10-01T19:39:07.370Z"
+  },
+  {
+    "id": "ops_job_2_1790883547368",
+    "targetUrl": "https://example.com",
+    "config": {
+      "targetUrl": "https://example.com",
+      "maxPages": 1,
+      "maxDepth": 1,
+      "timeoutMs": 5000,
+      "viewports": []
+    },
+    "status": "COMPLETED",
+    "progressPercent": 5,
+    "currentMessage": "Audit queued in durable ledger",
+    "retryCount": 0,
+    "maxRetries": 2,
+    "createdAt": "2026-10-01T19:39:07.369Z",
+    "workerId": "worker_ops_1",
+    "startedAt": "2026-10-01T19:39:07.372Z",
+    "completedAt": "2026-10-01T19:39:07.373Z"
+  },
+  {
+    "id": "ops_job_1_1790883581107",
+    "targetUrl": "https://example.com",
+    "config": {
+      "targetUrl": "https://example.com",
+      "maxPages": 1,
+      "maxDepth": 1,
+      "timeoutMs": 5000,
+      "viewports": [],
+      "enableA11y": false,
+      "enablePerformance": false,
+      "enableAI": false,
+      "enableExternalLinks": false
+    },
+    "status": "COMPLETED",
+    "progressPercent": 5,
+    "currentMessage": "Audit queued in durable ledger",
+    "retryCount": 0,
+    "maxRetries": 2,
+    "createdAt": "2026-10-01T19:39:41.107Z",
+    "workerId": "worker_ops_1",
+    "startedAt": "2026-10-01T19:39:41.108Z",
+    "completedAt": "2026-10-01T19:39:41.108Z"
+  },
+  {
+    "id": "ops_job_2_1790883581107",
+    "targetUrl": "https://example.com",
+    "config": {
+      "targetUrl": "https://example.com",
+      "maxPages": 1,
+      "maxDepth": 1,
+      "timeoutMs": 5000,
+      "viewports": [],
+      "enableA11y": false,
+      "enablePerformance": false,
+      "enableAI": false,
+      "enableExternalLinks": false
+    },
+    "status": "COMPLETED",
+    "progressPercent": 5,
+    "currentMessage": "Audit queued in durable ledger",
+    "retryCount": 0,
+    "maxRetries": 2,
+    "createdAt": "2026-10-01T19:39:41.107Z",
+    "workerId": "worker_ops_1",
+    "startedAt": "2026-10-01T19:39:41.108Z",
+    "completedAt": "2026-10-01T19:39:41.109Z"
+  },
+  {
+    "id": "test_queue_1790883589652",
+    "targetUrl": "http://localhost:3000/fixtures/healthy-benchmark",
+    "config": {
+      "targetUrl": "http://localhost:3000/fixtures/healthy-benchmark",
+      "maxPages": 1,
+      "maxDepth": 1,
+      "timeoutMs": 5000,
+      "viewports": [
+        {
+          "name": "Desktop",
+          "width": 1440,
+          "height": 900
+        }
+      ],
+      "enableA11y": false,
+      "enablePerformance": false,
+      "enableAI": false,
+      "enableExternalLinks": false
+    },
+    "status": "COMPLETED",
+    "progressPercent": 5,
+    "currentMessage": "Audit queued in durable ledger",
+    "retryCount": 0,
+    "maxRetries": 2,
+    "createdAt": "2026-10-01T19:39:49.652Z",
+    "workerId": "test_worker_1",
+    "startedAt": "2026-10-01T19:39:49.653Z",
+    "completedAt": "2026-10-01T19:39:49.653Z"
   }
 ]
