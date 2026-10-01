@@ -1,6 +1,7 @@
 /**
  * LaunchProof — Hardened Security, SSRF & Network-Level IP Pinning
- * Resolves and pins IP addresses to eliminate DNS rebinding vulnerabilities.
+ * Hardened against IPv4-mapped IPv6, hex/octal/decimal IP representations,
+ * DNS rebinding, and production-only strict DNS validation.
  */
 
 import dns from 'dns/promises';
@@ -33,34 +34,73 @@ const FORBIDDEN_PORTS = [
 ];
 
 /**
- * Checks whether an IP (IPv4 or IPv6 or IPv4-mapped IPv6) is reserved/private/loopback
+ * Hardened check whether an IP (IPv4, IPv6, IPv4-mapped IPv6, hex, octal, decimal) is private/reserved/loopback
  */
 export function isPrivateOrReservedIp(ip: string): boolean {
   if (!ip) return true;
+  const lower = ip.trim().toLowerCase();
 
-  // Handle IPv4-mapped IPv6 (e.g. ::ffff:127.0.0.1 or ::ffff:7f00:1)
-  if (ip.startsWith('::ffff:')) {
-    const mapped = ip.substring(7);
-    return isPrivateOrReservedIp(mapped);
+  // Handle decimal integer IP representation (e.g. 2130706433 = 127.0.0.1)
+  if (/^\d+$/.test(lower)) {
+    const num = parseInt(lower, 10);
+    if (!isNaN(num)) {
+      const a = (num >>> 24) & 255;
+      const b = (num >>> 16) & 255;
+      const c = (num >>> 8) & 255;
+      const d = num & 255;
+      return isPrivateOrReservedIp(`${a}.${b}.${c}.${d}`);
+    }
+  }
+
+  // Handle IPv4-mapped IPv6 (e.g. ::ffff:127.0.0.1 or ::ffff:7f00:1 or hex forms)
+  if (lower.startsWith('::ffff:')) {
+    const mapped = lower.substring(7);
+    if (mapped.includes('.')) {
+      return isPrivateOrReservedIp(mapped);
+    }
+    // Hex encoded IPv4 in mapped IPv6 (e.g. ::ffff:7f00:0001)
+    const parts = mapped.split(':');
+    if (parts.length === 2) {
+      const p1 = parseInt(parts[0], 16);
+      const p2 = parseInt(parts[1], 16);
+      if (!isNaN(p1) && !isNaN(p2)) {
+        const a = (p1 >>> 8) & 255;
+        const b = p1 & 255;
+        const c = (p2 >>> 8) & 255;
+        const d = p2 & 255;
+        return isPrivateOrReservedIp(`${a}.${b}.${c}.${d}`);
+      }
+    }
   }
 
   // IPv6 checks
-  if (ip.includes(':')) {
-    const lower = ip.toLowerCase();
-    // Loopback ::1
-    if (lower === '::1' || lower === '0:0:0:0:0:0:0:1') return true;
-    // Unspecified ::
-    if (lower === '::' || lower === '0:0:0:0:0:0:0:0') return true;
+  if (lower.includes(':')) {
+    // Loopback ::1, unspecified ::
+    if (lower === '::1' || lower === '0:0:0:0:0:0:0:1' || lower === '::' || lower === '0:0:0:0:0:0:0:0') return true;
     // Link-local fe80::/10
     if (lower.startsWith('fe8') || lower.startsWith('fe9') || lower.startsWith('fea') || lower.startsWith('feb')) return true;
-    // Unique local address fc00::/7 (fc00:: and fd00::)
+    // Unique local address fc00::/7
     if (lower.startsWith('fc') || lower.startsWith('fd')) return true;
+    // IPv4-mapped loopback in hex (e.g. ::127.0.0.1)
+    if (lower.includes('127.0.0.1') || lower.includes('0000:0000:0000:0000:0000:ffff:7f')) return true;
     return false;
   }
 
-  // IPv4 checks
-  const parts = ip.split('.').map((p) => parseInt(p, 10));
-  if (parts.length !== 4 || parts.some(isNaN)) return true;
+  // IPv4 checks (parse octal / hex if prefixed)
+  const segments = lower.split('.');
+  if (segments.length !== 4) return true;
+
+  const parts = segments.map((s) => {
+    if (s.startsWith('0x') || s.startsWith('0X')) {
+      return parseInt(s, 16);
+    }
+    if (s.startsWith('0') && s.length > 1) {
+      return parseInt(s, 8); // Octal
+    }
+    return parseInt(s, 10);
+  });
+
+  if (parts.some(isNaN)) return true;
 
   const [a, b, c, d] = parts;
 
@@ -76,20 +116,14 @@ export function isPrivateOrReservedIp(ip: string): boolean {
   // 192.168.0.0/16 (Private RFC1918)
   if (a === 192 && b === 168) return true;
 
-  // 169.254.0.0/16 (Link-Local / AWS/GCP Metadata 169.254.169.254)
+  // 169.254.0.0/16 (Link-Local / AWS/GCP Metadata)
   if (a === 169 && b === 254) return true;
 
-  // 0.0.0.0/8 (Current network)
+  // 0.0.0.0/8
   if (a === 0) return true;
 
-  // 224.0.0.0/4 (Multicast)
-  if (a >= 224 && a <= 239) return true;
-
-  // 240.0.0.0/4 (Reserved)
-  if (a >= 240) return true;
-
-  // 255.255.255.255 (Broadcast)
-  if (a === 255 && b === 255 && c === 255 && d === 255) return true;
+  // Multicast / Reserved / Broadcast
+  if (a >= 224) return true;
 
   return false;
 }
@@ -147,20 +181,20 @@ export async function validateTargetUrlSecurity(
       isValid: false,
       error: `Security blocked: target '${hostname}' is a loopback or internal metadata host.`,
       errorCode: 'SECURITY_BLOCKED',
-      details: 'SSRF Protection: Access to localhost, loopback, and cloud metadata is disallowed.',
     };
   }
 
-  // Check forbidden subdomains
+  // Check forbidden subdomains or IP literals
   if (
     hostname.endsWith('.localhost') ||
     hostname.endsWith('.local') ||
     hostname.endsWith('.internal') ||
-    hostname.includes('169.254.169.254')
+    hostname.includes('169.254.169.254') ||
+    isPrivateOrReservedIp(hostname)
   ) {
     return {
       isValid: false,
-      error: `Security blocked: target '${hostname}' resolves to an internal namespace.`,
+      error: `Security blocked: target '${hostname}' resolves to an internal namespace or private IP.`,
       errorCode: 'SECURITY_BLOCKED',
     };
   }
@@ -177,7 +211,7 @@ export async function validateTargetUrlSecurity(
     }
   }
 
-  // Real DNS Resolution & Network-Level IP Pinning
+  // Real DNS Resolution & Network-Level IP Pinning (Strict Production Validation)
   let resolvedIp = '';
   try {
     const lookup = await dns.lookup(hostname);
@@ -192,7 +226,7 @@ export async function validateTargetUrlSecurity(
       };
     }
   } catch (dnsErr: any) {
-    if (hostname.includes('launchproof.dev') || hostname.includes('ailaunchqa.dev') || hostname.includes('example.com')) {
+    if (!isProd && (hostname.includes('launchproof.dev') || hostname.includes('ailaunchqa.dev') || hostname.includes('example.com'))) {
       parsed.hash = '';
       return { isValid: true, normalizedUrl: parsed.toString(), resolvedIp: '93.184.216.34' };
     }

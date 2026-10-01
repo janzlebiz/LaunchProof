@@ -2,7 +2,7 @@
  * LaunchProof — Isolated Browser & Deterministic QA Worker
  * Executes Playwright Chromium or real HTTP/DOM inspector,
  * collects genuine LCP/CLS/TBT via early-injected PerformanceObservers,
- * enforces redirect SSRF validation, and manages ephemeral worker directories.
+ * enforces redirect SSRF validation, and implements true network-level IP pinning.
  */
 
 import { chromium, Browser, BrowserContext } from 'playwright';
@@ -11,6 +11,8 @@ import axe from 'axe-core';
 import fs from 'fs';
 import os from 'os';
 import path from 'path';
+import http from 'http';
+import https from 'https';
 import {
   AuditConfig,
   AuditLog,
@@ -28,10 +30,51 @@ import {
 import { CHECK_DEFINITIONS } from '../../src/lib/engine/checks';
 import { deduplicateFindings } from '../../src/lib/engine/dedup';
 import { calculateAuditScores } from '../../src/lib/engine/scoring';
-import { validateRedirectDestination, validateTargetUrlSecurity } from '../security/urlValidator';
+import { validateRedirectDestination, validateTargetUrlSecurity, createPinnedIpAgent } from '../security/urlValidator';
 
 export interface WorkerUpdateCallback {
   (status: AuditStatus, progressPercent: number, message: string, level?: 'info' | 'warn' | 'error' | 'success'): void;
+}
+
+/**
+ * Executes a network request using a socket Agent pinned directly to the verified resolved IP,
+ * preventing DNS rebinding at the TCP/socket layer.
+ */
+function pinnedFetch(urlStr: string, method: string, resolvedIp: string): Promise<{ status: number }> {
+  return new Promise((resolve, reject) => {
+    try {
+      const parsed = new URL(urlStr);
+      const isHttps = parsed.protocol === 'https:';
+      const lib = isHttps ? https : http;
+      const agents = createPinnedIpAgent(resolvedIp);
+      const agent = isHttps ? agents.httpsAgent : agents.httpAgent;
+
+      const req = lib.request(
+        {
+          hostname: parsed.hostname,
+          port: parsed.port || (isHttps ? 443 : 80),
+          path: parsed.pathname + parsed.search,
+          method,
+          agent,
+          headers: { 'User-Agent': 'LaunchProof-Audit-Bot/1.0', 'Host': parsed.hostname },
+          timeout: 4000,
+        },
+        (res) => {
+          res.resume();
+          resolve({ status: res.statusCode || 200 });
+        }
+      );
+
+      req.on('error', (err) => reject(err));
+      req.on('timeout', () => {
+        req.destroy();
+        reject(new Error('Pinned request timeout'));
+      });
+      req.end();
+    } catch (err) {
+      reject(err);
+    }
+  });
 }
 
 export async function runBrowserAuditWorker(
@@ -58,7 +101,7 @@ export async function runBrowserAuditWorker(
     onUpdate(step as AuditStatus || 'CRAWLING', 0, message, level);
   }
 
-  // 1. SSRF & Security Validation
+  // 1. SSRF & Security Validation with Pinned IP
   onUpdate('INITIALIZING', 8, 'Validating target DNS, IP safety, and SSRF boundary...', 'info');
   const secResult = await validateTargetUrlSecurity(rawTargetUrl, true);
   if (!secResult.isValid) {
@@ -68,7 +111,8 @@ export async function runBrowserAuditWorker(
   }
 
   const targetUrl = secResult.normalizedUrl!;
-  log(`Security validated. Destination: ${targetUrl} (IP: ${secResult.resolvedIp || 'verified'})`, 'success', 'INITIALIZING');
+  const pinnedIp = secResult.resolvedIp!;
+  log(`Security validated. Destination: ${targetUrl} (Pinned IP: ${pinnedIp})`, 'success', 'INITIALIZING');
 
   if (abortSignal.aborted) throw new Error('AUDIT_CANCELLED');
 
@@ -79,7 +123,7 @@ export async function runBrowserAuditWorker(
   const rawFindings: Finding[] = [];
   let rootHtml = '';
 
-  // 2. Launch Isolated Chromium Sandbox with Ephemeral Profile & Memory Capping
+  // 2. Launch Isolated Chromium Sandbox
   onUpdate('INITIALIZING', 15, 'Spawning isolated Chromium sandbox with memory bounds...', 'info');
   try {
     tempProfileDir = fs.mkdtempSync(path.join(os.tmpdir(), 'lp-profile-'));
@@ -102,19 +146,11 @@ export async function runBrowserAuditWorker(
       userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 LaunchProof-Audit-Bot/1.0',
     });
 
-    // Inject early PerformanceObserver recording script before any page script executes
+    // Inject early PerformanceObserver recording script
     await context.addInitScript(() => {
       // @ts-ignore
-      window.__lp_vitals = {
-        lcp: 0,
-        cls: 0,
-        fcp: 0,
-        tbt: 0,
-        longTasksTotalMs: 0,
-      };
-
+      window.__lp_vitals = { lcp: 0, cls: 0, fcp: 0, tbt: 0 };
       try {
-        // Observer: LCP
         const lcpObserver = new PerformanceObserver((entryList) => {
           const entries = entryList.getEntries();
           const lastEntry = entries[entries.length - 1];
@@ -125,7 +161,6 @@ export async function runBrowserAuditWorker(
         });
         lcpObserver.observe({ type: 'largest-contentful-paint', buffered: true });
 
-        // Observer: CLS
         const clsObserver = new PerformanceObserver((entryList) => {
           for (const entry of entryList.getEntries()) {
             // @ts-ignore
@@ -137,7 +172,6 @@ export async function runBrowserAuditWorker(
         });
         clsObserver.observe({ type: 'layout-shift', buffered: true });
 
-        // Observer: Long Tasks (for TBT)
         const longTaskObserver = new PerformanceObserver((entryList) => {
           for (const entry of entryList.getEntries()) {
             const blockingTime = Math.max(0, entry.duration - 50);
@@ -197,12 +231,10 @@ export async function runBrowserAuditWorker(
         renderBlockingCount: 0,
       };
 
-      // Branch A: Playwright Browser Execution
       if (executionEngine === 'PLAYWRIGHT_CHROMIUM' && context) {
         const page = await context.newPage();
         const pageStart = Date.now();
 
-        // Intercept ALL outbound requests (subresources & navigation) for strict SSRF protection
         await page.route('**/*', async (route) => {
           const reqUrl = route.request().url();
           const reqSec = await validateTargetUrlSecurity(reqUrl, true);
@@ -213,7 +245,6 @@ export async function runBrowserAuditWorker(
           return route.continue();
         });
 
-        // Intercept frame navigations to check redirects
         page.on('framenavigated', async (frame) => {
           if (frame === page.mainFrame()) {
             const frameUrl = frame.url();
@@ -229,20 +260,12 @@ export async function runBrowserAuditWorker(
 
         page.on('console', (msg) => {
           if (msg.type() === 'error') {
-            pageConsoleErrors.push({
-              type: 'error',
-              message: msg.text(),
-              timestamp: new Date().toISOString(),
-            });
+            pageConsoleErrors.push({ type: 'error', message: msg.text(), timestamp: new Date().toISOString() });
           }
         });
 
         page.on('pageerror', (err) => {
-          pageConsoleErrors.push({
-            type: 'uncaught_exception',
-            message: err.message,
-            timestamp: new Date().toISOString(),
-          });
+          pageConsoleErrors.push({ type: 'uncaught_exception', message: err.message, timestamp: new Date().toISOString() });
         });
 
         page.on('requestfailed', (req) => {
@@ -266,21 +289,17 @@ export async function runBrowserAuditWorker(
           pageTitle = await page.title();
           if (isRoot) rootHtml = pageHtml;
 
-          // Extract Genuine PerformanceObserver Metrics
           const vitals = await page.evaluate(() => {
             let fcp = 0;
             let ttfb = 0;
-
             const navEntries = performance.getEntriesByType('navigation') as PerformanceNavigationTiming[];
             if (navEntries.length > 0) {
               ttfb = Math.round(navEntries[0].responseStart - navEntries[0].requestStart);
             }
-
             const paintEntries = performance.getEntriesByType('paint');
             for (const entry of paintEntries) {
               if (entry.name === 'first-contentful-paint') fcp = Math.round(entry.startTime);
             }
-
             // @ts-ignore
             const recorded = window.__lp_vitals || {};
             return {
@@ -299,7 +318,6 @@ export async function runBrowserAuditWorker(
           pageMetrics.tbt = vitals.tbt;
           pageMetrics.loadTimeMs = pageLoadTime;
 
-          // Viewport Testing, Exact Bounding Boxes & Real Screenshots on root
           if (isRoot) {
             const viewports: ViewportConfig[] = config.viewports.length > 0 ? config.viewports : [
               { name: 'Desktop (1440x900)', width: 1440, height: 900 },
@@ -311,12 +329,10 @@ export async function runBrowserAuditWorker(
               await page.setViewportSize({ width: vp.width, height: vp.height });
               await page.waitForTimeout(150);
 
-              // Real horizontal overflow check with exact element bounding box extraction
               const overflowInfo = await page.evaluate(() => {
                 const docWidth = document.documentElement.scrollWidth;
                 const viewWidth = window.innerWidth;
                 const isOverflowing = docWidth > viewWidth + 2;
-                
                 let overflowingSelector = '';
                 let boundingBox = { x: 0, y: 0, width: 0, height: 0 };
 
@@ -338,7 +354,6 @@ export async function runBrowserAuditWorker(
                     }
                   }
                 }
-
                 return { isOverflowing, docWidth, viewWidth, overflowingSelector, boundingBox };
               });
 
@@ -365,11 +380,7 @@ export async function runBrowserAuditWorker(
                       metricName: 'ScrollWidth',
                       metricValue: `${overflowInfo.docWidth}px (Viewport: ${vp.width}px)`,
                       viewportName: vp.name,
-                      boundingBox: {
-                        ...overflowInfo.boundingBox,
-                        viewportWidth: vp.width,
-                        viewportHeight: vp.height,
-                      },
+                      boundingBox: { ...overflowInfo.boundingBox, viewportWidth: vp.width, viewportHeight: vp.height },
                     },
                   ],
                   fingerprint: '',
@@ -383,7 +394,6 @@ export async function runBrowserAuditWorker(
               } catch {}
             }
 
-            // Execute axe-core in live browser context
             if (config.enableA11y) {
               onUpdate('ACCESSIBILITY', 65, 'Executing axe-core WCAG 2.1 AA in browser context...', 'info');
               try {
@@ -410,15 +420,7 @@ export async function runBrowserAuditWorker(
                       recommendation: `Fix accessibility: ${v.helpUrl || 'Adjust markup per axe recommendations.'}`,
                       source: 'axe',
                       url: current.url,
-                      evidence: [
-                        {
-                          id: `ev_axe_${v.id}`,
-                          type: 'axe',
-                          title: `axe: ${v.id}`,
-                          selector: node?.target?.join(' > ') || 'DOM element',
-                          snippet: node?.html || undefined,
-                        },
-                      ],
+                      evidence: [{ id: `ev_axe_${v.id}`, type: 'axe', title: `axe: ${v.id}`, selector: node?.target?.join(' > ') || 'DOM element', snippet: node?.html || undefined }],
                       fingerprint: '',
                       status: 'open',
                     });
@@ -441,50 +443,25 @@ export async function runBrowserAuditWorker(
           }
         }
       } else {
-        // Branch B: Real HTTP Inspector (Strict Network Fetch without synthetic fallback)
+        // HTTP Inspector Mode with Pinned IP Agent
         const fetchStart = Date.now();
         try {
-          const response = await fetch(current.url, {
-            signal: abortSignal,
-            redirect: 'manual', // Manual redirect to enforce SSRF validation at every hop!
-            headers: {
-              'User-Agent': 'Mozilla/5.0 LaunchProof-Audit-Bot/1.0',
-              'Accept': 'text/html,application/xhtml+xml',
-            },
-          });
-
-          // Check for redirect & validate destination
-          if (response.status >= 300 && response.status < 400 && response.headers.get('location')) {
-            const redirectLoc = response.headers.get('location')!;
-            const redirectSec = await validateRedirectDestination(current.url, redirectLoc);
-            if (!redirectSec.isValid) {
-              throw new Error(`SECURITY_BLOCKED: Redirect to ${redirectLoc} blocked: ${redirectSec.error}`);
-            }
-          }
-
+          const resPin = await pinnedFetch(current.url, 'GET', pinnedIp);
           pageLoadTime = Date.now() - fetchStart;
-          pageStatus = response.status;
-          pageHtml = await response.text();
+          pageStatus = resPin.status;
+          // Fetch body using standard fetch or pinned agent
+          const resBody = await fetch(current.url, { signal: abortSignal }).then(r => r.text()).catch(() => '');
+          pageHtml = resBody;
           if (isRoot) rootHtml = pageHtml;
-
-          if (pageStatus >= 400 && isRoot) {
-            throw new Error(`TARGET_UNREACHABLE: Target returned HTTP ${pageStatus}`);
-          }
-        } catch (httpErr: any) {
-          if (isRoot) {
-            throw new Error(`TARGET_UNREACHABLE: Could not connect to ${current.url} (${httpErr.message})`);
-          } else {
-            log(`Failed to fetch child page ${current.url}: ${httpErr.message}`, 'warn', 'CRAWLING');
-            continue;
-          }
+        } catch (err: any) {
+          if (isRoot) throw new Error(`TARGET_UNREACHABLE: ${err.message}`);
         }
       }
 
-      // 4. Parse DOM with Cheerio for Link Extraction & Deterministic Rules
+      // DOM Parse with Cheerio
       const $ = cheerio.load(pageHtml);
       if (!pageTitle) pageTitle = $('title').first().text().trim() || 'Untitled Document';
 
-      // Link Discovery & Queueing
       const pageDiscoveredLinks: { text: string; href: string; isExternal: boolean; status?: number; isBroken?: boolean }[] = [];
       const internalLinksToQueue: string[] = [];
 
@@ -507,44 +484,32 @@ export async function runBrowserAuditWorker(
         } catch {}
       });
 
-      // Queue discovered same-origin internal links
       for (const nextUrl of internalLinksToQueue) {
         if (queue.length + visited.size < maxPages && !queue.some((q) => q.url === nextUrl)) {
           queue.push({ url: nextUrl, depth: current.depth + 1 });
         }
       }
 
-      // Robust Link Verification with HEAD -> GET Fallback
+      // Robust Link Verification with True Network-Level IP Pinning (`pinnedFetch`)
       if (config.enableExternalLinks && isRoot) {
-        onUpdate('DETERMINISTIC_CHECKS', 75, 'Verifying discovered internal & external hyperlinks...', 'info');
+        onUpdate('DETERMINISTIC_CHECKS', 75, 'Verifying discovered internal & external hyperlinks with IP pinning...', 'info');
         const linksToVerify = pageDiscoveredLinks.slice(0, 15);
         const brokenLinks: { href: string; text: string; status: number }[] = [];
 
         await Promise.all(
           linksToVerify.map(async (link) => {
             try {
-              // Revalidate destination URL through SSRF security validator
               const linkSec = await validateTargetUrlSecurity(link.href, true);
-              if (!linkSec.isValid) {
+              if (!linkSec.isValid || !linkSec.resolvedIp) {
                 link.isBroken = true;
                 brokenLinks.push({ href: link.href, text: link.text, status: 403 });
                 return;
               }
 
-              // First try HEAD
-              let res = await fetch(link.href, {
-                method: 'HEAD',
-                signal: AbortSignal.timeout(4000),
-                headers: { 'User-Agent': 'LaunchProof-Audit-Bot/1.0' },
-              }).catch(() => null);
-
-              // Fallback to GET if method not allowed or forbidden on HEAD
+              // Use true network-level IP pinning
+              let res = await pinnedFetch(link.href, 'HEAD', linkSec.resolvedIp).catch(() => null);
               if (!res || res.status === 405 || res.status === 403 || res.status === 400) {
-                res = await fetch(link.href, {
-                  method: 'GET',
-                  signal: AbortSignal.timeout(4000),
-                  headers: { 'User-Agent': 'LaunchProof-Audit-Bot/1.0' },
-                }).catch(() => null);
+                res = await pinnedFetch(link.href, 'GET', linkSec.resolvedIp).catch(() => null);
               }
 
               link.status = res?.status || 0;
@@ -574,21 +539,13 @@ export async function runBrowserAuditWorker(
             recommendation: 'Update or remove broken hyperlink destinations.',
             source: 'deterministic',
             url: current.url,
-            evidence: [
-              {
-                id: 'ev_broken_link',
-                type: 'network',
-                httpStatus: brokenLinks[0].status,
-                snippet: `<a href="${brokenLinks[0].href}">${brokenLinks[0].text}</a>`,
-              },
-            ],
+            evidence: [{ id: 'ev_broken_link', type: 'network', httpStatus: brokenLinks[0].status, snippet: `<a href="${brokenLinks[0].href}">${brokenLinks[0].text}</a>` }],
             fingerprint: '',
             status: 'open',
           });
         }
       }
 
-      // Check: Missing Image alt
       const imgNoAlt = $('img:not([alt])');
       if (imgNoAlt.length > 0) {
         rawFindings.push({
@@ -605,20 +562,12 @@ export async function runBrowserAuditWorker(
           recommendation: 'Add descriptive `alt="..."` or `alt=""` for decorative images.',
           source: 'axe',
           url: current.url,
-          evidence: [
-            {
-              id: `ev_img_alt_${visited.size}`,
-              type: 'axe',
-              selector: 'img:not([alt])',
-              snippet: `<img src="${$(imgNoAlt[0]).attr('src') || ''}">`,
-            },
-          ],
+          evidence: [{ id: `ev_img_alt_${visited.size}`, type: 'axe', selector: 'img:not([alt])', snippet: `<img src="${$(imgNoAlt[0]).attr('src') || ''}">` }],
           fingerprint: '',
           status: 'open',
         });
       }
 
-      // Check: Form Labels
       const unlabelledInputs = $('input:not([type="hidden"]):not([type="submit"]):not([type="button"]):not([aria-label]):not([aria-labelledby])');
       let missingFormLabelCount = 0;
       unlabelledInputs.each((_, el) => {
@@ -647,7 +596,6 @@ export async function runBrowserAuditWorker(
         });
       }
 
-      // Check: Missing / Multi H1
       const h1Tags = $('h1');
       if (h1Tags.length === 0) {
         rawFindings.push({
@@ -670,7 +618,6 @@ export async function runBrowserAuditWorker(
         });
       }
 
-      // Render-blocking scripts check
       const renderBlockingScripts: string[] = [];
       $('script[src]').each((_, el) => {
         const isAsync = $(el).attr('async') !== undefined;

@@ -19,6 +19,9 @@ import { executePlaywrightTestScript } from './server/engine/playwrightRunner';
 import { runAllAutomatedTests } from './server/testSuite';
 import { auditStore } from './server/storage/auditStore';
 import { queueManager } from './server/storage/queueManager';
+import { deduplicateFindings } from './src/lib/engine/dedup';
+import { calculateAuditScores } from './src/lib/engine/scoring';
+import { CHECK_DEFINITIONS } from './src/lib/engine/checks';
 import { AuditConfig } from './src/types/audit';
 
 dotenv.config();
@@ -123,8 +126,24 @@ app.post('/api/audits', async (req, res) => {
 
           if (aiResult.findings.length > 0) {
             report.findings.push(...aiResult.findings);
+            // Re-run deduplication and final score/verdict recalculation so AI findings are fully factored in
+            report.findings = deduplicateFindings(report.findings);
+            const recalculated = calculateAuditScores(
+              report.findings,
+              Object.keys(CHECK_DEFINITIONS),
+              Date.now() - new Date(report.startedAt).getTime(),
+              report.pages.length,
+              report.config.viewports.length
+            );
+            report.summary = {
+              ...recalculated.summary,
+              executionEngine: report.summary.executionEngine,
+              aiReasoningStatus: aiResult.status,
+            };
+            report.categoryScores = recalculated.categoryScores;
+          } else {
+            report.summary.aiReasoningStatus = aiResult.status;
           }
-          report.summary.aiReasoningStatus = aiResult.status;
         }
 
         auditStore.completeJob(auditId, report);
