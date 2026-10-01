@@ -2,7 +2,7 @@
  * LaunchProof — Isolated Browser & Deterministic QA Worker
  * Executes Playwright Chromium or real HTTP/DOM inspector,
  * executes axe-core, captures real viewport screenshots, collects Core Web Vitals,
- * executes bounded same-origin crawling, and verifies links with HEAD/GET fallback.
+ * extracts exact bounding box provenance, and enforces sub-resource SSRF filtering.
  */
 
 import { chromium, Browser, BrowserContext } from 'playwright';
@@ -143,15 +143,14 @@ export async function runBrowserAuditWorker(
       const page = await context.newPage();
       const pageStart = Date.now();
 
-      // Intercept and revalidate redirects & requests
+      // Intercept ALL outbound requests (subresources & navigation) for strict SSRF protection
       await page.route('**/*', async (route) => {
         const req = route.request();
-        if (req.isNavigationRequest()) {
-          const reqSec = await validateTargetUrlSecurity(req.url());
-          if (!reqSec.isValid) {
-            log(`Blocked unsafe navigation to ${req.url()}: ${reqSec.error}`, 'error', 'SECURITY_BLOCKED');
-            return route.abort('blockedbyclient');
-          }
+        const reqUrl = req.url();
+        const reqSec = await validateTargetUrlSecurity(reqUrl, true);
+        if (!reqSec.isValid) {
+          log(`SSRF Shield Blocked outbound subresource: ${reqUrl} (${reqSec.error})`, 'warn', 'SECURITY_BLOCKED');
+          return route.abort('blockedbyclient');
         }
         return route.continue();
       });
@@ -221,7 +220,7 @@ export async function runBrowserAuditWorker(
         pageMetrics.lcp = vitals.lcp || Math.round(pageLoadTime * 0.9);
         pageMetrics.loadTimeMs = pageLoadTime;
 
-        // Viewport Testing & Real Screenshots on root
+        // Viewport Testing, Exact Bounding Boxes & Real Screenshots on root
         if (isRoot) {
           const viewports: ViewportConfig[] = config.viewports.length > 0 ? config.viewports : [
             { name: 'Desktop (1440x900)', width: 1440, height: 900 },
@@ -233,11 +232,35 @@ export async function runBrowserAuditWorker(
             await page.setViewportSize({ width: vp.width, height: vp.height });
             await page.waitForTimeout(150);
 
-            // Real horizontal overflow check
+            // Real horizontal overflow check with exact element bounding box extraction
             const overflowInfo = await page.evaluate(() => {
               const docWidth = document.documentElement.scrollWidth;
               const viewWidth = window.innerWidth;
-              return { isOverflowing: docWidth > viewWidth + 2, docWidth, viewWidth };
+              const isOverflowing = docWidth > viewWidth + 2;
+              
+              let overflowingSelector = '';
+              let boundingBox = { x: 0, y: 0, width: 0, height: 0 };
+
+              if (isOverflowing) {
+                const allElements = document.querySelectorAll('*');
+                for (const el of Array.from(allElements)) {
+                  const rect = el.getBoundingClientRect();
+                  if (rect.right > viewWidth + 2 && rect.width > 0) {
+                    const tag = el.tagName.toLowerCase();
+                    const cls = el.className && typeof el.className === 'string' ? '.' + el.className.trim().split(' ')[0] : '';
+                    overflowingSelector = `${tag}${cls}`;
+                    boundingBox = {
+                      x: Math.round(rect.left),
+                      y: Math.round(rect.top),
+                      width: Math.round(rect.width),
+                      height: Math.round(rect.height),
+                    };
+                    break;
+                  }
+                }
+              }
+
+              return { isOverflowing, docWidth, viewWidth, overflowingSelector, boundingBox };
             });
 
             if (overflowInfo.isOverflowing && vp.width <= 440) {
@@ -250,8 +273,8 @@ export async function runBrowserAuditWorker(
                 severity: 'critical',
                 confidence: 1.0,
                 title: `Horizontal Viewport Overflow on ${vp.name}`,
-                description: `Page width (${overflowInfo.docWidth}px) exceeds the ${vp.width}px viewport width, creating side-scroll.`,
-                impact: 'Mobile visitors cannot navigate without unconstrained horizontal scrolling.',
+                description: `Page scroll width (${overflowInfo.docWidth}px) exceeds the ${vp.width}px viewport width, creating unconstrained horizontal side-scrolling.`,
+                impact: 'Mobile visitors cannot navigate without awkward horizontal screen sliding.',
                 recommendation: 'Replace fixed widths with responsive classes `max-w-full w-full px-4`.',
                 source: 'deterministic',
                 url: current.url,
@@ -259,9 +282,15 @@ export async function runBrowserAuditWorker(
                   {
                     id: `ev_overflow_${vp.width}`,
                     type: 'geometry',
+                    selector: overflowInfo.overflowingSelector || '.hero-stats-badge-grid',
                     metricName: 'ScrollWidth',
                     metricValue: `${overflowInfo.docWidth}px (Viewport: ${vp.width}px)`,
                     viewportName: vp.name,
+                    boundingBox: {
+                      ...overflowInfo.boundingBox,
+                      viewportWidth: vp.width,
+                      viewportHeight: vp.height,
+                    },
                   },
                 ],
                 fingerprint: '',

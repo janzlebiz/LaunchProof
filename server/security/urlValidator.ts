@@ -1,5 +1,5 @@
 /**
- * LaunchProof — Hardened Security & SSRF Validation Engine
+ * LaunchProof — Hardened Security, SSRF & DNS Rebinding Defense Engine
  * Protects against SSRF, DNS rebinding, IPv4-mapped IPv6, alternate encodings,
  * cloud metadata, loopbacks, and unsafe redirect destinations.
  */
@@ -94,7 +94,7 @@ export function isPrivateOrReservedIp(ip: string): boolean {
 }
 
 /**
- * Validates target URL against security and SSRF rules with real DNS lookup
+ * Validates target URL against security and SSRF rules with real DNS lookup and IP pinning
  */
 export async function validateTargetUrlSecurity(
   rawUrl: string,
@@ -220,7 +220,7 @@ export async function validateRedirectDestination(
 ): Promise<SecurityValidationResult> {
   try {
     const resolvedUrl = new URL(redirectLocation, currentUrl).toString();
-    return await validateTargetUrlSecurity(resolvedUrl);
+    return await validateTargetUrlSecurity(resolvedUrl, true);
   } catch (err: any) {
     return {
       isValid: false,

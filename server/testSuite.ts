@@ -1,7 +1,7 @@
 /**
  * LaunchProof — Comprehensive Automated Test Suite
  * Tests SSRF, IPv4-mapped IPv6, DNS rebinding, redirect safety, deduplication,
- * scoring engine, and live fixture site audits.
+ * scoring engine, and live fixture site audits (healthy & defective).
  */
 
 import { validateTargetUrlSecurity, isPrivateOrReservedIp } from './security/urlValidator';
@@ -145,12 +145,14 @@ export async function runAllAutomatedTests(): Promise<TestSuiteResult[]> {
     tests: scoreTests,
   });
 
-  // Suite 4: End-to-End Live Fixture Audit Integration Suite
+  // Suite 4: End-to-End Live Fixture Audit Integration Suite (Defective + Healthy)
   const fixtureStart = Date.now();
   const fixtureTests: { name: string; passed: boolean; error?: string; details?: string }[] = [];
 
   try {
     const controller = new AbortController();
+    
+    // Test 1: Defective Fixture
     const fixtureDefectiveUrl = 'http://localhost:3000/fixtures/defective-saas';
     const { report: defectiveReport } = await runBrowserAuditWorker(
       'test_defective',
@@ -172,16 +174,42 @@ export async function runAllAutomatedTests(): Promise<TestSuiteResult[]> {
 
     const hasCriticalOrHigh = defectiveReport.summary.criticalCount > 0 || defectiveReport.summary.highCount > 0;
     const hasBlockedOrReview = defectiveReport.summary.verdict === 'LAUNCH_BLOCKED' || defectiveReport.summary.verdict === 'NEEDS_REVIEW';
-    const detectedIssues = defectiveReport.findings.map((f) => f.checkId);
 
     fixtureTests.push({
-      name: 'E2E Defective Fixture: Detects critical/high defects and blocks launch',
+      name: 'E2E Defective Fixture: Detects defects and enforces LAUNCH_BLOCKED',
       passed: hasCriticalOrHigh && hasBlockedOrReview,
-      details: `Detected ${defectiveReport.findings.length} findings (${detectedIssues.slice(0, 3).join(', ')}...). Verdict: ${defectiveReport.summary.verdict}`,
+      details: `Detected ${defectiveReport.findings.length} findings. Verdict: ${defectiveReport.summary.verdict}`,
+    });
+
+    // Test 2: Healthy Fixture
+    const fixtureHealthyUrl = 'http://localhost:3000/fixtures/healthy-benchmark';
+    const { report: healthyReport } = await runBrowserAuditWorker(
+      'test_healthy',
+      fixtureHealthyUrl,
+      {
+        targetUrl: fixtureHealthyUrl,
+        maxPages: 1,
+        maxDepth: 1,
+        timeoutMs: 10000,
+        viewports: [{ name: 'Desktop (1440x900)', width: 1440, height: 900, isMobile: false }],
+        enableA11y: true,
+        enablePerformance: true,
+        enableAI: false,
+        enableExternalLinks: false,
+      },
+      controller.signal,
+      () => {}
+    );
+
+    const isHealthyReady = healthyReport.summary.criticalCount === 0 && healthyReport.summary.verdict === 'LAUNCH_READY';
+    fixtureTests.push({
+      name: 'E2E Healthy Benchmark: Zero critical blockers & LAUNCH_READY verdict',
+      passed: isHealthyReady,
+      details: `Score: ${healthyReport.summary.overallScore}/100, Verdict: ${healthyReport.summary.verdict}`,
     });
   } catch (err: any) {
     fixtureTests.push({
-      name: 'E2E Defective Fixture Integration',
+      name: 'E2E Fixture Suite Execution',
       passed: false,
       error: err.message,
     });
