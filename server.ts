@@ -1,7 +1,7 @@
 /**
  * LaunchProof — Fullstack Server & Job Orchestrator
  * Integrates real Playwright browser execution, axe-core, Gemini Vision,
- * fixture endpoints, SSRF validation, and durable audit storage.
+ * fixture endpoints, network IP pinning, durable queue ledger, and concurrency gate.
  */
 
 import express from 'express';
@@ -18,6 +18,7 @@ import { executeRealRetestComparison } from './server/engine/retestComparator';
 import { executePlaywrightTestScript } from './server/engine/playwrightRunner';
 import { runAllAutomatedTests } from './server/testSuite';
 import { auditStore } from './server/storage/auditStore';
+import { queueManager } from './server/storage/queueManager';
 import { AuditConfig } from './src/types/audit';
 
 dotenv.config();
@@ -50,14 +51,20 @@ if (apiKey) {
 
 /**
  * Endpoint: POST /api/audits
- * Starts a real isolated browser audit job
+ * Starts a real isolated browser audit job with strict concurrency gating
  */
 app.post('/api/audits', async (req, res) => {
   try {
     const { url, config } = req.body;
     if (!url) return res.status(400).json({ error: 'Target URL is required' });
 
-    // Rate limiting check
+    // 1. Concurrency Capacity Gate
+    const capacity = auditStore.canAcceptNewJob();
+    if (!capacity.allowed) {
+      return res.status(429).json({ error: capacity.reason || 'Server busy: Maximum concurrent audits reached.' });
+    }
+
+    // 2. Rate Limiting Check
     const rate = auditStore.checkRateLimit(url);
     if (!rate.allowed) {
       return res.status(429).json({ error: `Rate limit reached. Please wait ${rate.waitSeconds}s before auditing this domain again.` });
@@ -80,6 +87,12 @@ app.post('/api/audits', async (req, res) => {
       enableExternalLinks: config?.enableExternalLinks !== false,
     };
 
+    // Enqueue into Durable Queue Ledger
+    const enqueueRes = queueManager.enqueueJob(auditId, url, fullConfig);
+    if (!enqueueRes.success) {
+      return res.status(429).json({ error: enqueueRes.reason });
+    }
+
     const job = auditStore.registerJob(auditId, url);
 
     // Launch worker asynchronously
@@ -92,6 +105,7 @@ app.post('/api/audits', async (req, res) => {
           job.abortController.signal,
           (status, percent, msg, level) => {
             auditStore.updateJob(auditId, status, percent, msg, level);
+            queueManager.updateJobProgress(auditId, status, percent, msg);
           }
         );
 
@@ -114,8 +128,10 @@ app.post('/api/audits', async (req, res) => {
         }
 
         auditStore.completeJob(auditId, report);
+        queueManager.finalizeJob(auditId, 'COMPLETED');
       } catch (err: any) {
         auditStore.failJob(auditId, err.message || 'Audit failed');
+        queueManager.finalizeJob(auditId, 'FAILED', err.message);
       }
     })();
 
@@ -160,6 +176,7 @@ app.get('/api/audits/:id', (req, res) => {
 app.post('/api/audits/:id/cancel', (req, res) => {
   const { id } = req.params;
   const success = auditStore.cancelJob(id);
+  queueManager.finalizeJob(id, 'CANCELLED', 'Cancelled by user');
   return res.json({ success, status: 'CANCELLED' });
 });
 
@@ -192,7 +209,7 @@ app.post('/api/audits/:id/retest', async (req, res) => {
 
 /**
  * Endpoint: POST /api/playwright/execute
- * Runs generated Playwright test against target
+ * Runs generated Playwright test against target with strict SSRF validation
  */
 app.post('/api/playwright/execute', async (req, res) => {
   try {
