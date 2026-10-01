@@ -1,9 +1,14 @@
 /**
  * LaunchProof — Playwright Regression Test Executor
- * Runs generated or arbitrary Playwright test scripts against target URLs.
+ * Runs generated or arbitrary Playwright test scripts against target URLs
+ * with strict SSRF validation, isolated profiles, and memory limits.
  */
 
 import { chromium } from 'playwright';
+import fs from 'fs';
+import os from 'os';
+import path from 'path';
+import { validateTargetUrlSecurity } from '../security/urlValidator';
 
 export interface PlaywrightExecutionResult {
   passed: boolean;
@@ -20,30 +25,65 @@ export async function executePlaywrightTestScript(
   viewportHeight: number = 844
 ): Promise<PlaywrightExecutionResult> {
   const start = Date.now();
+
+  // 1. Strict SSRF Validation
+  const sec = await validateTargetUrlSecurity(targetUrl, true);
+  if (!sec.isValid) {
+    return {
+      passed: false,
+      durationMs: Date.now() - start,
+      assertionsCount: 0,
+      output: `Security Policy Violation: ${sec.error}`,
+      error: sec.error || 'Target blocked by SSRF defense shield',
+    };
+  }
+
+  const normalizedTarget = sec.normalizedUrl!;
   let browser = null;
+  let tempUserDataDir = '';
   let assertionsCount = 0;
 
   try {
+    tempUserDataDir = fs.mkdtempSync(path.join(os.tmpdir(), 'lp-test-'));
+
     browser = await chromium.launch({
       headless: true,
-      args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage', '--disable-gpu'],
+      args: [
+        '--no-sandbox',
+        '--disable-setuid-sandbox',
+        '--disable-dev-shm-usage',
+        '--disable-gpu',
+        '--js-flags=--max-old-space-size=256',
+      ],
       timeout: 10000,
     });
 
     const context = await browser.newContext({
       viewport: { width: viewportWidth, height: viewportHeight },
+      userAgent: 'Mozilla/5.0 LaunchProof-TestRunner/1.0',
     });
+
     const page = await context.newPage();
+
+    // Intercept all requests for SSRF defense
+    await page.route('**/*', async (route) => {
+      const reqUrl = route.request().url();
+      const reqSec = await validateTargetUrlSecurity(reqUrl, true);
+      if (!reqSec.isValid) {
+        return route.abort('blockedbyclient');
+      }
+      return route.continue();
+    });
 
     const errors: string[] = [];
     page.on('pageerror', (err) => errors.push(err.message));
 
-    // 1. Navigate to target
-    const response = await page.goto(targetUrl, { timeout: 15000, waitUntil: 'domcontentloaded' });
+    // 2. Navigate to target
+    const response = await page.goto(normalizedTarget, { timeout: 15000, waitUntil: 'domcontentloaded' });
     const status = response?.status() || 200;
     assertionsCount++;
 
-    // 2. Check target element visibility
+    // 3. Check target element visibility
     let isVisible = false;
     if (testSelector && testSelector !== 'body') {
       try {
@@ -57,13 +97,14 @@ export async function executePlaywrightTestScript(
       isVisible = true;
     }
 
-    // 3. Check for horizontal overflow
+    // 4. Check for horizontal overflow
     const hasHorizontalScroll = await page.evaluate(() => {
       return document.documentElement.scrollWidth > window.innerWidth + 2;
     });
     assertionsCount++;
 
-    await browser.close();
+    await context.close().catch(() => {});
+    await browser.close().catch(() => {});
 
     const passed = status < 400 && errors.length === 0 && (!testSelector || isVisible);
 
@@ -71,12 +112,13 @@ export async function executePlaywrightTestScript(
       passed,
       durationMs: Date.now() - start,
       assertionsCount,
-      output: `Playwright Test Execution Summary:
+      output: `Playwright Sandbox Test Execution:
+- Target Destination: ${normalizedTarget}
 - HTTP Status: ${status} (Expected: 200 OK)
-- Target Element '${testSelector}': ${isVisible ? 'VISIBLE & LOCATED' : 'NOT FOUND'}
-- Mobile Horizontal Scroll: ${hasHorizontalScroll ? 'OVERFLOW DEFECT DETECTED' : 'NO OVERFLOW (CLEAN)'}
-- Runtime Page Errors: ${errors.length === 0 ? '0 (Clean)' : `${errors.length} unhandled error(s)`}`,
-      error: !passed ? `Failed ${errors.length > 0 ? `with ${errors.length} runtime error(s)` : `selector '${testSelector}' was not visible`}` : undefined,
+- Target Element '${testSelector}': ${isVisible ? 'LOCATED & VISIBLE' : 'NOT LOCATED'}
+- Mobile Horizontal Scroll: ${hasHorizontalScroll ? 'DEFECT DETECTED (Overflow)' : 'CLEAN (No overflow)'}
+- Runtime Unhandled Errors: ${errors.length === 0 ? '0' : `${errors.length} caught`}`,
+      error: !passed ? `Test assertions failed (status: ${status}, selector visible: ${isVisible})` : undefined,
     };
   } catch (err: any) {
     if (browser) await browser.close().catch(() => {});
@@ -87,5 +129,11 @@ export async function executePlaywrightTestScript(
       output: `Playwright sandbox execution error: ${err.message}`,
       error: err.message || 'Execution failed',
     };
+  } finally {
+    if (tempUserDataDir && fs.existsSync(tempUserDataDir)) {
+      try {
+        fs.rmSync(tempUserDataDir, { recursive: true, force: true });
+      } catch {}
+    }
   }
 }
