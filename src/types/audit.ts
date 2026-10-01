@@ -40,6 +40,8 @@ export type AuditStatus =
 
 export type LaunchVerdict = 'LAUNCH_READY' | 'LAUNCH_BLOCKED' | 'NEEDS_REVIEW';
 
+export type ExecutionEngine = 'PLAYWRIGHT_CHROMIUM' | 'HTTP_INSPECTOR';
+
 export interface ViewportConfig {
   name: string;
   width: number;
@@ -80,6 +82,7 @@ export interface EvidenceReference {
   logMessage?: string;
   httpStatus?: number;
   screenshotId?: string;
+  screenshotBase64?: string;
   boundingBox?: BoundingBox;
   viewportName?: string;
   timestamp?: string;
@@ -114,6 +117,7 @@ export interface CheckItemResult {
   severityIfFailed: Severity;
   details: string;
   findingsCount: number;
+  executed: boolean;
 }
 
 export interface CategoryScore {
@@ -181,6 +185,7 @@ export interface PageResult {
     headings: number;
     scripts: number;
   };
+  screenshots?: Record<string, string>;
   htmlSnippet?: string;
 }
 
@@ -198,6 +203,8 @@ export interface AuditSummary {
   viewportsTested: number;
   checksExecuted: number;
   durationMs: number;
+  executionEngine: ExecutionEngine;
+  aiReasoningStatus: 'SUCCESS' | 'UNAVAILABLE' | 'SKIPPED' | 'FAILED';
 }
 
 export interface AuditLog {
@@ -220,7 +227,6 @@ export interface AuditReport {
   findings: Finding[];
   pages: PageResult[];
   logs: AuditLog[];
-  isRealScrape?: boolean;
   errorMessage?: string;
 }
 

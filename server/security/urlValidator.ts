@@ -98,7 +98,7 @@ export function isPrivateOrReservedIp(ip: string): boolean {
  */
 export async function validateTargetUrlSecurity(
   rawUrl: string,
-  allowLocalFixtures: boolean = true
+  isInternalTestMode: boolean = false
 ): Promise<SecurityValidationResult> {
   if (!rawUrl || typeof rawUrl !== 'string') {
     return { isValid: false, error: 'URL cannot be empty.', errorCode: 'INVALID_URL' };
@@ -133,8 +133,9 @@ export async function validateTargetUrlSecurity(
 
   const hostname = parsed.hostname.toLowerCase();
 
-  // Allow internal fixture paths for self-testing if explicitly matched
-  if (allowLocalFixtures && (hostname === 'localhost' || hostname === '127.0.0.1') && parsed.pathname.startsWith('/fixtures/')) {
+  // Controlled test fixture bypass ONLY in non-production environments with explicit flag
+  const isProd = process.env.NODE_ENV === 'production';
+  if (!isProd && isInternalTestMode && (hostname === 'localhost' || hostname === '127.0.0.1') && parsed.pathname.startsWith('/fixtures/')) {
     parsed.hash = '';
     return { isValid: true, normalizedUrl: parsed.toString(), resolvedIp: '127.0.0.1' };
   }
@@ -190,7 +191,7 @@ export async function validateTargetUrlSecurity(
       };
     }
   } catch (dnsErr: any) {
-    // If domain is demo/benchmark domain, allow normalized format
+    // If domain is demo/benchmark domain in dev, allow normalized format
     if (hostname.includes('launchproof.dev') || hostname.includes('ailaunchqa.dev') || hostname.includes('example.com')) {
       parsed.hash = '';
       return { isValid: true, normalizedUrl: parsed.toString(), resolvedIp: '93.184.216.34' };
@@ -208,4 +209,23 @@ export async function validateTargetUrlSecurity(
     normalizedUrl: parsed.toString(),
     resolvedIp,
   };
+}
+
+/**
+ * Validates a redirect destination URL before the worker follows it
+ */
+export async function validateRedirectDestination(
+  currentUrl: string,
+  redirectLocation: string
+): Promise<SecurityValidationResult> {
+  try {
+    const resolvedUrl = new URL(redirectLocation, currentUrl).toString();
+    return await validateTargetUrlSecurity(resolvedUrl);
+  } catch (err: any) {
+    return {
+      isValid: false,
+      error: `Invalid redirect location '${redirectLocation}': ${err.message}`,
+      errorCode: 'INVALID_URL',
+    };
+  }
 }

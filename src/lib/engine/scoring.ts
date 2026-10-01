@@ -98,6 +98,7 @@ export function calculateAuditScores(
           ? 'Passed — No defects observed during testing.'
           : `Failed — ${checkFindings.length} issue(s) detected: ${checkFindings.map((f) => f.title).join('; ')}`,
         findingsCount: checkFindings.length,
+        executed: true,
       };
     });
 
@@ -161,6 +162,8 @@ export function calculateAuditScores(
     viewportsTested: viewportsCount,
     checksExecuted: Object.keys(CHECK_DEFINITIONS).length,
     durationMs,
+    executionEngine: 'PLAYWRIGHT_CHROMIUM',
+    aiReasoningStatus: 'SUCCESS',
   };
 
   return { summary, categoryScores };

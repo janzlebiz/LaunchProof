@@ -684,7 +684,6 @@ Return ONLY valid JSON matching this schema:
     findings: deduplicated,
     pages: [pageReport],
     logs,
-    isRealScrape,
   };
 
   onUpdate('COMPLETED', 100, `Audit finished with verdict ${summary.verdict}`, 'success');

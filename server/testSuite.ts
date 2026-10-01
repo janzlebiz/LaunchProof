@@ -8,6 +8,7 @@ import { validateTargetUrlSecurity, isPrivateOrReservedIp } from './security/url
 import { generateFindingFingerprint, deduplicateFindings } from '../src/lib/engine/dedup';
 import { calculateAuditScores } from '../src/lib/engine/scoring';
 import { CHECK_DEFINITIONS } from '../src/lib/engine/checks';
+import { runBrowserAuditWorker } from './engine/browserWorker';
 import { Finding, TestSuiteResult } from '../src/types/audit';
 
 export async function runAllAutomatedTests(): Promise<TestSuiteResult[]> {
@@ -99,7 +100,7 @@ export async function runAllAutomatedTests(): Promise<TestSuiteResult[]> {
   const fp1 = generateFindingFingerprint(mockFinding1);
   const fp2 = generateFindingFingerprint(mockFinding2);
   dedupTests.push({
-    name: 'Stable Fingerprint Generation',
+    name: 'Stable Composite Fingerprint Generation',
     passed: fp1 === fp2,
     details: `Fingerprint: ${fp1}`,
   });
@@ -142,6 +143,55 @@ export async function runAllAutomatedTests(): Promise<TestSuiteResult[]> {
     passed: scoreTests.every((t) => t.passed),
     durationMs: Date.now() - scoreStart,
     tests: scoreTests,
+  });
+
+  // Suite 4: End-to-End Live Fixture Audit Integration Suite
+  const fixtureStart = Date.now();
+  const fixtureTests: { name: string; passed: boolean; error?: string; details?: string }[] = [];
+
+  try {
+    const controller = new AbortController();
+    const fixtureDefectiveUrl = 'http://localhost:3000/fixtures/defective-saas';
+    const { report: defectiveReport } = await runBrowserAuditWorker(
+      'test_defective',
+      fixtureDefectiveUrl,
+      {
+        targetUrl: fixtureDefectiveUrl,
+        maxPages: 1,
+        maxDepth: 1,
+        timeoutMs: 10000,
+        viewports: [{ name: 'Mobile (390x844)', width: 390, height: 844, isMobile: true }],
+        enableA11y: true,
+        enablePerformance: true,
+        enableAI: false,
+        enableExternalLinks: true,
+      },
+      controller.signal,
+      () => {}
+    );
+
+    const hasCriticalOrHigh = defectiveReport.summary.criticalCount > 0 || defectiveReport.summary.highCount > 0;
+    const hasBlockedOrReview = defectiveReport.summary.verdict === 'LAUNCH_BLOCKED' || defectiveReport.summary.verdict === 'NEEDS_REVIEW';
+    const detectedIssues = defectiveReport.findings.map((f) => f.checkId);
+
+    fixtureTests.push({
+      name: 'E2E Defective Fixture: Detects critical/high defects and blocks launch',
+      passed: hasCriticalOrHigh && hasBlockedOrReview,
+      details: `Detected ${defectiveReport.findings.length} findings (${detectedIssues.slice(0, 3).join(', ')}...). Verdict: ${defectiveReport.summary.verdict}`,
+    });
+  } catch (err: any) {
+    fixtureTests.push({
+      name: 'E2E Defective Fixture Integration',
+      passed: false,
+      error: err.message,
+    });
+  }
+
+  suites.push({
+    name: 'End-to-End Live Fixture Audit Integration Suite',
+    passed: fixtureTests.every((t) => t.passed),
+    durationMs: Date.now() - fixtureStart,
+    tests: fixtureTests,
   });
 
   return suites;

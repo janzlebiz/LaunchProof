@@ -1,6 +1,7 @@
 /**
  * LaunchProof — Multimodal Gemini Vision AI Reasoning Engine
- * Analyzes real screenshot images and DOM context with strict Zod validation.
+ * Analyzes real screenshot images and DOM context with strict Zod validation
+ * and immutable evidence provenance.
  */
 
 import { GoogleGenAI } from '@google/genai';
@@ -30,10 +31,9 @@ export async function runGeminiMultimodalVisualReasoning(
   domSnippet: string,
   existingFindings: Finding[],
   screenshotBase64?: string
-): Promise<Finding[]> {
+): Promise<{ findings: Finding[]; status: 'SUCCESS' | 'UNAVAILABLE' | 'FAILED' }> {
   if (!aiClient) {
-    // If no AI key or AI offline, return empty without fabricating evidence
-    return [];
+    return { findings: [], status: 'UNAVAILABLE' };
   }
 
   try {
@@ -87,37 +87,44 @@ Rules:
     const parsed = JSON.parse(response.text || '{}');
     const validated = AiResponseSchema.safeParse(parsed);
 
-    if (!validated.success) return [];
+    if (!validated.success) return { findings: [], status: 'FAILED' };
 
-    const newFindings: Finding[] = validated.data.findings.map((f) => ({
-      id: `f_ai_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`,
-      auditId: '',
-      category: f.category as QACategory,
-      checkId: f.checkId,
-      severity: f.severity as Severity,
-      confidence: f.confidence,
-      title: f.title,
-      description: f.description,
-      impact: f.impact,
-      recommendation: f.recommendation,
-      source: 'ai_visual',
-      url: targetUrl,
-      evidence: [
-        {
-          id: `ev_ai_${Date.now()}`,
-          type: 'screenshot',
-          title: 'Gemini Multimodal Visual Reasoning',
-          selector: f.selector || 'body',
-          viewportName: 'Desktop 1440x900',
-        },
-      ],
-      fingerprint: '',
-      status: 'open',
-    }));
+    const newFindings: Finding[] = validated.data.findings.map((f) => {
+      const findingId = `f_ai_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`;
+      const evidenceId = `ev_ai_shot_${Date.now()}`;
 
-    return newFindings;
+      return {
+        id: findingId,
+        auditId: '',
+        pageId: 'page_root',
+        category: f.category as QACategory,
+        checkId: f.checkId,
+        severity: f.severity as Severity,
+        confidence: f.confidence,
+        title: f.title,
+        description: f.description,
+        impact: f.impact,
+        recommendation: f.recommendation,
+        source: 'ai_visual',
+        url: targetUrl,
+        evidence: [
+          {
+            id: evidenceId,
+            type: 'screenshot',
+            title: 'Gemini Multimodal Visual Evidence',
+            selector: f.selector || 'body',
+            viewportName: 'Desktop (1440x900)',
+            screenshotId: 'shot_root_desktop',
+          },
+        ],
+        fingerprint: '',
+        status: 'open',
+      };
+    });
+
+    return { findings: newFindings, status: 'SUCCESS' };
   } catch (err) {
-    console.warn('Gemini vision reasoning skipped or failed:', err);
-    return [];
+    console.warn('Gemini vision reasoning failed or skipped:', err);
+    return { findings: [], status: 'FAILED' };
   }
 }

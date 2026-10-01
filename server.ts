@@ -98,7 +98,7 @@ app.post('/api/audits', async (req, res) => {
         // Run real Gemini Vision reasoning with screenshots
         if (fullConfig.enableAI && ai) {
           auditStore.updateJob(auditId, 'AI_REASONING', 88, 'Running Gemini Vision on real screenshot evidence...', 'info');
-          const aiFindings = await runGeminiMultimodalVisualReasoning(
+          const aiResult = await runGeminiMultimodalVisualReasoning(
             ai,
             url,
             report.pages[0]?.title || 'Target Page',
@@ -107,9 +107,10 @@ app.post('/api/audits', async (req, res) => {
             screenshotBase64Map['Desktop (1440x900)'] || screenshotBase64Map['Mobile (390x844)']
           );
 
-          if (aiFindings.length > 0) {
-            report.findings.push(...aiFindings);
+          if (aiResult.findings.length > 0) {
+            report.findings.push(...aiResult.findings);
           }
+          report.summary.aiReasoningStatus = aiResult.status;
         }
 
         auditStore.completeJob(auditId, report);

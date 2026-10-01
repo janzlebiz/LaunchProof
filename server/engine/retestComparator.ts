@@ -5,6 +5,7 @@
  */
 
 import { AuditConfig, AuditReport, Finding, RetestComparison } from '../../src/types/audit';
+import { generateFindingFingerprint } from '../../src/lib/engine/dedup';
 import { runBrowserAuditWorker } from './browserWorker';
 
 export async function executeRealRetestComparison(
@@ -24,20 +25,36 @@ export async function executeRealRetestComparison(
     (status, percent, msg) => onUpdate(status, percent, msg)
   );
 
-  const prevFingerprints = new Set(previousReport.findings.map((f) => f.fingerprint || f.checkId));
-  const freshFingerprints = new Set(freshReport.findings.map((f) => f.fingerprint || f.checkId));
+  // Derive stable fingerprints for all baseline and fresh findings
+  const prevFingerprints = new Map<string, Finding>();
+  for (const pf of previousReport.findings) {
+    const fp = pf.fingerprint || generateFindingFingerprint(pf);
+    prevFingerprints.set(fp, pf);
+  }
 
-  const resolvedFindings: Finding[] = previousReport.findings.filter(
-    (pf) => !freshFingerprints.has(pf.fingerprint || pf.checkId)
-  );
+  const freshFingerprints = new Map<string, Finding>();
+  for (const ff of freshReport.findings) {
+    const fp = ff.fingerprint || generateFindingFingerprint(ff);
+    freshFingerprints.set(fp, ff);
+  }
 
-  const persistingFindings: Finding[] = freshReport.findings.filter(
-    (ff) => prevFingerprints.has(ff.fingerprint || ff.checkId)
-  );
+  const resolvedFindings: Finding[] = [];
+  for (const [fp, pf] of prevFingerprints.entries()) {
+    if (!freshFingerprints.has(fp)) {
+      resolvedFindings.push({ ...pf, status: 'fixed' });
+    }
+  }
 
-  const newFindings: Finding[] = freshReport.findings.filter(
-    (ff) => !prevFingerprints.has(ff.fingerprint || ff.checkId)
-  );
+  const persistingFindings: Finding[] = [];
+  const newFindings: Finding[] = [];
+
+  for (const [fp, ff] of freshFingerprints.entries()) {
+    if (prevFingerprints.has(fp)) {
+      persistingFindings.push(ff);
+    } else {
+      newFindings.push(ff);
+    }
+  }
 
   const scoreDelta = freshReport.summary.overallScore - previousReport.summary.overallScore;
 

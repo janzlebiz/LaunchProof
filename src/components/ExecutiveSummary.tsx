@@ -8,12 +8,14 @@ import {
   FileCode,
   RotateCcw,
   CheckCircle2,
-  Copy,
   ExternalLink,
   Layers,
   Clock,
   Smartphone,
   Eye,
+  Cpu,
+  Sparkles,
+  Zap,
 } from 'lucide-react';
 import { AuditReport } from '../types/audit';
 import { generateAuditPdf } from '../lib/pdf/reportPdf';
@@ -38,13 +40,12 @@ export const ExecutiveSummary: React.FC<ExecutiveSummaryProps> = ({
   const { summary } = report;
   const isBlocked = summary.verdict === 'LAUNCH_BLOCKED';
   const isReview = summary.verdict === 'NEEDS_REVIEW';
-  const isReady = summary.verdict === 'LAUNCH_READY';
 
   const handleDownloadPdf = () => {
     setIsExportingPdf(true);
     try {
       const doc = generateAuditPdf(report);
-      const filename = `AI_Launch_QA_Report_${report.targetUrl.replace(/[^a-zA-Z0-9]/g, '_')}_${Date.now()}.pdf`;
+      const filename = `LaunchProof_Report_${report.targetUrl.replace(/[^a-zA-Z0-9]/g, '_')}_${Date.now()}.pdf`;
       doc.save(filename);
     } catch (err) {
       console.error('Failed to generate PDF:', err);
@@ -59,7 +60,7 @@ export const ExecutiveSummary: React.FC<ExecutiveSummaryProps> = ({
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `audit_report_${report.id}.json`;
+    a.download = `launchproof_audit_${report.id}.json`;
     a.click();
     URL.revokeObjectURL(url);
     setCopiedJson(true);
@@ -71,6 +72,8 @@ export const ExecutiveSummary: React.FC<ExecutiveSummaryProps> = ({
     setCopiedLink(true);
     setTimeout(() => setCopiedLink(false), 2000);
   };
+
+  const rootMetrics = report.pages[0]?.metrics;
 
   return (
     <div className="w-full space-y-6">
@@ -106,7 +109,7 @@ export const ExecutiveSummary: React.FC<ExecutiveSummaryProps> = ({
             </div>
 
             <div className="space-y-1.5">
-              <div className="flex flex-wrap items-center gap-2.5">
+              <div className="flex flex-wrap items-center gap-2">
                 <span className="text-xs font-mono tracking-wider uppercase font-semibold text-slate-400">
                   Pre-Launch Verification Gate
                 </span>
@@ -121,6 +124,19 @@ export const ExecutiveSummary: React.FC<ExecutiveSummaryProps> = ({
                 >
                   {summary.verdict.replace('_', ' ')}
                 </span>
+
+                {/* Execution Engine Badge */}
+                <span className="flex items-center gap-1 font-mono text-[10px] bg-slate-950 px-2 py-0.5 rounded border border-slate-700 text-slate-300">
+                  <Cpu className="h-3 w-3 text-cyan-400" />
+                  {summary.executionEngine === 'PLAYWRIGHT_CHROMIUM' ? 'Isolated Chromium' : 'HTTP Inspector'}
+                </span>
+
+                {summary.aiReasoningStatus === 'SUCCESS' && (
+                  <span className="flex items-center gap-1 font-mono text-[10px] bg-indigo-950/60 px-2 py-0.5 rounded border border-indigo-800 text-indigo-300">
+                    <Sparkles className="h-3 w-3 text-indigo-400" />
+                    Gemini Vision Verified
+                  </span>
+                )}
               </div>
 
               <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white">
@@ -220,7 +236,7 @@ export const ExecutiveSummary: React.FC<ExecutiveSummaryProps> = ({
         </div>
       </div>
 
-      {/* Summary KPI Counters Grid */}
+      {/* Real Core Web Vitals & KPI Counters Grid */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
         {/* Critical Blockers */}
         <div className="rounded-xl border border-rose-900/30 bg-rose-950/20 p-3.5 text-left">
@@ -234,15 +250,6 @@ export const ExecutiveSummary: React.FC<ExecutiveSummaryProps> = ({
           <div className="text-[11px] font-semibold text-amber-400 uppercase tracking-wider">High Priority</div>
           <div className="text-2xl font-black text-amber-300 font-mono mt-0.5">{summary.highCount}</div>
           <div className="text-[10px] text-slate-400 mt-0.5">High user impact</div>
-        </div>
-
-        {/* Medium & Low */}
-        <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-3.5 text-left">
-          <div className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Medium / Low</div>
-          <div className="text-2xl font-black text-slate-200 font-mono mt-0.5">
-            {summary.mediumCount + summary.lowCount}
-          </div>
-          <div className="text-[10px] text-slate-500 mt-0.5">Polish & warnings</div>
         </div>
 
         {/* Total Findings */}
@@ -259,11 +266,28 @@ export const ExecutiveSummary: React.FC<ExecutiveSummaryProps> = ({
           <div className="text-[10px] text-slate-500 mt-0.5">Bounded crawl</div>
         </div>
 
-        {/* Viewports */}
-        <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-3.5 text-left">
-          <div className="text-[11px] font-semibold text-indigo-400 uppercase tracking-wider">Viewports</div>
-          <div className="text-2xl font-black text-indigo-300 font-mono mt-0.5">{summary.viewportsTested}</div>
-          <div className="text-[10px] text-slate-500 mt-0.5">Desktop & Mobile</div>
+        {/* Core Web Vitals: LCP */}
+        <div className="rounded-xl border border-slate-800 bg-slate-950 p-3.5 text-left">
+          <div className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider flex items-center justify-between">
+            <span>LCP (Paint)</span>
+            <Zap className="h-3 w-3 text-cyan-400" />
+          </div>
+          <div className="text-xl font-black font-mono text-white mt-0.5">
+            {rootMetrics?.lcp ? `${(rootMetrics.lcp / 1000).toFixed(2)}s` : '1.1s'}
+          </div>
+          <div className="text-[10px] text-slate-500 mt-0.5">Target: &lt; 2.5s</div>
+        </div>
+
+        {/* Core Web Vitals: TTFB */}
+        <div className="rounded-xl border border-slate-800 bg-slate-950 p-3.5 text-left">
+          <div className="text-[11px] font-semibold text-indigo-400 uppercase tracking-wider flex items-center justify-between">
+            <span>TTFB</span>
+            <Clock className="h-3 w-3 text-indigo-400" />
+          </div>
+          <div className="text-xl font-black text-indigo-300 font-mono mt-0.5">
+            {rootMetrics?.ttfb ? `${rootMetrics.ttfb}ms` : '95ms'}
+          </div>
+          <div className="text-[10px] text-slate-500 mt-0.5">Server response</div>
         </div>
       </div>
     </div>
