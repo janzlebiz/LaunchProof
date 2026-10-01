@@ -520,5 +520,585 @@
     "workerId": "test_worker_1",
     "startedAt": "2026-10-01T18:57:01.430Z",
     "completedAt": "2026-10-01T18:57:01.431Z"
+  },
+  {
+    "id": "audit_1790881677107_xgyi7",
+    "targetUrl": "https://ais-dev-bzwoignz3ygqmsvmvdgiav-212282537635.asia-east1.run.app/",
+    "config": {
+      "targetUrl": "https://ais-dev-bzwoignz3ygqmsvmvdgiav-212282537635.asia-east1.run.app/",
+      "maxPages": 20,
+      "maxDepth": 5,
+      "timeoutMs": 25000,
+      "viewports": [
+        {
+          "name": "Desktop (1440x900)",
+          "width": 1440,
+          "height": 900,
+          "isMobile": false
+        },
+        {
+          "name": "Tablet (768x1024)",
+          "width": 768,
+          "height": 1024,
+          "isMobile": true
+        },
+        {
+          "name": "Mobile (390x844)",
+          "width": 390,
+          "height": 844,
+          "isMobile": true
+        }
+      ],
+      "enableA11y": true,
+      "enablePerformance": true,
+      "enableAI": true,
+      "enableExternalLinks": true
+    },
+    "status": "COMPLETED",
+    "progressPercent": 96,
+    "currentMessage": "Computing weighted pillar scores & launch gate verdict...",
+    "retryCount": 0,
+    "maxRetries": 2,
+    "createdAt": "2026-10-01T19:07:57.108Z",
+    "workerId": "worker_2307_9n3d",
+    "startedAt": "2026-10-01T19:07:57.607Z",
+    "completedAt": "2026-10-01T19:07:58.565Z"
+  },
+  {
+    "id": "audit_1790881725391_t31cb",
+    "targetUrl": "https://ais-pre-twqasbvtmkrtsllriliohj-212282537635.asia-east1.run.app/",
+    "config": {
+      "targetUrl": "https://ais-pre-twqasbvtmkrtsllriliohj-212282537635.asia-east1.run.app/",
+      "maxPages": 20,
+      "maxDepth": 5,
+      "timeoutMs": 25000,
+      "viewports": [
+        {
+          "name": "Desktop (1440x900)",
+          "width": 1440,
+          "height": 900,
+          "isMobile": false
+        },
+        {
+          "name": "Tablet (768x1024)",
+          "width": 768,
+          "height": 1024,
+          "isMobile": true
+        },
+        {
+          "name": "Mobile (390x844)",
+          "width": 390,
+          "height": 844,
+          "isMobile": true
+        }
+      ],
+      "enableA11y": true,
+      "enablePerformance": true,
+      "enableAI": true,
+      "enableExternalLinks": true
+    },
+    "status": "COMPLETED",
+    "progressPercent": 96,
+    "currentMessage": "Computing weighted pillar scores & launch gate verdict...",
+    "retryCount": 0,
+    "maxRetries": 2,
+    "createdAt": "2026-10-01T19:08:45.392Z",
+    "workerId": "worker_2307_9n3d",
+    "startedAt": "2026-10-01T19:08:45.627Z",
+    "completedAt": "2026-10-01T19:08:50.424Z"
+  },
+  {
+    "id": "audit_1790881809627_b28mm",
+    "targetUrl": "https://ais-pre-twqasbvtmkrtsllriliohj-212282537635.asia-east1.run.app/",
+    "config": {
+      "targetUrl": "https://ais-pre-twqasbvtmkrtsllriliohj-212282537635.asia-east1.run.app/",
+      "maxPages": 20,
+      "maxDepth": 5,
+      "timeoutMs": 25000,
+      "viewports": [
+        {
+          "name": "Desktop (1440x900)",
+          "width": 1440,
+          "height": 900,
+          "isMobile": false
+        },
+        {
+          "name": "Tablet (768x1024)",
+          "width": 768,
+          "height": 1024,
+          "isMobile": true
+        },
+        {
+          "name": "Mobile (390x844)",
+          "width": 390,
+          "height": 844,
+          "isMobile": true
+        }
+      ],
+      "enableA11y": true,
+      "enablePerformance": true,
+      "enableAI": true,
+      "enableExternalLinks": true
+    },
+    "status": "COMPLETED",
+    "progressPercent": 96,
+    "currentMessage": "Computing weighted pillar scores & launch gate verdict...",
+    "retryCount": 0,
+    "maxRetries": 2,
+    "createdAt": "2026-10-01T19:10:09.627Z",
+    "workerId": "worker_2307_9n3d",
+    "startedAt": "2026-10-01T19:10:09.661Z",
+    "completedAt": "2026-10-01T19:10:16.775Z"
+  },
+  {
+    "id": "audit_1790881847817_c6mm4",
+    "targetUrl": "https://ais-pre-twqasbvtmkrtsllriliohj-212282537635.asia-east1.run.app/",
+    "config": {
+      "targetUrl": "https://ais-pre-twqasbvtmkrtsllriliohj-212282537635.asia-east1.run.app/",
+      "maxPages": 20,
+      "maxDepth": 5,
+      "timeoutMs": 25000,
+      "viewports": [
+        {
+          "name": "Desktop (1440x900)",
+          "width": 1440,
+          "height": 900,
+          "isMobile": false
+        },
+        {
+          "name": "Tablet (768x1024)",
+          "width": 768,
+          "height": 1024,
+          "isMobile": true
+        },
+        {
+          "name": "Mobile (390x844)",
+          "width": 390,
+          "height": 844,
+          "isMobile": true
+        }
+      ],
+      "enableA11y": true,
+      "enablePerformance": true,
+      "enableAI": true,
+      "enableExternalLinks": true
+    },
+    "status": "COMPLETED",
+    "progressPercent": 96,
+    "currentMessage": "Computing weighted pillar scores & launch gate verdict...",
+    "retryCount": 0,
+    "maxRetries": 2,
+    "createdAt": "2026-10-01T19:10:47.817Z",
+    "workerId": "worker_2307_9n3d",
+    "startedAt": "2026-10-01T19:10:49.674Z",
+    "completedAt": "2026-10-01T19:10:50.044Z"
+  },
+  {
+    "id": "audit_1790881853316_t4dx1",
+    "targetUrl": "https://ais-pre-twqasbvtmkrtsllriliohj-212282537635.asia-east1.run.app/",
+    "config": {
+      "targetUrl": "https://ais-pre-twqasbvtmkrtsllriliohj-212282537635.asia-east1.run.app/",
+      "maxPages": 20,
+      "maxDepth": 5,
+      "timeoutMs": 25000,
+      "viewports": [
+        {
+          "name": "Desktop (1440x900)",
+          "width": 1440,
+          "height": 900,
+          "isMobile": false
+        },
+        {
+          "name": "Tablet (768x1024)",
+          "width": 768,
+          "height": 1024,
+          "isMobile": true
+        },
+        {
+          "name": "Mobile (390x844)",
+          "width": 390,
+          "height": 844,
+          "isMobile": true
+        }
+      ],
+      "enableA11y": true,
+      "enablePerformance": true,
+      "enableAI": true,
+      "enableExternalLinks": true
+    },
+    "status": "COMPLETED",
+    "progressPercent": 96,
+    "currentMessage": "Computing weighted pillar scores & launch gate verdict...",
+    "retryCount": 0,
+    "maxRetries": 2,
+    "createdAt": "2026-10-01T19:10:53.316Z",
+    "workerId": "worker_2307_9n3d",
+    "startedAt": "2026-10-01T19:10:53.675Z",
+    "completedAt": "2026-10-01T19:10:53.922Z"
+  },
+  {
+    "id": "audit_1790881894774_jzzdc",
+    "targetUrl": "https://ais-pre-twqasbvtmkrtsllriliohj-212282537635.asia-east1.run.app/home",
+    "config": {
+      "targetUrl": "https://ais-pre-twqasbvtmkrtsllriliohj-212282537635.asia-east1.run.app/home",
+      "maxPages": 20,
+      "maxDepth": 5,
+      "timeoutMs": 25000,
+      "viewports": [
+        {
+          "name": "Desktop (1440x900)",
+          "width": 1440,
+          "height": 900,
+          "isMobile": false
+        },
+        {
+          "name": "Tablet (768x1024)",
+          "width": 768,
+          "height": 1024,
+          "isMobile": true
+        },
+        {
+          "name": "Mobile (390x844)",
+          "width": 390,
+          "height": 844,
+          "isMobile": true
+        }
+      ],
+      "enableA11y": true,
+      "enablePerformance": true,
+      "enableAI": true,
+      "enableExternalLinks": true
+    },
+    "status": "COMPLETED",
+    "progressPercent": 96,
+    "currentMessage": "Computing weighted pillar scores & launch gate verdict...",
+    "retryCount": 0,
+    "maxRetries": 2,
+    "createdAt": "2026-10-01T19:11:34.774Z",
+    "workerId": "worker_2307_9n3d",
+    "startedAt": "2026-10-01T19:11:35.690Z",
+    "completedAt": "2026-10-01T19:11:36.742Z"
+  },
+  {
+    "id": "test_queue_1790882058670",
+    "targetUrl": "http://localhost:3000/fixtures/healthy-benchmark",
+    "config": {
+      "targetUrl": "http://localhost:3000/fixtures/healthy-benchmark",
+      "maxPages": 1,
+      "maxDepth": 1,
+      "timeoutMs": 5000,
+      "viewports": [
+        {
+          "name": "Desktop",
+          "width": 1440,
+          "height": 900
+        }
+      ],
+      "enableA11y": false,
+      "enablePerformance": false,
+      "enableAI": false,
+      "enableExternalLinks": false
+    },
+    "status": "COMPLETED",
+    "progressPercent": 5,
+    "currentMessage": "Audit queued in durable ledger",
+    "retryCount": 0,
+    "maxRetries": 2,
+    "createdAt": "2026-10-01T19:14:18.670Z",
+    "workerId": "test_worker_1",
+    "startedAt": "2026-10-01T19:14:18.671Z",
+    "completedAt": "2026-10-01T19:14:18.671Z"
+  },
+  {
+    "id": "audit_1790882131705_5umol",
+    "targetUrl": "https://ais-pre-twqasbvtmkrtsllriliohj-212282537635.asia-east1.run.app/",
+    "config": {
+      "targetUrl": "https://ais-pre-twqasbvtmkrtsllriliohj-212282537635.asia-east1.run.app/",
+      "maxPages": 20,
+      "maxDepth": 5,
+      "timeoutMs": 25000,
+      "viewports": [
+        {
+          "name": "Desktop (1440x900)",
+          "width": 1440,
+          "height": 900,
+          "isMobile": false
+        },
+        {
+          "name": "Tablet (768x1024)",
+          "width": 768,
+          "height": 1024,
+          "isMobile": true
+        },
+        {
+          "name": "Mobile (390x844)",
+          "width": 390,
+          "height": 844,
+          "isMobile": true
+        }
+      ],
+      "enableA11y": true,
+      "enablePerformance": true,
+      "enableAI": true,
+      "enableExternalLinks": true
+    },
+    "status": "COMPLETED",
+    "progressPercent": 96,
+    "currentMessage": "Computing weighted pillar scores & launch gate verdict...",
+    "retryCount": 0,
+    "maxRetries": 2,
+    "createdAt": "2026-10-01T19:15:31.705Z",
+    "workerId": "worker_2458_42b0",
+    "startedAt": "2026-10-01T19:15:31.718Z",
+    "completedAt": "2026-10-01T19:15:33.637Z"
+  },
+  {
+    "id": "audit_1790882183947_l8qe8",
+    "targetUrl": "https://ais-pre-twqasbvtmkrtsllriliohj-212282537635.asia-east1.run.app/",
+    "config": {
+      "targetUrl": "https://ais-pre-twqasbvtmkrtsllriliohj-212282537635.asia-east1.run.app/",
+      "maxPages": 5,
+      "maxDepth": 2,
+      "timeoutMs": 25000,
+      "viewports": [
+        {
+          "name": "Desktop (1440x900)",
+          "width": 1440,
+          "height": 900,
+          "isMobile": false
+        },
+        {
+          "name": "Tablet (768x1024)",
+          "width": 768,
+          "height": 1024,
+          "isMobile": true
+        },
+        {
+          "name": "Mobile (390x844)",
+          "width": 390,
+          "height": 844,
+          "isMobile": true
+        }
+      ],
+      "enableA11y": true,
+      "enablePerformance": true,
+      "enableAI": true,
+      "enableExternalLinks": true
+    },
+    "status": "COMPLETED",
+    "progressPercent": 96,
+    "currentMessage": "Computing weighted pillar scores & launch gate verdict...",
+    "retryCount": 0,
+    "maxRetries": 2,
+    "createdAt": "2026-10-01T19:16:23.947Z",
+    "workerId": "worker_2458_42b0",
+    "startedAt": "2026-10-01T19:16:25.744Z",
+    "completedAt": "2026-10-01T19:16:25.979Z"
+  },
+  {
+    "id": "test_queue_1790882253940",
+    "targetUrl": "http://localhost:3000/fixtures/healthy-benchmark",
+    "config": {
+      "targetUrl": "http://localhost:3000/fixtures/healthy-benchmark",
+      "maxPages": 1,
+      "maxDepth": 1,
+      "timeoutMs": 5000,
+      "viewports": [
+        {
+          "name": "Desktop",
+          "width": 1440,
+          "height": 900
+        }
+      ],
+      "enableA11y": false,
+      "enablePerformance": false,
+      "enableAI": false,
+      "enableExternalLinks": false
+    },
+    "status": "COMPLETED",
+    "progressPercent": 5,
+    "currentMessage": "Audit queued in durable ledger",
+    "retryCount": 0,
+    "maxRetries": 2,
+    "createdAt": "2026-10-01T19:17:33.940Z",
+    "workerId": "test_worker_1",
+    "startedAt": "2026-10-01T19:17:33.941Z",
+    "completedAt": "2026-10-01T19:17:33.941Z"
+  },
+  {
+    "id": "test_queue_1790882745206",
+    "targetUrl": "http://localhost:3000/fixtures/healthy-benchmark",
+    "config": {
+      "targetUrl": "http://localhost:3000/fixtures/healthy-benchmark",
+      "maxPages": 1,
+      "maxDepth": 1,
+      "timeoutMs": 5000,
+      "viewports": [
+        {
+          "name": "Desktop",
+          "width": 1440,
+          "height": 900
+        }
+      ],
+      "enableA11y": false,
+      "enablePerformance": false,
+      "enableAI": false,
+      "enableExternalLinks": false
+    },
+    "status": "COMPLETED",
+    "progressPercent": 5,
+    "currentMessage": "Audit queued in durable ledger",
+    "retryCount": 0,
+    "maxRetries": 2,
+    "createdAt": "2026-10-01T19:25:45.206Z",
+    "workerId": "test_worker_1",
+    "startedAt": "2026-10-01T19:25:45.206Z",
+    "completedAt": "2026-10-01T19:25:45.207Z"
+  },
+  {
+    "id": "audit_1790882825813_zd57q",
+    "targetUrl": "https://ais-pre-twqasbvtmkrtsllriliohj-212282537635.asia-east1.run.app/",
+    "config": {
+      "targetUrl": "https://ais-pre-twqasbvtmkrtsllriliohj-212282537635.asia-east1.run.app/",
+      "maxPages": 20,
+      "maxDepth": 5,
+      "timeoutMs": 25000,
+      "viewports": [
+        {
+          "name": "Desktop (1440x900)",
+          "width": 1440,
+          "height": 900,
+          "isMobile": false
+        },
+        {
+          "name": "Tablet (768x1024)",
+          "width": 768,
+          "height": 1024,
+          "isMobile": true
+        },
+        {
+          "name": "Mobile (390x844)",
+          "width": 390,
+          "height": 844,
+          "isMobile": true
+        }
+      ],
+      "enableA11y": true,
+      "enablePerformance": true,
+      "enableAI": true,
+      "enableExternalLinks": true
+    },
+    "status": "COMPLETED",
+    "progressPercent": 96,
+    "currentMessage": "Computing weighted pillar scores & launch gate verdict...",
+    "retryCount": 0,
+    "maxRetries": 2,
+    "createdAt": "2026-10-01T19:27:05.813Z",
+    "workerId": "worker_2762_6js8",
+    "startedAt": "2026-10-01T19:27:07.437Z",
+    "completedAt": "2026-10-01T19:27:08.615Z"
+  },
+  {
+    "id": "test_queue_1790882857913",
+    "targetUrl": "http://localhost:3000/fixtures/healthy-benchmark",
+    "config": {
+      "targetUrl": "http://localhost:3000/fixtures/healthy-benchmark",
+      "maxPages": 1,
+      "maxDepth": 1,
+      "timeoutMs": 5000,
+      "viewports": [
+        {
+          "name": "Desktop",
+          "width": 1440,
+          "height": 900
+        }
+      ],
+      "enableA11y": false,
+      "enablePerformance": false,
+      "enableAI": false,
+      "enableExternalLinks": false
+    },
+    "status": "COMPLETED",
+    "progressPercent": 5,
+    "currentMessage": "Audit queued in durable ledger",
+    "retryCount": 0,
+    "maxRetries": 2,
+    "createdAt": "2026-10-01T19:27:37.913Z",
+    "workerId": "test_worker_1",
+    "startedAt": "2026-10-01T19:27:37.913Z",
+    "completedAt": "2026-10-01T19:27:37.914Z"
+  },
+  {
+    "id": "audit_1790882919709_5hmj3",
+    "targetUrl": "https://ais-pre-twqasbvtmkrtsllriliohj-212282537635.asia-east1.run.app/",
+    "config": {
+      "targetUrl": "https://ais-pre-twqasbvtmkrtsllriliohj-212282537635.asia-east1.run.app/",
+      "maxPages": 20,
+      "maxDepth": 5,
+      "timeoutMs": 25000,
+      "viewports": [
+        {
+          "name": "Desktop (1440x900)",
+          "width": 1440,
+          "height": 900,
+          "isMobile": false
+        },
+        {
+          "name": "Tablet (768x1024)",
+          "width": 768,
+          "height": 1024,
+          "isMobile": true
+        },
+        {
+          "name": "Mobile (390x844)",
+          "width": 390,
+          "height": 844,
+          "isMobile": true
+        }
+      ],
+      "enableA11y": true,
+      "enablePerformance": true,
+      "enableAI": true,
+      "enableExternalLinks": true
+    },
+    "status": "COMPLETED",
+    "progressPercent": 96,
+    "currentMessage": "Computing weighted pillar scores & launch gate verdict...",
+    "retryCount": 0,
+    "maxRetries": 2,
+    "createdAt": "2026-10-01T19:28:39.709Z",
+    "workerId": "worker_2913_kvr5",
+    "startedAt": "2026-10-01T19:28:40.415Z",
+    "completedAt": "2026-10-01T19:28:44.368Z"
+  },
+  {
+    "id": "test_queue_1790883038583",
+    "targetUrl": "http://localhost:3000/fixtures/healthy-benchmark",
+    "config": {
+      "targetUrl": "http://localhost:3000/fixtures/healthy-benchmark",
+      "maxPages": 1,
+      "maxDepth": 1,
+      "timeoutMs": 5000,
+      "viewports": [
+        {
+          "name": "Desktop",
+          "width": 1440,
+          "height": 900
+        }
+      ],
+      "enableA11y": false,
+      "enablePerformance": false,
+      "enableAI": false,
+      "enableExternalLinks": false
+    },
+    "status": "COMPLETED",
+    "progressPercent": 5,
+    "currentMessage": "Audit queued in durable ledger",
+    "retryCount": 0,
+    "maxRetries": 2,
+    "createdAt": "2026-10-01T19:30:38.583Z",
+    "workerId": "test_worker_1",
+    "startedAt": "2026-10-01T19:30:38.584Z",
+    "completedAt": "2026-10-01T19:30:38.584Z"
   }
 ]

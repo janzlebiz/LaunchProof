@@ -1,0 +1,17 @@
+{
+  "name": "LaunchProof",
+  "short_name": "LaunchProof",
+  "description": "Automated pre-launch QA platform with deterministic technical audits, mobile responsive checks, axe accessibility, Core Web Vitals, and Gemini multimodal visual reasoning.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#020617",
+  "theme_color": "#020617",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

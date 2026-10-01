@@ -31,13 +31,12 @@ export async function runGeminiMultimodalVisualReasoning(
   domSnippet: string,
   existingFindings: Finding[],
   screenshotBase64?: string
-): Promise<{ findings: Finding[]; status: 'SUCCESS' | 'UNAVAILABLE' | 'FAILED' }> {
+): Promise<{ findings: Finding[]; status: 'SUCCESS' | 'UNAVAILABLE' | 'SKIPPED' | 'FAILED' }> {
   if (!aiClient) {
     return { findings: [], status: 'UNAVAILABLE' };
   }
 
-  try {
-    const textPrompt = `You are the LaunchProof Web Quality & Visual Reasoning Engine.
+  const textPrompt = `You are the LaunchProof Web Quality & Visual Reasoning Engine.
 Inspect this website for pre-launch visual hierarchy, UX friction, responsive composition, or layout defects.
 Target URL: ${targetUrl}
 Page Title: ${pageTitle}
@@ -67,64 +66,87 @@ Rules:
   ]
 }`;
 
-    const parts: any[] = [];
-    if (screenshotBase64) {
-      parts.push({
-        inlineData: {
-          mimeType: 'image/png',
-          data: screenshotBase64,
-        },
-      });
-    }
-    parts.push({ text: textPrompt });
-
-    const response = await aiClient.models.generateContent({
-      model: 'gemini-3.8-flash',
-      contents: { parts },
-      config: { responseMimeType: 'application/json' },
+  const parts: any[] = [];
+  if (screenshotBase64) {
+    parts.push({
+      inlineData: {
+        mimeType: 'image/png',
+        data: screenshotBase64,
+      },
     });
-
-    const parsed = JSON.parse(response.text || '{}');
-    const validated = AiResponseSchema.safeParse(parsed);
-
-    if (!validated.success) return { findings: [], status: 'FAILED' };
-
-    const newFindings: Finding[] = validated.data.findings.map((f) => {
-      const findingId = `f_ai_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`;
-      const evidenceId = `ev_ai_shot_${Date.now()}`;
-
-      return {
-        id: findingId,
-        auditId: '',
-        pageId: 'page_root',
-        category: f.category as QACategory,
-        checkId: f.checkId,
-        severity: f.severity as Severity,
-        confidence: f.confidence,
-        title: f.title,
-        description: f.description,
-        impact: f.impact,
-        recommendation: f.recommendation,
-        source: 'ai_visual',
-        url: targetUrl,
-        evidence: [
-          {
-            id: evidenceId,
-            type: 'screenshot',
-            title: 'Gemini Multimodal Visual Evidence',
-            selector: f.selector || 'body',
-            viewportName: 'Desktop (1440x900)',
-            screenshotId: 'shot_root_desktop',
-          },
-        ],
-        fingerprint: '',
-        status: 'open',
-      };
-    });
-
-    return { findings: newFindings, status: 'SUCCESS' };
-  } catch (err) {
-    console.warn('Gemini vision reasoning failed or skipped:', err);
-    return { findings: [], status: 'FAILED' };
   }
+  parts.push({ text: textPrompt });
+
+  const candidateModels = ['gemini-3.8-flash', 'gemini-flash-latest', 'gemini-3.1-flash-lite'];
+
+  for (const modelName of candidateModels) {
+    try {
+      const response = await aiClient.models.generateContent({
+        model: modelName,
+        contents: { parts },
+        config: { responseMimeType: 'application/json' },
+      });
+
+      const parsed = JSON.parse(response.text || '{}');
+      const validated = AiResponseSchema.safeParse(parsed);
+
+      if (!validated.success) return { findings: [], status: 'FAILED' };
+
+      const newFindings: Finding[] = validated.data.findings.map((f) => {
+        const findingId = `f_ai_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`;
+        const evidenceId = `ev_ai_shot_${Date.now()}`;
+
+        return {
+          id: findingId,
+          auditId: '',
+          pageId: 'page_root',
+          category: f.category as QACategory,
+          checkId: f.checkId,
+          severity: f.severity as Severity,
+          confidence: f.confidence,
+          title: f.title,
+          description: f.description,
+          impact: f.impact,
+          recommendation: f.recommendation,
+          source: 'ai_visual',
+          url: targetUrl,
+          evidence: [
+            {
+              id: evidenceId,
+              type: 'screenshot',
+              title: 'Gemini Multimodal Visual Evidence',
+              selector: f.selector || 'body',
+              viewportName: 'Desktop (1440x900)',
+              screenshotId: 'shot_root_desktop',
+            },
+          ],
+          fingerprint: '',
+          status: 'open',
+        };
+      });
+
+      return { findings: newFindings, status: 'SUCCESS' };
+    } catch (err: any) {
+      const errMsg = String(err?.message || err);
+      const isRetryableError =
+        errMsg.includes('429') ||
+        errMsg.includes('404') ||
+        errMsg.includes('RESOURCE_EXHAUSTED') ||
+        errMsg.includes('NOT_FOUND') ||
+        errMsg.includes('quota') ||
+        errMsg.includes('Quota exceeded') ||
+        errMsg.includes('no longer available');
+
+      if (isRetryableError) {
+        console.info(`Gemini Vision model '${modelName}' unavailable (${errMsg.slice(0, 80)}...). Trying next model...`);
+        continue;
+      }
+
+      console.warn(`Gemini vision reasoning failed on model '${modelName}':`, errMsg);
+      return { findings: [], status: 'FAILED' };
+    }
+  }
+
+  console.info('Gemini Vision AI reasoning quota reached across free-tier models. Skipping AI visual analysis stage; deterministic QA completed successfully.');
+  return { findings: [], status: 'SKIPPED' };
 }

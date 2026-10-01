@@ -221,6 +221,7 @@ export async function runBrowserAuditWorker(
       let pageTitle = '';
       let pageStatus = 200;
       let pageLoadTime = 0;
+      let domLinks: { text: string; href: string }[] = [];
       const pageConsoleErrors: BrowserError[] = [];
       const pageNetworkErrors: NetworkError[] = [];
       let pageMetrics: PerformanceMetrics = {
@@ -444,6 +445,20 @@ export async function runBrowserAuditWorker(
             }
           }
 
+          // Extract live DOM links from active page before closing (Handles SPAs, React, Next.js, Vue, Svelte, HashRouter)
+          try {
+            domLinks = await page.evaluate(() => {
+              const elements = Array.from(document.querySelectorAll('a[href], [data-href], [role="link"], button[data-url], nav a'));
+              return elements
+                .map((el) => {
+                  const rawHref = el.getAttribute('href') || el.getAttribute('data-href') || el.getAttribute('data-url') || (el as HTMLAnchorElement).href || '';
+                  const text = (el.textContent || '').trim();
+                  return { href: rawHref, text };
+                })
+                .filter((l) => l.href && l.href !== '#' && l.href !== '#top' && !l.href.startsWith('javascript:'));
+            });
+          } catch {}
+
           await page.close();
         } catch (navErr: any) {
           await page.close();
@@ -468,28 +483,6 @@ export async function runBrowserAuditWorker(
         }
       }
 
-      // Live DOM Link Extraction (Handles SPAs, React, Next.js, Vue, Svelte, client routers)
-      let domLinks: { text: string; href: string }[] = [];
-      if (executionEngine === 'PLAYWRIGHT_CHROMIUM' && context) {
-        // Extract live links directly from active browser DOM
-        try {
-          const pages = context.pages();
-          const activePage = pages[pages.length - 1];
-          if (activePage && !activePage.isClosed()) {
-            domLinks = await activePage.evaluate(() => {
-              const anchors = Array.from(document.querySelectorAll('a[href], [data-href], [role="link"]'));
-              return anchors
-                .map((a) => {
-                  const rawHref = a.getAttribute('href') || a.getAttribute('data-href') || (a as HTMLAnchorElement).href || '';
-                  const text = (a.textContent || '').trim();
-                  return { href: rawHref, text };
-                })
-                .filter((l) => l.href && !l.href.startsWith('#') && !l.href.startsWith('javascript:'));
-            }).catch(() => []);
-          }
-        } catch {}
-      }
-
       // DOM Parse with Cheerio as secondary fallback
       const $ = cheerio.load(pageHtml);
       if (!pageTitle) pageTitle = $('title').first().text().trim() || 'Untitled Document';
@@ -503,7 +496,7 @@ export async function runBrowserAuditWorker(
       $('a[href]').each((_, el) => {
         const href = $(el).attr('href')?.trim() || '';
         const text = $(el).text().trim() || 'Link';
-        if (href && !href.startsWith('#') && !href.startsWith('javascript:')) {
+        if (href && href !== '#' && href !== '#top' && !href.startsWith('javascript:')) {
           rawLinkList.push({ text, href });
         }
       });
@@ -513,15 +506,21 @@ export async function runBrowserAuditWorker(
       for (const item of rawLinkList) {
         try {
           const resolved = new URL(item.href, current.url);
-          resolved.hash = ''; // Strip hash fragments
+
+          // Strip pure top-scroll anchors (#, #top, #main, #content, #root) but preserve SPA hash routes (#home, #about, #pricing, etc.)
+          const isScrollOnlyAnchor = ['#', '#top', '#main', '#content', '#root', ''].includes(resolved.hash);
+          if (isScrollOnlyAnchor) {
+            resolved.hash = '';
+          }
+
           let linkUrl = resolved.toString();
 
-          // Standardize trailing slash
-          if (resolved.pathname.length > 1 && linkUrl.endsWith('/')) {
+          // Standardize trailing slash on pathname
+          if (resolved.pathname.length > 1 && resolved.pathname.endsWith('/') && !resolved.hash) {
             linkUrl = linkUrl.slice(0, -1);
           }
 
-          if (seenInPage.has(linkUrl)) continue;
+          if (seenInPage.has(linkUrl) || linkUrl === current.url) continue;
           seenInPage.add(linkUrl);
 
           const isExternal = resolved.hostname !== targetHostname;
