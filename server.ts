@@ -19,6 +19,7 @@ import { executePlaywrightTestScript } from './server/engine/playwrightRunner';
 import { runAllAutomatedTests } from './server/testSuite';
 import { auditStore } from './server/storage/auditStore';
 import { queueManager } from './server/storage/queueManager';
+import { startQueueDaemon } from './server/engine/queueDaemon';
 import { deduplicateFindings } from './src/lib/engine/dedup';
 import { calculateAuditScores } from './src/lib/engine/scoring';
 import { CHECK_DEFINITIONS } from './src/lib/engine/checks';
@@ -359,6 +360,7 @@ async function startServer() {
 
   app.listen(PORT, '0.0.0.0', () => {
     console.log(`[LaunchProof] Fullstack Engine listening on http://0.0.0.0:${PORT}`);
+    startQueueDaemon(ai);
   });
 }
 

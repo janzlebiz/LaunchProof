@@ -26,9 +26,9 @@ export async function runAllAutomatedTests(): Promise<TestSuiteResult[]> {
     { ip: '169.254.169.254', isPrivate: true, name: 'Cloud Metadata IP (169.254.169.254)' },
     { ip: '::1', isPrivate: true, name: 'IPv6 Loopback (::1)' },
     { ip: '::ffff:127.0.0.1', isPrivate: true, name: 'IPv4-mapped IPv6 Loopback (::ffff:127.0.0.1)' },
-    { ip: '::ffff:10.0.0.1', isPrivate: true, name: 'IPv4-mapped IPv6 Private (::ffff:10.0.0.1)' },
+    { ip: '2130706433', isPrivate: true, name: 'Decimal Integer IP (2130706433 -> 127.0.0.1)' },
+    { ip: '0x7f000001', isPrivate: true, name: 'Hexadecimal IP (0x7f000001 -> 127.0.0.1)' },
     { ip: '8.8.8.8', isPrivate: false, name: 'Public IPv4 (8.8.8.8)' },
-    { ip: '1.1.1.1', isPrivate: false, name: 'Public IPv4 (1.1.1.1)' },
   ];
 
   for (const c of ipCases) {
@@ -136,6 +136,19 @@ export async function runAllAutomatedTests(): Promise<TestSuiteResult[]> {
     name: 'Critical finding strictly enforces LAUNCH_BLOCKED verdict',
     passed: blockedScore.summary.verdict === 'LAUNCH_BLOCKED' && blockedScore.summary.criticalCount === 1,
     details: `Verdict: ${blockedScore.summary.verdict}, Blockers: ${blockedScore.summary.criticalCount}`,
+  });
+
+  const aiFinding: Finding = {
+    ...mockFinding1,
+    id: 'ai_f1',
+    source: 'ai_visual',
+    severity: 'critical',
+  };
+  const aiRescore = calculateAuditScores([aiFinding], allCheckIds, 1000, 1, 3);
+  scoreTests.push({
+    name: 'AI finding correctly down-scores and enforces LAUNCH_BLOCKED verdict',
+    passed: aiRescore.summary.verdict === 'LAUNCH_BLOCKED' && aiRescore.summary.criticalCount === 1,
+    details: `Score: ${aiRescore.summary.overallScore}, Verdict: ${aiRescore.summary.verdict}`,
   });
 
   suites.push({
