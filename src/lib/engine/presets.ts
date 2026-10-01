@@ -1,6 +1,6 @@
 /**
- * AI Launch QA — Standard Target Presets
- * Pre-configured test environments for instant QA demonstration & comparison
+ * LaunchProof — Target Presets
+ * Pre-configured live test environments for instant QA testing and comparison
  */
 
 import { TargetPreset } from '../../types/audit';
@@ -8,47 +8,32 @@ import { TargetPreset } from '../../types/audit';
 export const TARGET_PRESETS: TargetPreset[] = [
   {
     id: 'preset-ai-saas-defects',
-    name: 'AI-Generated SaaS Landing Page',
-    badge: 'Common AI Defects',
+    name: 'Live Fixture: AI SaaS (Intentional Defects)',
+    badge: 'Live Fixture',
     badgeColor: 'amber',
-    url: 'https://saas-demo.ailaunchqa.dev/v1/preview',
-    description: 'Freshly generated web app with responsive horizontal overflow, missing form labels, dead CTA buttons, and low contrast.',
+    url: window.location.origin ? `${window.location.origin}/fixtures/defective-saas` : 'http://localhost:3000/fixtures/defective-saas',
+    description: 'Live test fixture containing real horizontal overflow (440px), missing image alt text, unlabelled input, broken 404 documentation link, and low contrast (3.1:1).',
     type: 'flawed',
     expectedIssues: [
-      'Mobile horizontal overflow (390px)',
-      'Uncaught TypeError in analytics script',
-      'Primary CTA button missing click handler',
-      'Hero image missing alt text',
-      'Contrast ratio below 4.5:1 on subtitle',
+      'Mobile horizontal overflow on 390px',
+      'Image missing alt attribute',
+      'Unlabelled form email input',
+      'Broken link returning 404',
+      'Render-blocking font in <head>',
     ],
   },
   {
     id: 'preset-healthy-benchmark',
-    name: 'Production Ready Benchmark',
-    badge: 'Launch Ready',
+    name: 'Live Fixture: Production Ready Benchmark',
+    badge: 'Production Benchmark',
     badgeColor: 'emerald',
-    url: 'https://benchmark.ailaunchqa.dev/production',
-    description: 'Fully optimized web application with strict accessibility, semantic landmarks, Core Web Vitals under 1.2s, and responsive layout.',
+    url: window.location.origin ? `${window.location.origin}/fixtures/healthy-benchmark` : 'http://localhost:3000/fixtures/healthy-benchmark',
+    description: 'Live benchmark page with full accessibility, semantic headings, responsive design, and Core Web Vitals under 1.2s.',
     type: 'healthy',
     expectedIssues: [
       'Passes 28/28 checks',
       '0 Critical Blockers',
-      'LCP < 1.1s, CLS = 0.00',
-    ],
-  },
-  {
-    id: 'preset-ecommerce-checkout',
-    name: 'E-Commerce Flow & Checkout',
-    badge: 'Conversion Blockers',
-    badgeColor: 'rose',
-    url: 'https://store-preview.ailaunchqa.dev/checkout',
-    description: 'Cart and checkout template with form accessibility gaps, broken discount link, clipped payment badges on mobile, and missing H1.',
-    type: 'ecommerce',
-    expectedIssues: [
-      'Missing accessible form field labels',
-      'Broken external affiliate link (404)',
-      'Render-blocking stylesheet (480ms delay)',
-      'Viewport clipping on credit card inputs',
+      'LCP < 1.2s, CLS = 0.00',
     ],
   },
 ];

@@ -10,8 +10,9 @@ import {
   ShieldAlert,
   Sparkles,
   Check,
+  Loader2,
 } from 'lucide-react';
-import { AuditReport, Finding, LaunchVerdict } from '../types/audit';
+import { AuditReport, Finding, LaunchVerdict, RetestComparison } from '../types/audit';
 
 interface RetestComparisonViewProps {
   currentReport: AuditReport;
@@ -24,78 +25,39 @@ export const RetestComparisonView: React.FC<RetestComparisonViewProps> = ({
   onClose,
   onApplyRetestResults,
 }) => {
-  // Local state of findings marked as fixed in this retest simulation
-  const [fixedItemIds, setFixedItemIds] = useState<string[]>(
-    currentReport.findings.filter((f) => f.status === 'fixed').map((f) => f.id)
-  );
-  const [isSimulating, setIsSimulating] = useState(false);
-  const [hasRunRetest, setHasRunRetest] = useState(false);
+  const [isRetesting, setIsRetesting] = useState(false);
+  const [retestResult, setRetestResult] = useState<{ freshReport: AuditReport; comparison: RetestComparison } | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
-  const toggleFix = (id: string) => {
-    if (fixedItemIds.includes(id)) {
-      setFixedItemIds(fixedItemIds.filter((item) => item !== id));
-    } else {
-      setFixedItemIds([...fixedItemIds, id]);
+  const handleRunRealRetest = async () => {
+    setIsRetesting(true);
+    setError(null);
+
+    try {
+      const res = await fetch(`/api/audits/${currentReport.id}/retest`, {
+        method: 'POST',
+      });
+
+      if (!res.ok) {
+        const errData = await res.json().catch(() => ({}));
+        throw new Error(errData.error || `Retest failed with HTTP ${res.status}`);
+      }
+
+      const data = await res.json();
+      setRetestResult(data);
+    } catch (err: any) {
+      setError(err.message || 'Retest failed.');
+    } finally {
+      setIsRetesting(false);
     }
-  };
-
-  const handleFixAll = () => {
-    setFixedItemIds(currentReport.findings.map((f) => f.id));
   };
 
   const beforeScore = currentReport.summary.overallScore;
   const beforeVerdict = currentReport.summary.verdict;
 
-  // Calculate simulated after score
-  const remainingFindings = currentReport.findings.filter((f) => !fixedItemIds.includes(f.id));
-  const remainingCritical = remainingFindings.filter((f) => f.severity === 'critical').length;
-  const remainingHigh = remainingFindings.filter((f) => f.severity === 'high').length;
-
-  let simulatedAfterScore = Math.min(
-    100,
-    Math.round(beforeScore + (fixedItemIds.length * 12))
-  );
-  if (remainingFindings.length === 0) simulatedAfterScore = 100;
-
-  let simulatedAfterVerdict: LaunchVerdict = 'LAUNCH_READY';
-  if (remainingCritical > 0) simulatedAfterVerdict = 'LAUNCH_BLOCKED';
-  else if (simulatedAfterScore < 75 || remainingHigh >= 3) simulatedAfterVerdict = 'NEEDS_REVIEW';
-
-  const scoreDelta = simulatedAfterScore - beforeScore;
-
-  const handleRunRetest = () => {
-    setIsSimulating(true);
-    setTimeout(() => {
-      setIsSimulating(false);
-      setHasRunRetest(true);
-    }, 800);
-  };
-
-  const handleApplyChanges = () => {
-    const updatedFindings: Finding[] = currentReport.findings.map((f) => ({
-      ...f,
-      status: fixedItemIds.includes(f.id) ? 'fixed' : 'open',
-    }));
-
-    const updatedReport: AuditReport = {
-      ...currentReport,
-      summary: {
-        ...currentReport.summary,
-        overallScore: simulatedAfterScore,
-        verdict: simulatedAfterVerdict,
-        verdictReason:
-          simulatedAfterVerdict === 'LAUNCH_READY'
-            ? 'All critical blockers resolved. QA gate verified for launch.'
-            : `${remainingCritical} blocker(s) remain open.`,
-        criticalCount: remainingCritical,
-        highCount: remainingHigh,
-      },
-      findings: updatedFindings,
-    };
-
-    onApplyRetestResults(updatedReport);
-    onClose();
-  };
+  const afterScore = retestResult ? retestResult.freshReport.summary.overallScore : beforeScore;
+  const afterVerdict = retestResult ? retestResult.freshReport.summary.verdict : beforeVerdict;
+  const scoreDelta = retestResult ? retestResult.comparison.scoreDelta : 0;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/85 backdrop-blur-md animate-fadeIn">
@@ -107,9 +69,9 @@ export const RetestComparisonView: React.FC<RetestComparisonViewProps> = ({
               <RotateCcw className="h-5 w-5" />
             </div>
             <div>
-              <h3 className="text-base font-bold text-white">Retest & Fix Verification Engine</h3>
+              <h3 className="text-base font-bold text-white">Real Retest & Fresh Evidence Verification</h3>
               <p className="text-xs text-slate-400">
-                Simulate or re-run automated audit after code remediation to verify delta.
+                Runs a fresh browser audit against {currentReport.targetUrl} and computes live diff.
               </p>
             </div>
           </div>
@@ -124,122 +86,131 @@ export const RetestComparisonView: React.FC<RetestComparisonViewProps> = ({
 
         {/* Comparison Header Cards */}
         <div className="p-5 sm:p-6 bg-slate-950/40 border-b border-slate-800 grid grid-cols-1 md:grid-cols-3 gap-4">
-          {/* Before */}
           <div className="rounded-xl border border-slate-800 bg-slate-950 p-4 text-center">
-            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Before Audit</span>
+            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Baseline Audit</span>
             <div className="text-3xl font-black text-rose-400 font-mono my-1">{beforeScore} / 100</div>
             <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-rose-950 text-rose-300 border border-rose-500/40">
               {beforeVerdict.replace('_', ' ')}
             </span>
           </div>
 
-          {/* Delta Arrow */}
           <div className="flex flex-col items-center justify-center p-2 text-center">
             <div className="flex items-center gap-1 text-emerald-400 font-mono font-bold text-lg">
               <TrendingUp className="h-5 w-5" />
-              <span>+{Math.max(0, scoreDelta)} pts</span>
+              <span>{scoreDelta >= 0 ? `+${scoreDelta}` : `${scoreDelta}`} pts</span>
             </div>
             <span className="text-[11px] text-slate-400 mt-1">
-              {fixedItemIds.length} of {currentReport.findings.length} fixed
+              {retestResult ? `${retestResult.comparison.resolvedFindings.length} resolved` : 'Ready to execute'}
             </span>
           </div>
 
-          {/* After */}
           <div className="rounded-xl border border-emerald-900/40 bg-emerald-950/20 p-4 text-center">
-            <span className="text-[10px] font-bold text-emerald-400 uppercase tracking-wider">Simulated After</span>
-            <div className="text-3xl font-black text-emerald-400 font-mono my-1">{simulatedAfterScore} / 100</div>
+            <span className="text-[10px] font-bold text-emerald-400 uppercase tracking-wider">Fresh Retest Result</span>
+            <div className="text-3xl font-black text-emerald-400 font-mono my-1">{afterScore} / 100</div>
             <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-emerald-950 text-emerald-300 border border-emerald-500/40">
-              {simulatedAfterVerdict.replace('_', ' ')}
+              {afterVerdict.replace('_', ' ')}
             </span>
           </div>
         </div>
 
-        {/* Findings Checklist Body */}
+        {/* Content Body */}
         <div className="flex-1 overflow-y-auto p-5 sm:p-6 space-y-4">
-          <div className="flex items-center justify-between">
-            <h4 className="text-xs font-bold text-slate-300 uppercase tracking-wider">
-              Mark Applied Remediation Fixes:
-            </h4>
-            <button
-              onClick={handleFixAll}
-              className="text-xs font-semibold text-cyan-400 hover:text-cyan-300 underline"
-            >
-              Mark All as Resolved
-            </button>
-          </div>
+          {error && (
+            <div className="rounded-xl border border-rose-500/50 bg-rose-950/40 p-3 text-xs text-rose-300">
+              {error}
+            </div>
+          )}
 
-          <div className="space-y-2.5">
-            {currentReport.findings.map((f) => {
-              const isChecked = fixedItemIds.includes(f.id);
+          {!retestResult && !isRetesting && (
+            <div className="text-center py-12 space-y-3">
+              <RotateCcw className="h-10 w-10 text-cyan-400/50 mx-auto" />
+              <h4 className="text-sm font-bold text-white">Execute Real Target Retest</h4>
+              <p className="text-xs text-slate-400 max-w-md mx-auto">
+                LaunchProof will open a new isolated browser context, crawl {currentReport.targetUrl}, test responsive viewports, evaluate axe-core, and compute the fresh verification delta.
+              </p>
+              <button
+                onClick={handleRunRealRetest}
+                className="mt-2 inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-cyan-500 to-indigo-600 text-white font-bold text-xs shadow-lg hover:from-cyan-400 hover:to-indigo-500"
+              >
+                <RotateCcw className="h-4 w-4" />
+                <span>Run Fresh Retest Audit</span>
+              </button>
+            </div>
+          )}
 
-              return (
-                <div
-                  key={f.id}
-                  onClick={() => toggleFix(f.id)}
-                  className={`p-3.5 rounded-xl border flex items-start gap-3 cursor-pointer transition-all ${
-                    isChecked
-                      ? 'border-emerald-500/50 bg-emerald-950/20'
-                      : 'border-slate-800 bg-slate-950 hover:border-slate-700'
-                  }`}
-                >
-                  <div className="mt-0.5">
-                    <input
-                      type="checkbox"
-                      checked={isChecked}
-                      onChange={() => {}} // Handled by parent container click
-                      className="rounded border-slate-700 bg-slate-900 text-emerald-500 focus:ring-0"
-                    />
-                  </div>
+          {isRetesting && (
+            <div className="text-center py-16 space-y-3">
+              <Loader2 className="h-8 w-8 text-cyan-400 animate-spin mx-auto" />
+              <p className="text-xs font-mono text-cyan-300">Running fresh browser audit worker against {currentReport.targetUrl}...</p>
+            </div>
+          )}
 
-                  <div className="flex-1 space-y-1">
-                    <div className="flex items-center gap-2">
-                      <span
-                        className={`text-[9px] font-mono font-bold uppercase px-1.5 rounded ${
-                          f.severity === 'critical'
-                            ? 'bg-rose-950 text-rose-300'
-                            : 'bg-amber-950 text-amber-300'
-                        }`}
-                      >
-                        {f.severity}
-                      </span>
-                      <span className={`text-xs font-bold ${isChecked ? 'text-emerald-300 line-through' : 'text-white'}`}>
-                        {f.title}
-                      </span>
-                    </div>
-                    <p className="text-[11px] text-slate-400">{f.recommendation}</p>
-                  </div>
-
-                  <span
-                    className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
-                      isChecked
-                        ? 'bg-emerald-950 text-emerald-400 border border-emerald-500/40'
-                        : 'bg-slate-900 text-slate-500 border border-slate-800'
-                    }`}
-                  >
-                    {isChecked ? 'RESOLVED' : 'STILL PRESENT'}
+          {retestResult && (
+            <div className="space-y-4">
+              {/* Resolved Findings */}
+              {retestResult.comparison.resolvedFindings.length > 0 && (
+                <div className="space-y-2">
+                  <span className="text-xs font-bold text-emerald-400 uppercase tracking-wider flex items-center gap-1.5">
+                    <CheckCircle2 className="h-4 w-4" />
+                    <span>Resolved Defects ({retestResult.comparison.resolvedFindings.length})</span>
                   </span>
+                  <div className="space-y-2">
+                    {retestResult.comparison.resolvedFindings.map((rf) => (
+                      <div key={rf.id} className="p-3 rounded-xl border border-emerald-900/50 bg-emerald-950/20 text-xs flex items-center justify-between">
+                        <span className="text-emerald-200 line-through">{rf.title}</span>
+                        <span className="text-[10px] font-bold text-emerald-400 bg-emerald-950 px-2 py-0.5 rounded border border-emerald-800">
+                          RESOLVED
+                        </span>
+                      </div>
+                    ))}
+                  </div>
                 </div>
-              );
-            })}
-          </div>
+              )}
+
+              {/* Persisting Findings */}
+              {retestResult.comparison.persistingFindings.length > 0 && (
+                <div className="space-y-2">
+                  <span className="text-xs font-bold text-amber-400 uppercase tracking-wider flex items-center gap-1.5">
+                    <AlertTriangle className="h-4 w-4" />
+                    <span>Still Present ({retestResult.comparison.persistingFindings.length})</span>
+                  </span>
+                  <div className="space-y-2">
+                    {retestResult.comparison.persistingFindings.map((pf) => (
+                      <div key={pf.id} className="p-3 rounded-xl border border-slate-800 bg-slate-950 text-xs flex items-center justify-between">
+                        <span className="text-slate-300">{pf.title}</span>
+                        <span className="text-[10px] font-bold text-amber-400 bg-amber-950 px-2 py-0.5 rounded border border-amber-800">
+                          STILL OPEN
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
         </div>
 
-        {/* Footer Actions */}
+        {/* Footer */}
         <div className="p-4 sm:p-5 border-t border-slate-800 bg-slate-950 flex items-center justify-between gap-3">
           <button
             onClick={onClose}
             className="px-4 py-2 rounded-xl border border-slate-700 text-xs font-semibold text-slate-300 hover:text-white"
           >
-            Cancel
+            Close
           </button>
 
-          <button
-            onClick={handleApplyChanges}
-            className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-cyan-500 to-indigo-600 text-white text-xs font-bold shadow-lg shadow-cyan-500/25 hover:from-cyan-400 hover:to-indigo-500 transition-all"
-          >
-            <CheckCircle2 className="h-4 w-4" />
-            <span>Apply Retest & Update Report ({simulatedAfterScore}/100)</span>
-          </button>
+          {retestResult && (
+            <button
+              onClick={() => {
+                onApplyRetestResults(retestResult.freshReport);
+                onClose();
+              }}
+              className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-cyan-500 to-indigo-600 text-white text-xs font-bold shadow hover:from-cyan-400 hover:to-indigo-500 transition-all"
+            >
+              <CheckCircle2 className="h-4 w-4" />
+              <span>Adopt Fresh Retest Report ({afterScore}/100)</span>
+            </button>
+          )}
         </div>
       </div>
     </div>

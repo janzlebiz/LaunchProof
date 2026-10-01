@@ -1,7 +1,7 @@
 /**
  * LaunchProof — Fullstack Server & Job Orchestrator
- * Runs Express API routes for real audit execution, Gemini reasoning,
- * SSRF security validation, test runners, and static/Vite serving on port 3000.
+ * Integrates real Playwright browser execution, axe-core, Gemini Vision,
+ * fixture endpoints, SSRF validation, and durable audit storage.
  */
 
 import express from 'express';
@@ -10,9 +10,15 @@ import { GoogleGenAI } from '@google/genai';
 import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { executeRealAuditJob, validateUrlSecurityServer } from './server/auditEngine';
+import { setupFixtureRoutes } from './server/fixtures/fixturePages';
+import { validateTargetUrlSecurity } from './server/security/urlValidator';
+import { runBrowserAuditWorker } from './server/engine/browserWorker';
+import { runGeminiMultimodalVisualReasoning } from './server/engine/aiReasoner';
+import { executeRealRetestComparison } from './server/engine/retestComparator';
+import { executePlaywrightTestScript } from './server/engine/playwrightRunner';
 import { runAllAutomatedTests } from './server/testSuite';
-import { AuditConfig, AuditReport, AuditStatus } from './src/types/audit';
+import { auditStore } from './server/storage/auditStore';
+import { AuditConfig } from './src/types/audit';
 
 dotenv.config();
 
@@ -22,7 +28,10 @@ const __dirname = path.dirname(__filename);
 const app = express();
 const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 3000;
 
-app.use(express.json({ limit: '10mb' }));
+app.use(express.json({ limit: '15mb' }));
+
+// Setup Live Fixture Target Routes
+setupFixtureRoutes(app);
 
 // Initialize GoogleGenAI SDK on server side
 const apiKey = process.env.GEMINI_API_KEY;
@@ -39,31 +48,19 @@ if (apiKey) {
   });
 }
 
-// In-Memory Persistent Audit Job Store
-interface AuditJobRecord {
-  id: string;
-  targetUrl: string;
-  status: AuditStatus;
-  progressPercent: number;
-  currentMessage: string;
-  logs: { id: string; timestamp: string; level: string; message: string; step?: string }[];
-  report: AuditReport | null;
-  error?: string;
-  startedAt: string;
-  completedAt?: string;
-}
-
-const auditJobs = new Map<string, AuditJobRecord>();
-
 /**
  * Endpoint: POST /api/audits
- * Starts a real backend audit job
+ * Starts a real isolated browser audit job
  */
 app.post('/api/audits', async (req, res) => {
   try {
     const { url, config } = req.body;
-    if (!url) {
-      return res.status(400).json({ error: 'Target URL is required' });
+    if (!url) return res.status(400).json({ error: 'Target URL is required' });
+
+    // Rate limiting check
+    const rate = auditStore.checkRateLimit(url);
+    if (!rate.allowed) {
+      return res.status(429).json({ error: `Rate limit reached. Please wait ${rate.waitSeconds}s before auditing this domain again.` });
     }
 
     const auditId = `audit_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
@@ -71,9 +68,10 @@ app.post('/api/audits', async (req, res) => {
       targetUrl: url,
       maxPages: config?.maxPages || 5,
       maxDepth: config?.maxDepth || 2,
-      timeoutMs: config?.timeoutMs || 15000,
+      timeoutMs: config?.timeoutMs || 25000,
       viewports: config?.viewports || [
         { name: 'Desktop (1440x900)', width: 1440, height: 900, isMobile: false },
+        { name: 'Tablet (768x1024)', width: 768, height: 1024, isMobile: true },
         { name: 'Mobile (390x844)', width: 390, height: 844, isMobile: true },
       ],
       enableA11y: config?.enableA11y !== false,
@@ -82,88 +80,68 @@ app.post('/api/audits', async (req, res) => {
       enableExternalLinks: config?.enableExternalLinks !== false,
     };
 
-    const jobRecord: AuditJobRecord = {
-      id: auditId,
-      targetUrl: url,
-      status: 'QUEUED',
-      progressPercent: 5,
-      currentMessage: 'Job queued. Validating target URL security...',
-      logs: [],
-      report: null,
-      startedAt: new Date().toISOString(),
-    };
+    const job = auditStore.registerJob(auditId, url);
 
-    auditJobs.set(auditId, jobRecord);
+    // Launch worker asynchronously
+    (async () => {
+      try {
+        const { report, rawHtml, screenshotBase64Map } = await runBrowserAuditWorker(
+          auditId,
+          url,
+          fullConfig,
+          job.abortController.signal,
+          (status, percent, msg, level) => {
+            auditStore.updateJob(auditId, status, percent, msg, level);
+          }
+        );
 
-    // Run audit worker in background
-    executeRealAuditJob(
-      auditId,
-      url,
-      fullConfig,
-      ai,
-      (status, progressPercent, message, level = 'info') => {
-        const job = auditJobs.get(auditId);
-        if (job) {
-          job.status = status;
-          job.progressPercent = progressPercent;
-          job.currentMessage = message;
-          job.logs.push({
-            id: `log_${Date.now()}_${Math.random().toString(36).substring(2, 5)}`,
-            timestamp: new Date().toLocaleTimeString(),
-            level,
-            message,
-            step: status,
-          });
+        // Run real Gemini Vision reasoning with screenshots
+        if (fullConfig.enableAI && ai) {
+          auditStore.updateJob(auditId, 'AI_REASONING', 88, 'Running Gemini Vision on real screenshot evidence...', 'info');
+          const aiFindings = await runGeminiMultimodalVisualReasoning(
+            ai,
+            url,
+            report.pages[0]?.title || 'Target Page',
+            rawHtml,
+            report.findings,
+            screenshotBase64Map['Desktop (1440x900)'] || screenshotBase64Map['Mobile (390x844)']
+          );
+
+          if (aiFindings.length > 0) {
+            report.findings.push(...aiFindings);
+          }
         }
+
+        auditStore.completeJob(auditId, report);
+      } catch (err: any) {
+        auditStore.failJob(auditId, err.message || 'Audit failed');
       }
-    )
-      .then((finalReport) => {
-        const job = auditJobs.get(auditId);
-        if (job) {
-          job.status = 'COMPLETED';
-          job.progressPercent = 100;
-          job.currentMessage = `Audit completed. Verdict: ${finalReport.summary.verdict}`;
-          job.report = finalReport;
-          job.completedAt = new Date().toISOString();
-        }
-      })
-      .catch((err) => {
-        const job = auditJobs.get(auditId);
-        if (job) {
-          job.status = 'FAILED';
-          job.error = err.message || 'Audit execution failed.';
-          job.currentMessage = `Failed: ${err.message}`;
-          job.logs.push({
-            id: `err_${Date.now()}`,
-            timestamp: new Date().toLocaleTimeString(),
-            level: 'error',
-            message: err.message,
-            step: 'FAILED',
-          });
-        }
-      });
+    })();
 
     return res.json({ auditId, status: 'QUEUED' });
   } catch (err: any) {
-    console.error('Failed to create audit job:', err);
-    return res.status(500).json({ error: err.message || 'Internal Server Error' });
+    console.error('Error creating audit:', err);
+    return res.status(500).json({ error: err.message || 'Internal error' });
   }
 });
 
 /**
  * Endpoint: GET /api/audits/:id
- * Polls audit job status, logs, and progress
  */
 app.get('/api/audits/:id', (req, res) => {
   const { id } = req.params;
-  const job = auditJobs.get(id);
+  const job = auditStore.getJob(id);
 
   if (!job) {
-    return res.status(404).json({ error: `Audit job '${id}' not found` });
+    const report = auditStore.getReport(id);
+    if (report) {
+      return res.json({ id, status: 'COMPLETED', progressPercent: 100, report });
+    }
+    return res.status(404).json({ error: `Audit '${id}' not found` });
   }
 
   return res.json({
-    id: job.id,
+    id: job.auditId,
     targetUrl: job.targetUrl,
     status: job.status,
     progressPercent: job.progressPercent,
@@ -172,7 +150,6 @@ app.get('/api/audits/:id', (req, res) => {
     report: job.report,
     error: job.error,
     startedAt: job.startedAt,
-    completedAt: job.completedAt,
   });
 });
 
@@ -181,20 +158,62 @@ app.get('/api/audits/:id', (req, res) => {
  */
 app.post('/api/audits/:id/cancel', (req, res) => {
   const { id } = req.params;
-  const job = auditJobs.get(id);
+  const success = auditStore.cancelJob(id);
+  return res.json({ success, status: 'CANCELLED' });
+});
 
-  if (!job) {
-    return res.status(404).json({ error: `Audit job '${id}' not found` });
+/**
+ * Endpoint: POST /api/audits/:id/retest
+ * Performs a real re-audit against the target and computes before/after diff
+ */
+app.post('/api/audits/:id/retest', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const previousReport = auditStore.getReport(id);
+    if (!previousReport) {
+      return res.status(404).json({ error: `Base audit '${id}' not found for retest` });
+    }
+
+    const controller = new AbortController();
+    const { freshReport, comparison } = await executeRealRetestComparison(
+      previousReport,
+      previousReport.config,
+      controller.signal,
+      () => {}
+    );
+
+    auditStore.completeJob(freshReport.id, freshReport);
+    return res.json({ freshReport, comparison });
+  } catch (err: any) {
+    return res.status(500).json({ error: err.message || 'Retest failed' });
   }
+});
 
-  job.status = 'CANCELLED';
-  job.currentMessage = 'Audit was cancelled by user.';
-  return res.json({ success: true, status: 'CANCELLED' });
+/**
+ * Endpoint: POST /api/playwright/execute
+ * Runs generated Playwright test against target
+ */
+app.post('/api/playwright/execute', async (req, res) => {
+  try {
+    const { url, selector } = req.body;
+    if (!url) return res.status(400).json({ error: 'URL is required' });
+
+    const result = await executePlaywrightTestScript(url, selector || 'body');
+    return res.json(result);
+  } catch (err: any) {
+    return res.status(500).json({ error: err.message || 'Execution error' });
+  }
+});
+
+/**
+ * Endpoint: GET /api/audits/history
+ */
+app.get('/api/audits/history', (_req, res) => {
+  return res.json({ history: auditStore.getAllReports() });
 });
 
 /**
  * Endpoint: POST /api/tests/run-all
- * Runs all unit & security tests with live assertions
  */
 app.post('/api/tests/run-all', async (_req, res) => {
   try {
@@ -202,7 +221,7 @@ app.post('/api/tests/run-all', async (_req, res) => {
     const allPassed = results.every((r) => r.passed);
     return res.json({ success: true, allPassed, suites: results });
   } catch (err: any) {
-    return res.status(500).json({ error: err.message || 'Failed to run test suite' });
+    return res.status(500).json({ error: err.message || 'Failed test suites' });
   }
 });
 
@@ -211,87 +230,8 @@ app.post('/api/tests/run-all', async (_req, res) => {
  */
 app.post('/api/security/validate', async (req, res) => {
   const { url } = req.body;
-  if (!url) return res.status(400).json({ error: 'URL is required' });
-  const result = await validateUrlSecurityServer(url);
+  const result = await validateTargetUrlSecurity(url);
   return res.json(result);
-});
-
-/**
- * Endpoint: POST /api/gemini/analyze
- */
-app.post('/api/gemini/analyze', async (req, res) => {
-  try {
-    const { url, pageTitle, viewportName, domSummary, deterministicIssuesSummary } = req.body;
-
-    if (!ai) {
-      return res.json({
-        findings: [
-          {
-            title: 'Primary CTA lacks visual contrast against background',
-            category: 'visual_ux',
-            severity: 'high',
-            confidence: 0.91,
-            description: 'The main conversion button (`button.btn-primary`) uses a color scheme that blends into the hero background gradient.',
-            impact: 'Users may overlook the primary action, resulting in decreased conversion rates.',
-            recommendation: 'Use a high-contrast accent background (e.g., bg-emerald-500 or bg-cyan-500) with bold white text.',
-            checkId: 'visual.cta-prominence',
-            selector: 'button.btn-primary',
-          },
-        ],
-      });
-    }
-
-    const prompt = `You are the LaunchProof Web Quality Reasoning Engine.
-Target URL: ${url}
-Page Title: ${pageTitle}
-Active Viewports: ${viewportName}
-DOM Summary: ${domSummary}
-Deterministic issues found: ${JSON.stringify(deterministicIssuesSummary || [])}
-
-Perform strict, evidence-grounded visual/UX reasoning. Identify any visual hierarchy, layout collision, touch target spacing, or conversion friction defects.
-Return only valid JSON matching this schema:
-{
-  "findings": [
-    {
-      "title": "...",
-      "category": "visual_ux",
-      "severity": "high" | "medium" | "low",
-      "confidence": 0.85 to 0.99,
-      "description": "...",
-      "impact": "...",
-      "recommendation": "...",
-      "checkId": "visual.cta-prominence" | "visual.spacing-consistency" | "visual.responsive-composition",
-      "selector": "..."
-    }
-  ]
-}`;
-
-    const response = await ai.models.generateContent({
-      model: 'gemini-3.8-flash',
-      contents: prompt,
-      config: { responseMimeType: 'application/json' },
-    });
-
-    const parsed = JSON.parse(response.text || '{}');
-    return res.json(parsed);
-  } catch (err: any) {
-    console.error('Error in /api/gemini/analyze:', err);
-    return res.json({
-      findings: [
-        {
-          title: 'Primary CTA lacks visual contrast against background',
-          category: 'visual_ux',
-          severity: 'high',
-          confidence: 0.91,
-          description: 'The main conversion button (`button.btn-primary`) uses a color scheme that blends into the hero section gradient.',
-          impact: 'Users may overlook the primary action, resulting in decreased conversion rates.',
-          recommendation: 'Use a high-contrast accent background (e.g., bg-emerald-500 or bg-cyan-500) with bold white text.',
-          checkId: 'visual.cta-prominence',
-          selector: 'button.btn-primary',
-        },
-      ],
-    });
-  }
 });
 
 /**
@@ -326,8 +266,7 @@ Requirements:
 
     return res.json({ fixPrompt: response.text });
   } catch (err: any) {
-    console.error('Error in /api/gemini/fix-prompt:', err);
-    return res.status(500).json({ error: 'Failed to generate fix prompt' });
+    return res.status(500).json({ error: err.message || 'Failed' });
   }
 });
 
@@ -360,8 +299,7 @@ Use '@playwright/test' syntax with test.describe, expect assertions, viewport co
 
     return res.json({ playwrightTest: code });
   } catch (err: any) {
-    console.error('Error in /api/gemini/regression-test:', err);
-    return res.status(500).json({ error: 'Failed to generate test' });
+    return res.status(500).json({ error: err.message || 'Failed' });
   }
 });
 
@@ -383,7 +321,7 @@ async function startServer() {
   }
 
   app.listen(PORT, '0.0.0.0', () => {
-    console.log(`[LaunchProof] Fullstack Engine & Worker listening on http://0.0.0.0:${PORT}`);
+    console.log(`[LaunchProof] Fullstack Engine listening on http://0.0.0.0:${PORT}`);
   });
 }
 
