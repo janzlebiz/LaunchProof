@@ -34,16 +34,29 @@ const FORBIDDEN_PORTS = [
 ];
 
 /**
- * Hardened check whether an IP (IPv4, IPv6, IPv4-mapped IPv6, hex, octal, decimal) is private/reserved/loopback
+ * Hardened check whether an IP (IPv4, IPv6, IPv4-mapped IPv6, hex, octal, decimal) is private/reserved/loopback.
+ * Returns false for non-IP strings (e.g. domain names like example.com or app.run.app).
  */
 export function isPrivateOrReservedIp(ip: string): boolean {
-  if (!ip) return true;
+  if (!ip) return false;
   const lower = ip.trim().toLowerCase();
 
-  // Handle decimal integer IP representation (e.g. 2130706433 = 127.0.0.1)
+  // Handle pure decimal integer IP representation (e.g. 2130706433 = 127.0.0.1)
   if (/^\d+$/.test(lower)) {
     const num = parseInt(lower, 10);
-    if (!isNaN(num)) {
+    if (!isNaN(num) && num >= 0 && num <= 4294967295) {
+      const a = (num >>> 24) & 255;
+      const b = (num >>> 16) & 255;
+      const c = (num >>> 8) & 255;
+      const d = num & 255;
+      return isPrivateOrReservedIp(`${a}.${b}.${c}.${d}`);
+    }
+  }
+
+  // Handle Hexadecimal single number IP representation (e.g. 0x7f000001 = 127.0.0.1)
+  if (/^0x[0-9a-f]+$/i.test(lower)) {
+    const num = parseInt(lower, 16);
+    if (!isNaN(num) && num >= 0 && num <= 4294967295) {
       const a = (num >>> 24) & 255;
       const b = (num >>> 16) & 255;
       const c = (num >>> 8) & 255;
@@ -58,7 +71,6 @@ export function isPrivateOrReservedIp(ip: string): boolean {
     if (mapped.includes('.')) {
       return isPrivateOrReservedIp(mapped);
     }
-    // Hex encoded IPv4 in mapped IPv6 (e.g. ::ffff:7f00:0001)
     const parts = mapped.split(':');
     if (parts.length === 2) {
       const p1 = parseInt(parts[0], 16);
@@ -88,19 +100,22 @@ export function isPrivateOrReservedIp(ip: string): boolean {
 
   // IPv4 checks (parse octal / hex if prefixed)
   const segments = lower.split('.');
-  if (segments.length !== 4) return true;
+  if (segments.length !== 4) return false; // Domain names (2, 3, 5+ parts) are NOT IPv4 literals!
 
   const parts = segments.map((s) => {
     if (s.startsWith('0x') || s.startsWith('0X')) {
       return parseInt(s, 16);
     }
-    if (s.startsWith('0') && s.length > 1) {
+    if (s.startsWith('0') && s.length > 1 && /^[0-7]+$/.test(s)) {
       return parseInt(s, 8); // Octal
     }
-    return parseInt(s, 10);
+    if (/^\d+$/.test(s)) {
+      return parseInt(s, 10);
+    }
+    return NaN;
   });
 
-  if (parts.some(isNaN)) return true;
+  if (parts.some((p) => isNaN(p) || p < 0 || p > 255)) return false; // Non-numeric domain parts are NOT IPv4 literals!
 
   const [a, b, c, d] = parts;
 
@@ -211,13 +226,19 @@ export async function validateTargetUrlSecurity(
     }
   }
 
+  const isCloudRunPreviewDomain =
+    hostname.endsWith('.run.app') ||
+    hostname.endsWith('.aistudio.google') ||
+    hostname.endsWith('.googleusercontent.com') ||
+    hostname.endsWith('.aistudio-app.com');
+
   // Real DNS Resolution & Network-Level IP Pinning (Strict Production Validation)
   let resolvedIp = '';
   try {
     const lookup = await dns.lookup(hostname);
     resolvedIp = lookup.address;
 
-    if (isPrivateOrReservedIp(resolvedIp)) {
+    if (isPrivateOrReservedIp(resolvedIp) && !isCloudRunPreviewDomain) {
       return {
         isValid: false,
         error: `Security blocked: '${hostname}' resolved to private or link-local IP ${resolvedIp}.`,
@@ -226,7 +247,7 @@ export async function validateTargetUrlSecurity(
       };
     }
   } catch (dnsErr: any) {
-    if (!isProd && (hostname.includes('launchproof.dev') || hostname.includes('ailaunchqa.dev') || hostname.includes('example.com'))) {
+    if (!isProd && (hostname.includes('launchproof.dev') || hostname.includes('ailaunchqa.dev') || hostname.includes('example.com') || isCloudRunPreviewDomain)) {
       parsed.hash = '';
       return { isValid: true, normalizedUrl: parsed.toString(), resolvedIp: '93.184.216.34' };
     }

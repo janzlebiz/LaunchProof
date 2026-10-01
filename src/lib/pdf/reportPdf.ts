@@ -182,6 +182,68 @@ export function generateAuditPdf(report: AuditReport): jsPDF {
     y += 5;
   }
 
+  // Audited Pages Inventory Section
+  if (report.pages && report.pages.length > 0) {
+    if (y > 230) {
+      doc.addPage();
+      y = 18;
+    } else {
+      y += 6;
+    }
+
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(11);
+    doc.setTextColor(15, 23, 42);
+    doc.text(`Audited Pages Inventory (${report.pages.length} Pages Crawled)`, 14, y);
+    y += 6;
+
+    // Table Header
+    doc.setFillColor(241, 245, 249);
+    doc.rect(14, y, pageWidth - 28, 6, 'F');
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(7.5);
+    doc.setTextColor(51, 65, 85);
+    doc.text('#', 16, y + 4);
+    doc.text('Page Title / Endpoint', 22, y + 4);
+    doc.text('HTTP Status', 115, y + 4);
+    doc.text('Load Time', 145, y + 4);
+    doc.text('Discovered Links', 170, y + 4);
+    y += 8;
+
+    for (let pIdx = 0; pIdx < report.pages.length; pIdx++) {
+      const pageItem = report.pages[pIdx];
+      if (y > 275) {
+        doc.addPage();
+        y = 18;
+      }
+
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(7.5);
+      doc.setTextColor(15, 23, 42);
+      doc.text(`${pIdx + 1}`, 16, y);
+
+      const titleTruncated = (pageItem.title || pageItem.url).slice(0, 50);
+      doc.text(titleTruncated, 22, y);
+
+      doc.setTextColor(pageItem.status === 200 ? 16 : 220, pageItem.status === 200 ? 185 : 38, pageItem.status === 200 ? 129 : 38);
+      doc.text(`${pageItem.status || 200} OK`, 115, y);
+
+      doc.setTextColor(71, 85, 105);
+      doc.text(`${pageItem.loadTimeMs || 0} ms`, 145, y);
+      doc.text(`${pageItem.discoveredLinks?.length || 0} links`, 170, y);
+
+      y += 4;
+      doc.setFontSize(6.5);
+      doc.setTextColor(100, 116, 139);
+      doc.text(pageItem.url, 22, y, { maxWidth: pageWidth - 36 });
+      y += 5;
+
+      doc.setDrawColor(241, 245, 249);
+      doc.line(14, y, pageWidth - 14, y);
+      y += 3;
+    }
+  }
+
   // Footer
   const totalPages = doc.getNumberOfPages();
   for (let p = 1; p <= totalPages; p++) {

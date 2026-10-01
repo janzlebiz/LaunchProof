@@ -238,6 +238,8 @@ export const UrlInputSection: React.FC<UrlInputSectionProps> = ({
                       <option value={3}>3 Pages</option>
                       <option value={5}>5 Pages (Recommended)</option>
                       <option value={10}>10 Pages (Deep)</option>
+                      <option value={15}>15 Pages (Exhaustive)</option>
+                      <option value={20}>20 Pages (Full Site)</option>
                     </select>
                   </div>
                   <div>
@@ -249,7 +251,9 @@ export const UrlInputSection: React.FC<UrlInputSectionProps> = ({
                     >
                       <option value={1}>Depth 1</option>
                       <option value={2}>Depth 2</option>
-                      <option value={3}>Depth 3</option>
+                      <option value={3}>Depth 3 (Recommended)</option>
+                      <option value={4}>Depth 4</option>
+                      <option value={5}>Depth 5 (Deep)</option>
                     </select>
                   </div>
                 </div>

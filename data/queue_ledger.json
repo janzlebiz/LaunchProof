@@ -238,5 +238,287 @@
     "workerId": "test_worker_1",
     "startedAt": "2026-10-01T18:10:57.672Z",
     "completedAt": "2026-10-01T18:10:57.672Z"
+  },
+  {
+    "id": "audit_1790879092428_542tt",
+    "targetUrl": "https://ais-dev-bzwoignz3ygqmsvmvdgiav-212282537635.asia-east1.run.app/fixtures/healthy-benchmark",
+    "config": {
+      "targetUrl": "https://ais-dev-bzwoignz3ygqmsvmvdgiav-212282537635.asia-east1.run.app/fixtures/healthy-benchmark",
+      "maxPages": 5,
+      "maxDepth": 2,
+      "timeoutMs": 25000,
+      "viewports": [
+        {
+          "name": "Desktop (1440x900)",
+          "width": 1440,
+          "height": 900,
+          "isMobile": false
+        },
+        {
+          "name": "Tablet (768x1024)",
+          "width": 768,
+          "height": 1024,
+          "isMobile": true
+        },
+        {
+          "name": "Mobile (390x844)",
+          "width": 390,
+          "height": 844,
+          "isMobile": true
+        }
+      ],
+      "enableA11y": true,
+      "enablePerformance": true,
+      "enableAI": true,
+      "enableExternalLinks": true
+    },
+    "status": "FAILED",
+    "progressPercent": 100,
+    "currentMessage": "Security blocked: target 'ais-dev-bzwoignz3ygqmsvmvdgiav-212282537635.asia-east1.run.app' resolves to an internal namespace or private IP.",
+    "retryCount": 0,
+    "maxRetries": 2,
+    "createdAt": "2026-10-01T18:24:52.428Z",
+    "workerId": "worker_1656_7fy0",
+    "startedAt": "2026-10-01T18:24:54.290Z",
+    "completedAt": "2026-10-01T18:24:54.305Z",
+    "error": "SECURITY_BLOCKED: Security blocked: target 'ais-dev-bzwoignz3ygqmsvmvdgiav-212282537635.asia-east1.run.app' resolves to an internal namespace or private IP."
+  },
+  {
+    "id": "audit_1790879460157_ytvx5",
+    "targetUrl": "https://ais-dev-bzwoignz3ygqmsvmvdgiav-212282537635.asia-east1.run.app/fixtures/defective-saas",
+    "config": {
+      "targetUrl": "https://ais-dev-bzwoignz3ygqmsvmvdgiav-212282537635.asia-east1.run.app/fixtures/defective-saas",
+      "maxPages": 5,
+      "maxDepth": 2,
+      "timeoutMs": 25000,
+      "viewports": [
+        {
+          "name": "Desktop (1440x900)",
+          "width": 1440,
+          "height": 900,
+          "isMobile": false
+        },
+        {
+          "name": "Tablet (768x1024)",
+          "width": 768,
+          "height": 1024,
+          "isMobile": true
+        },
+        {
+          "name": "Mobile (390x844)",
+          "width": 390,
+          "height": 844,
+          "isMobile": true
+        }
+      ],
+      "enableA11y": true,
+      "enablePerformance": true,
+      "enableAI": true,
+      "enableExternalLinks": true
+    },
+    "status": "FAILED",
+    "progressPercent": 100,
+    "currentMessage": "Security blocked: target 'ais-dev-bzwoignz3ygqmsvmvdgiav-212282537635.asia-east1.run.app' resolves to an internal namespace or private IP.",
+    "retryCount": 0,
+    "maxRetries": 2,
+    "createdAt": "2026-10-01T18:31:00.158Z",
+    "workerId": "worker_1656_7fy0",
+    "startedAt": "2026-10-01T18:31:00.446Z",
+    "completedAt": "2026-10-01T18:31:00.448Z",
+    "error": "SECURITY_BLOCKED: Security blocked: target 'ais-dev-bzwoignz3ygqmsvmvdgiav-212282537635.asia-east1.run.app' resolves to an internal namespace or private IP."
+  },
+  {
+    "id": "test_queue_1790879553310",
+    "targetUrl": "http://localhost:3000/fixtures/healthy-benchmark",
+    "config": {
+      "targetUrl": "http://localhost:3000/fixtures/healthy-benchmark",
+      "maxPages": 1,
+      "maxDepth": 1,
+      "timeoutMs": 5000,
+      "viewports": [
+        {
+          "name": "Desktop",
+          "width": 1440,
+          "height": 900
+        }
+      ],
+      "enableA11y": false,
+      "enablePerformance": false,
+      "enableAI": false,
+      "enableExternalLinks": false
+    },
+    "status": "COMPLETED",
+    "progressPercent": 5,
+    "currentMessage": "Audit queued in durable ledger",
+    "retryCount": 0,
+    "maxRetries": 2,
+    "createdAt": "2026-10-01T18:32:33.310Z",
+    "workerId": "test_worker_1",
+    "startedAt": "2026-10-01T18:32:33.310Z",
+    "completedAt": "2026-10-01T18:32:33.311Z"
+  },
+  {
+    "id": "test_queue_1790880454951",
+    "targetUrl": "http://localhost:3000/fixtures/healthy-benchmark",
+    "config": {
+      "targetUrl": "http://localhost:3000/fixtures/healthy-benchmark",
+      "maxPages": 1,
+      "maxDepth": 1,
+      "timeoutMs": 5000,
+      "viewports": [
+        {
+          "name": "Desktop",
+          "width": 1440,
+          "height": 900
+        }
+      ],
+      "enableA11y": false,
+      "enablePerformance": false,
+      "enableAI": false,
+      "enableExternalLinks": false
+    },
+    "status": "COMPLETED",
+    "progressPercent": 5,
+    "currentMessage": "Audit queued in durable ledger",
+    "retryCount": 0,
+    "maxRetries": 2,
+    "createdAt": "2026-10-01T18:47:34.951Z",
+    "workerId": "test_worker_1",
+    "startedAt": "2026-10-01T18:47:34.951Z",
+    "completedAt": "2026-10-01T18:47:34.952Z"
+  },
+  {
+    "id": "audit_1790880541379_ulnll",
+    "targetUrl": "https://ais-dev-bzwoignz3ygqmsvmvdgiav-212282537635.asia-east1.run.app/",
+    "config": {
+      "targetUrl": "https://ais-dev-bzwoignz3ygqmsvmvdgiav-212282537635.asia-east1.run.app/",
+      "maxPages": 10,
+      "maxDepth": 3,
+      "timeoutMs": 25000,
+      "viewports": [
+        {
+          "name": "Desktop (1440x900)",
+          "width": 1440,
+          "height": 900,
+          "isMobile": false
+        },
+        {
+          "name": "Tablet (768x1024)",
+          "width": 768,
+          "height": 1024,
+          "isMobile": true
+        },
+        {
+          "name": "Mobile (390x844)",
+          "width": 390,
+          "height": 844,
+          "isMobile": true
+        }
+      ],
+      "enableA11y": true,
+      "enablePerformance": true,
+      "enableAI": true,
+      "enableExternalLinks": true
+    },
+    "status": "FAILED",
+    "progressPercent": 100,
+    "currentMessage": "Security blocked: target 'ais-dev-bzwoignz3ygqmsvmvdgiav-212282537635.asia-east1.run.app' resolves to an internal namespace or private IP.",
+    "retryCount": 0,
+    "maxRetries": 2,
+    "createdAt": "2026-10-01T18:49:01.379Z",
+    "workerId": "worker_2005_mhfi",
+    "startedAt": "2026-10-01T18:49:02.375Z",
+    "completedAt": "2026-10-01T18:49:02.378Z",
+    "error": "SECURITY_BLOCKED: Security blocked: target 'ais-dev-bzwoignz3ygqmsvmvdgiav-212282537635.asia-east1.run.app' resolves to an internal namespace or private IP."
+  },
+  {
+    "id": "test_queue_1790880685776",
+    "targetUrl": "http://localhost:3000/fixtures/healthy-benchmark",
+    "config": {
+      "targetUrl": "http://localhost:3000/fixtures/healthy-benchmark",
+      "maxPages": 1,
+      "maxDepth": 1,
+      "timeoutMs": 5000,
+      "viewports": [
+        {
+          "name": "Desktop",
+          "width": 1440,
+          "height": 900
+        }
+      ],
+      "enableA11y": false,
+      "enablePerformance": false,
+      "enableAI": false,
+      "enableExternalLinks": false
+    },
+    "status": "COMPLETED",
+    "progressPercent": 5,
+    "currentMessage": "Audit queued in durable ledger",
+    "retryCount": 0,
+    "maxRetries": 2,
+    "createdAt": "2026-10-01T18:51:25.776Z",
+    "workerId": "test_worker_1",
+    "startedAt": "2026-10-01T18:51:25.776Z",
+    "completedAt": "2026-10-01T18:51:25.776Z"
+  },
+  {
+    "id": "test_queue_1790880791866",
+    "targetUrl": "http://localhost:3000/fixtures/healthy-benchmark",
+    "config": {
+      "targetUrl": "http://localhost:3000/fixtures/healthy-benchmark",
+      "maxPages": 1,
+      "maxDepth": 1,
+      "timeoutMs": 5000,
+      "viewports": [
+        {
+          "name": "Desktop",
+          "width": 1440,
+          "height": 900
+        }
+      ],
+      "enableA11y": false,
+      "enablePerformance": false,
+      "enableAI": false,
+      "enableExternalLinks": false
+    },
+    "status": "COMPLETED",
+    "progressPercent": 5,
+    "currentMessage": "Audit queued in durable ledger",
+    "retryCount": 0,
+    "maxRetries": 2,
+    "createdAt": "2026-10-01T18:53:11.866Z",
+    "workerId": "test_worker_1",
+    "startedAt": "2026-10-01T18:53:11.867Z",
+    "completedAt": "2026-10-01T18:53:11.867Z"
+  },
+  {
+    "id": "test_queue_1790881021428",
+    "targetUrl": "http://localhost:3000/fixtures/healthy-benchmark",
+    "config": {
+      "targetUrl": "http://localhost:3000/fixtures/healthy-benchmark",
+      "maxPages": 1,
+      "maxDepth": 1,
+      "timeoutMs": 5000,
+      "viewports": [
+        {
+          "name": "Desktop",
+          "width": 1440,
+          "height": 900
+        }
+      ],
+      "enableA11y": false,
+      "enablePerformance": false,
+      "enableAI": false,
+      "enableExternalLinks": false
+    },
+    "status": "COMPLETED",
+    "progressPercent": 5,
+    "currentMessage": "Audit queued in durable ledger",
+    "retryCount": 0,
+    "maxRetries": 2,
+    "createdAt": "2026-10-01T18:57:01.429Z",
+    "workerId": "test_worker_1",
+    "startedAt": "2026-10-01T18:57:01.430Z",
+    "completedAt": "2026-10-01T18:57:01.431Z"
   }
 ]

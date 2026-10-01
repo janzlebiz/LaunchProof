@@ -199,9 +199,11 @@ export async function runBrowserAuditWorker(
   // 3. Crawler Queue & Traversal Setup
   const queue: { url: string; depth: number }[] = [{ url: targetUrl, depth: 1 }];
   const visited = new Set<string>();
-  const maxPages = Math.min(config.maxPages || 5, 10);
-  const maxDepth = Math.min(config.maxDepth || 2, 3);
-  const targetOrigin = new URL(targetUrl).origin;
+  const maxPages = Math.min(Math.max(config.maxPages || 5, 1), 20);
+  const maxDepth = Math.min(Math.max(config.maxDepth || 3, 1), 5);
+  const targetUrlParsed = new URL(targetUrl);
+  const targetOrigin = targetUrlParsed.origin;
+  const targetHostname = targetUrlParsed.hostname;
 
   try {
     while (queue.length > 0 && visited.size < maxPages) {
@@ -289,6 +291,9 @@ export async function runBrowserAuditWorker(
             waitUntil: 'domcontentloaded',
             timeout: config.timeoutMs || 20000,
           });
+
+          // Wait brief delay for SPA hydration and client JavaScript rendering
+          await page.waitForTimeout(1000);
 
           pageLoadTime = Date.now() - pageStart;
           pageStatus = response?.status() || 200;
@@ -463,34 +468,76 @@ export async function runBrowserAuditWorker(
         }
       }
 
-      // DOM Parse with Cheerio
+      // Live DOM Link Extraction (Handles SPAs, React, Next.js, Vue, Svelte, client routers)
+      let domLinks: { text: string; href: string }[] = [];
+      if (executionEngine === 'PLAYWRIGHT_CHROMIUM' && context) {
+        // Extract live links directly from active browser DOM
+        try {
+          const pages = context.pages();
+          const activePage = pages[pages.length - 1];
+          if (activePage && !activePage.isClosed()) {
+            domLinks = await activePage.evaluate(() => {
+              const anchors = Array.from(document.querySelectorAll('a[href], [data-href], [role="link"]'));
+              return anchors
+                .map((a) => {
+                  const rawHref = a.getAttribute('href') || a.getAttribute('data-href') || (a as HTMLAnchorElement).href || '';
+                  const text = (a.textContent || '').trim();
+                  return { href: rawHref, text };
+                })
+                .filter((l) => l.href && !l.href.startsWith('#') && !l.href.startsWith('javascript:'));
+            }).catch(() => []);
+          }
+        } catch {}
+      }
+
+      // DOM Parse with Cheerio as secondary fallback
       const $ = cheerio.load(pageHtml);
       if (!pageTitle) pageTitle = $('title').first().text().trim() || 'Untitled Document';
 
       const pageDiscoveredLinks: { text: string; href: string; isExternal: boolean; status?: number; isBroken?: boolean }[] = [];
       const internalLinksToQueue: string[] = [];
 
+      // Combine live DOM links and Cheerio static links
+      const rawLinkList: { text: string; href: string }[] = [...domLinks];
+
       $('a[href]').each((_, el) => {
         const href = $(el).attr('href')?.trim() || '';
         const text = $(el).text().trim() || 'Link';
-        if (!href || href.startsWith('#') || href.startsWith('javascript:')) return;
+        if (href && !href.startsWith('#') && !href.startsWith('javascript:')) {
+          rawLinkList.push({ text, href });
+        }
+      });
 
+      const seenInPage = new Set<string>();
+
+      for (const item of rawLinkList) {
         try {
-          const resolved = new URL(href, current.url);
-          resolved.hash = '';
-          const isExternal = resolved.origin !== targetOrigin;
-          const linkUrl = resolved.toString();
+          const resolved = new URL(item.href, current.url);
+          resolved.hash = ''; // Strip hash fragments
+          let linkUrl = resolved.toString();
 
-          pageDiscoveredLinks.push({ text: text.slice(0, 30), href: linkUrl, isExternal });
+          // Standardize trailing slash
+          if (resolved.pathname.length > 1 && linkUrl.endsWith('/')) {
+            linkUrl = linkUrl.slice(0, -1);
+          }
 
-          if (!isExternal && current.depth < maxDepth && !visited.has(linkUrl)) {
+          if (seenInPage.has(linkUrl)) continue;
+          seenInPage.add(linkUrl);
+
+          const isExternal = resolved.hostname !== targetHostname;
+          pageDiscoveredLinks.push({ text: item.text.slice(0, 40) || 'Link', href: linkUrl, isExternal });
+
+          // Exclude static assets (.pdf, .png, .jpg, .svg, .css, .js, .zip, etc.)
+          const isAsset = /\.(pdf|png|jpg|jpeg|gif|svg|zip|mp4|webp|css|js|ico|xml|json)$/i.test(resolved.pathname);
+
+          if (!isExternal && !isAsset && current.depth < maxDepth && !visited.has(linkUrl)) {
             internalLinksToQueue.push(linkUrl);
           }
         } catch {}
-      });
+      }
 
       for (const nextUrl of internalLinksToQueue) {
-        if (queue.length + visited.size < maxPages && !queue.some((q) => q.url === nextUrl)) {
+        if (visited.size + queue.length < maxPages && !queue.some((q) => q.url === nextUrl) && !visited.has(nextUrl)) {
           queue.push({ url: nextUrl, depth: current.depth + 1 });
         }
       }
