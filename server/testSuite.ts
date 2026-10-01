@@ -9,6 +9,7 @@ import { generateFindingFingerprint, deduplicateFindings } from '../src/lib/engi
 import { calculateAuditScores } from '../src/lib/engine/scoring';
 import { CHECK_DEFINITIONS } from '../src/lib/engine/checks';
 import { runBrowserAuditWorker } from './engine/browserWorker';
+import { queueManager } from './storage/queueManager';
 import { Finding, TestSuiteResult } from '../src/types/audit';
 
 export async function runAllAutomatedTests(): Promise<TestSuiteResult[]> {
@@ -221,6 +222,7 @@ export async function runAllAutomatedTests(): Promise<TestSuiteResult[]> {
       details: `Score: ${healthyReport.summary.overallScore}/100, Verdict: ${healthyReport.summary.verdict}`,
     });
   } catch (err: any) {
+    console.error('Fixture test error stack:', err.stack);
     fixtureTests.push({
       name: 'E2E Fixture Suite Execution',
       passed: false,
@@ -233,6 +235,64 @@ export async function runAllAutomatedTests(): Promise<TestSuiteResult[]> {
     passed: fixtureTests.every((t) => t.passed),
     durationMs: Date.now() - fixtureStart,
     tests: fixtureTests,
+  });
+
+  // Suite 5: Queue Ownership & Lease Claim Suite
+  const queueStart = Date.now();
+  const queueTests: { name: string; passed: boolean; error?: string; details?: string }[] = [];
+  try {
+    const qTestId = `test_queue_${Date.now()}`;
+    const enqueueRes = queueManager.enqueueJob(qTestId, 'http://localhost:3000/fixtures/healthy-benchmark', {
+      targetUrl: 'http://localhost:3000/fixtures/healthy-benchmark',
+      maxPages: 1,
+      maxDepth: 1,
+      timeoutMs: 5000,
+      viewports: [{ name: 'Desktop', width: 1440, height: 900 }],
+      enableA11y: false,
+      enablePerformance: false,
+      enableAI: false,
+      enableExternalLinks: false,
+    });
+    queueTests.push({
+      name: 'Queue enqueue succeeds',
+      passed: enqueueRes.success,
+      details: `Enqueued ${qTestId}`,
+    });
+
+    const claimed = queueManager.claimJob('test_worker_1');
+    queueTests.push({
+      name: 'Queue daemon claims queued job exactly once',
+      passed: claimed !== null && claimed.id === qTestId,
+      details: `Claimed ID: ${claimed?.id}`,
+    });
+
+    const secondClaim = queueManager.claimJob('test_worker_2');
+    queueTests.push({
+      name: 'Claimed job is locked from concurrent worker claims',
+      passed: secondClaim === null,
+      details: `Second claim result: ${secondClaim}`,
+    });
+
+    queueManager.finalizeJob(qTestId, 'COMPLETED');
+    const finalJob = queueManager.getJob(qTestId);
+    queueTests.push({
+      name: 'Job finalizes to COMPLETED status',
+      passed: finalJob?.status === 'COMPLETED',
+      details: `Final status: ${finalJob?.status}`,
+    });
+  } catch (err: any) {
+    queueTests.push({
+      name: 'Queue Flow Suite Execution',
+      passed: false,
+      error: err.message,
+    });
+  }
+
+  suites.push({
+    name: 'Queue Ownership & Lease Claim Suite',
+    passed: queueTests.every((t) => t.passed),
+    durationMs: Date.now() - queueStart,
+    tests: queueTests,
   });
 
   return suites;

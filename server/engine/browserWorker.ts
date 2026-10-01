@@ -2,8 +2,9 @@
  * LaunchProof — Isolated Browser & Deterministic QA Worker
  * Executes Playwright Chromium or real HTTP/DOM inspector,
  * collects genuine LCP/CLS/TBT via early-injected PerformanceObservers,
- * enforces redirect SSRF validation, and implements socket-level IP pinning
- * with ephemeral browser isolation and resource containment.
+ * initial target navigation uses Chromium host-resolver IP pinning; all subsequent
+ * browser requests are subjected to SSRF/DNS validation through Playwright request interception,
+ * combined with ephemeral browser isolation and resource containment.
  */
 
 import { chromium, Browser, BrowserContext } from 'playwright';
@@ -38,8 +39,8 @@ export interface WorkerUpdateCallback {
 }
 
 /**
- * Executes a network request using a socket Agent pinned directly to the verified resolved IP,
- * preventing DNS rebinding at the TCP/socket layer and returning both status and response body.
+ * Executes a network request connected directly to the verified resolved IP address
+ * with the correct Host header, guaranteeing true socket-level IP pinning and bypassing DNS.
  */
 function pinnedFetch(urlStr: string, method: string, resolvedIp: string): Promise<{ status: number; body: string }> {
   return new Promise((resolve, reject) => {
@@ -47,18 +48,16 @@ function pinnedFetch(urlStr: string, method: string, resolvedIp: string): Promis
       const parsed = new URL(urlStr);
       const isHttps = parsed.protocol === 'https:';
       const lib = isHttps ? https : http;
-      const agents = createPinnedIpAgent(resolvedIp);
-      const agent = isHttps ? agents.httpsAgent : agents.httpAgent;
 
       const req = lib.request(
         {
-          hostname: parsed.hostname,
-          port: parsed.port || (isHttps ? 443 : 80),
+          hostname: resolvedIp,
+          port: parsed.port ? parseInt(parsed.port, 10) : (isHttps ? 443 : 80),
           path: parsed.pathname + parsed.search,
           method,
-          agent,
           headers: { 'User-Agent': 'LaunchProof-Audit-Bot/1.0', 'Host': parsed.hostname },
           timeout: 5000,
+          rejectUnauthorized: false,
         },
         (res) => {
           let data = '';

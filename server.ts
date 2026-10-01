@@ -91,70 +91,13 @@ app.post('/api/audits', async (req, res) => {
       enableExternalLinks: config?.enableExternalLinks !== false,
     };
 
-    // Enqueue into Durable Queue Ledger
+    // Enqueue into Durable Queue Ledger and register job as QUEUED. queueDaemon handles execution authority.
     const enqueueRes = queueManager.enqueueJob(auditId, url, fullConfig);
     if (!enqueueRes.success) {
       return res.status(429).json({ error: enqueueRes.reason });
     }
 
-    const job = auditStore.registerJob(auditId, url);
-
-    // Launch worker asynchronously
-    (async () => {
-      try {
-        const { report, rawHtml, screenshotBase64Map } = await runBrowserAuditWorker(
-          auditId,
-          url,
-          fullConfig,
-          job.abortController.signal,
-          (status, percent, msg, level) => {
-            auditStore.updateJob(auditId, status, percent, msg, level);
-            queueManager.updateJobProgress(auditId, status, percent, msg);
-          }
-        );
-
-        // Run real Gemini Vision reasoning with screenshots
-        if (fullConfig.enableAI && ai) {
-          auditStore.updateJob(auditId, 'AI_REASONING', 88, 'Running Gemini Vision on real screenshot evidence...', 'info');
-          const aiResult = await runGeminiMultimodalVisualReasoning(
-            ai,
-            url,
-            report.pages[0]?.title || 'Target Page',
-            rawHtml,
-            report.findings,
-            screenshotBase64Map['Desktop (1440x900)'] || screenshotBase64Map['Mobile (390x844)']
-          );
-
-          if (aiResult.findings.length > 0) {
-            report.findings.push(...aiResult.findings);
-            // Re-run deduplication and final score/verdict recalculation so AI findings are fully factored in
-            report.findings = deduplicateFindings(report.findings);
-            const recalculated = calculateAuditScores(
-              report.findings,
-              Object.keys(CHECK_DEFINITIONS),
-              Date.now() - new Date(report.startedAt).getTime(),
-              report.pages.length,
-              report.config.viewports.length
-            );
-            report.summary = {
-              ...recalculated.summary,
-              executionEngine: report.summary.executionEngine,
-              aiReasoningStatus: aiResult.status,
-            };
-            report.categoryScores = recalculated.categoryScores;
-          } else {
-            report.summary.aiReasoningStatus = aiResult.status;
-          }
-        }
-
-        auditStore.completeJob(auditId, report);
-        queueManager.finalizeJob(auditId, 'COMPLETED');
-      } catch (err: any) {
-        auditStore.failJob(auditId, err.message || 'Audit failed');
-        queueManager.finalizeJob(auditId, 'FAILED', err.message);
-      }
-    })();
-
+    auditStore.registerJob(auditId, url);
     return res.json({ auditId, status: 'QUEUED' });
   } catch (err: any) {
     console.error('Error creating audit:', err);

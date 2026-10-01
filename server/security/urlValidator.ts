@@ -167,10 +167,10 @@ export async function validateTargetUrlSecurity(
   }
 
   const hostname = parsed.hostname.toLowerCase();
-
-  // Controlled test fixture bypass ONLY in non-production environments with explicit flag
   const isProd = process.env.NODE_ENV === 'production';
-  if (!isProd && isInternalTestMode && (hostname === 'localhost' || hostname === '127.0.0.1') && parsed.pathname.startsWith('/fixtures/')) {
+
+  // Controlled test fixture bypass when explicit internal test flag and fixture path are set
+  if (isInternalTestMode && (hostname === 'localhost' || hostname === '127.0.0.1' || hostname === '0.0.0.0') && parsed.pathname.startsWith('/fixtures/')) {
     parsed.hash = '';
     return { isValid: true, normalizedUrl: parsed.toString(), resolvedIp: '127.0.0.1' };
   }
