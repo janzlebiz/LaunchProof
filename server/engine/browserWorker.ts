@@ -2,7 +2,8 @@
  * LaunchProof — Isolated Browser & Deterministic QA Worker
  * Executes Playwright Chromium or real HTTP/DOM inspector,
  * collects genuine LCP/CLS/TBT via early-injected PerformanceObservers,
- * enforces redirect SSRF validation, and implements true network-level IP pinning.
+ * enforces redirect SSRF validation, and implements socket-level IP pinning
+ * with ephemeral browser isolation and resource containment.
  */
 
 import { chromium, Browser, BrowserContext } from 'playwright';
@@ -38,9 +39,9 @@ export interface WorkerUpdateCallback {
 
 /**
  * Executes a network request using a socket Agent pinned directly to the verified resolved IP,
- * preventing DNS rebinding at the TCP/socket layer.
+ * preventing DNS rebinding at the TCP/socket layer and returning both status and response body.
  */
-function pinnedFetch(urlStr: string, method: string, resolvedIp: string): Promise<{ status: number }> {
+function pinnedFetch(urlStr: string, method: string, resolvedIp: string): Promise<{ status: number; body: string }> {
   return new Promise((resolve, reject) => {
     try {
       const parsed = new URL(urlStr);
@@ -57,11 +58,16 @@ function pinnedFetch(urlStr: string, method: string, resolvedIp: string): Promis
           method,
           agent,
           headers: { 'User-Agent': 'LaunchProof-Audit-Bot/1.0', 'Host': parsed.hostname },
-          timeout: 4000,
+          timeout: 5000,
         },
         (res) => {
-          res.resume();
-          resolve({ status: res.statusCode || 200 });
+          let data = '';
+          res.on('data', (chunk) => {
+            data += chunk;
+          });
+          res.on('end', () => {
+            resolve({ status: res.statusCode || 200, body: data });
+          });
         }
       );
 
@@ -123,10 +129,11 @@ export async function runBrowserAuditWorker(
   const rawFindings: Finding[] = [];
   let rootHtml = '';
 
-  // 2. Launch Isolated Chromium Sandbox
-  onUpdate('INITIALIZING', 15, 'Spawning isolated Chromium sandbox with memory bounds...', 'info');
+  // 2. Launch Ephemeral Browser Context with Resource Containment & Host Resolver Rules
+  onUpdate('INITIALIZING', 15, 'Spawning ephemeral browser context with resource containment...', 'info');
   try {
     tempProfileDir = fs.mkdtempSync(path.join(os.tmpdir(), 'lp-profile-'));
+    const targetHostname = new URL(targetUrl).hostname;
 
     browser = await chromium.launch({
       headless: true,
@@ -135,6 +142,7 @@ export async function runBrowserAuditWorker(
         '--disable-setuid-sandbox',
         '--disable-dev-shm-usage',
         '--disable-gpu',
+        `--host-resolver-rules=MAP ${targetHostname} ${pinnedIp}`,
         '--js-flags=--max-old-space-size=256',
         '--disable-background-networking',
       ],
@@ -183,7 +191,7 @@ export async function runBrowserAuditWorker(
       } catch {}
     });
 
-    log('Spawned isolated Chromium context with early Vitals PerformanceObserver', 'success', 'INITIALIZING');
+    log('Spawned ephemeral browser context with resource containment & host resolver rules', 'success', 'INITIALIZING');
   } catch (launchErr: any) {
     executionEngine = 'HTTP_INSPECTOR';
     log(`Chromium sandbox launch unavailable (${launchErr.message}). Switching to HTTP Inspector engine.`, 'warn', 'INITIALIZING');
@@ -443,15 +451,13 @@ export async function runBrowserAuditWorker(
           }
         }
       } else {
-        // HTTP Inspector Mode with Pinned IP Agent
+        // HTTP Inspector Mode with Pinned IP Agent (Strictly Pinned Request)
         const fetchStart = Date.now();
         try {
           const resPin = await pinnedFetch(current.url, 'GET', pinnedIp);
           pageLoadTime = Date.now() - fetchStart;
           pageStatus = resPin.status;
-          // Fetch body using standard fetch or pinned agent
-          const resBody = await fetch(current.url, { signal: abortSignal }).then(r => r.text()).catch(() => '');
-          pageHtml = resBody;
+          pageHtml = resPin.body;
           if (isRoot) rootHtml = pageHtml;
         } catch (err: any) {
           if (isRoot) throw new Error(`TARGET_UNREACHABLE: ${err.message}`);
@@ -506,7 +512,6 @@ export async function runBrowserAuditWorker(
                 return;
               }
 
-              // Use true network-level IP pinning
               let res = await pinnedFetch(link.href, 'HEAD', linkSec.resolvedIp).catch(() => null);
               if (!res || res.status === 405 || res.status === 403 || res.status === 400) {
                 res = await pinnedFetch(link.href, 'GET', linkSec.resolvedIp).catch(() => null);
