@@ -148,5 +148,65 @@
     "workerId": "test_worker_1",
     "startedAt": "2026-10-01T17:58:59.694Z",
     "completedAt": "2026-10-01T17:58:59.694Z"
+  },
+  {
+    "id": "test_queue_1790877588153",
+    "targetUrl": "http://localhost:3000/fixtures/healthy-benchmark",
+    "config": {
+      "targetUrl": "http://localhost:3000/fixtures/healthy-benchmark",
+      "maxPages": 1,
+      "maxDepth": 1,
+      "timeoutMs": 5000,
+      "viewports": [
+        {
+          "name": "Desktop",
+          "width": 1440,
+          "height": 900
+        }
+      ],
+      "enableA11y": false,
+      "enablePerformance": false,
+      "enableAI": false,
+      "enableExternalLinks": false
+    },
+    "status": "COMPLETED",
+    "progressPercent": 5,
+    "currentMessage": "Audit queued in durable ledger",
+    "retryCount": 0,
+    "maxRetries": 2,
+    "createdAt": "2026-10-01T17:59:48.153Z",
+    "workerId": "test_worker_1",
+    "startedAt": "2026-10-01T17:59:48.154Z",
+    "completedAt": "2026-10-01T17:59:48.154Z"
+  },
+  {
+    "id": "test_queue_1790877849436",
+    "targetUrl": "http://localhost:3000/fixtures/healthy-benchmark",
+    "config": {
+      "targetUrl": "http://localhost:3000/fixtures/healthy-benchmark",
+      "maxPages": 1,
+      "maxDepth": 1,
+      "timeoutMs": 5000,
+      "viewports": [
+        {
+          "name": "Desktop",
+          "width": 1440,
+          "height": 900
+        }
+      ],
+      "enableA11y": false,
+      "enablePerformance": false,
+      "enableAI": false,
+      "enableExternalLinks": false
+    },
+    "status": "COMPLETED",
+    "progressPercent": 5,
+    "currentMessage": "Audit queued in durable ledger",
+    "retryCount": 0,
+    "maxRetries": 2,
+    "createdAt": "2026-10-01T18:04:09.436Z",
+    "workerId": "test_worker_1",
+    "startedAt": "2026-10-01T18:04:09.437Z",
+    "completedAt": "2026-10-01T18:04:09.437Z"
   }
 ]
